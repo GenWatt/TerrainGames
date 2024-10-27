@@ -8,11 +8,20 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import "../global.css";
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StatusBar } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import Toast from 'react-native-toast-message';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -33,6 +42,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle="light-content" backgroundColor={Colors.dark.background} />
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <QueryClientProvider client={queryClient}>
           <Stack>
@@ -42,6 +52,7 @@ export default function RootLayout() {
             <Stack.Screen name="auth/register" options={{ headerShown: false }} />
           </Stack>
         </QueryClientProvider>
+        <Toast />
       </SafeAreaView>
     </SafeAreaProvider>
   );

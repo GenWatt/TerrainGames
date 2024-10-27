@@ -19,6 +19,7 @@ const redirectedOptions: Partial<AuthSessionRedirectUriOptions> = {
 
 export default function useLoginViewModel() {
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest(googleConfig, redirectedOptions);
+
     const loginWithGoogleMutation = useMutation({
         mutationFn: loginWithGoogle,
         onSuccess(data, variables, context) {

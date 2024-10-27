@@ -25,6 +25,7 @@ router.post('/auth/registerUser', async (req, res, next) => {
 });
 
 router.get('/auth/me', authMiddleware, async (req, res) => {
+    console.log(req.user);
     res.send(req.user);
 })
 

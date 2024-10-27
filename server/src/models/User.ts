@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { UserRole, Theme } from "../types/enums";
 import bcrypt from "bcrypt";
+import { IUser, Theme, UserRole } from "../../../shared/types";
 
 const userSchema = new mongoose.Schema<IUser & Document>({
     username: {
@@ -54,20 +54,6 @@ userSchema.pre("save", async function (next) {
     this.password = hash;
     next();
 });
-
-type IUser = {
-    username: string;
-    email: string;
-    password: string;
-    role: UserRole;
-    googleId: string;
-    avatar: string;
-    accessToken: string;
-    createdAt: Date;
-    prefs: {
-        theme: Theme;
-    };
-}
 
 export type UserType = mongoose.Document & IUser;
 

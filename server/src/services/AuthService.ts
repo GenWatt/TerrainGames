@@ -1,5 +1,5 @@
 import { User, UserType } from "../models/User";
-import { UserRole } from "../types/enums";
+import { UserRole } from "../../../shared/types";
 import GoogleService from "./GoogleService";
 import Joi from "joi";
 import jwt from "jsonwebtoken";

@@ -1,15 +1,28 @@
 import useLoginFormViewModel from "@/hooks/viewModels/useLoginFormViewModel";
-import { Button, View, Text } from "react-native";
-import CustomInput from "./ui/CustomInput";
+import { Button, View, Text, TextInput } from "react-native";
+import CustomInput, { CustomInputProps } from "./ui/CustomInput";
+import { useEffect, useRef } from "react";
 
-export default function LoginForm() {
+export interface ILoginFormProps {
+    isFocus?: boolean;
+}
+
+export default function LoginForm({ isFocus = true }: ILoginFormProps) {
     const { form, handleChange, handleSubmit } = useLoginFormViewModel();
+    const usernameRef = useRef<null | TextInput>(null);
+
+    useEffect(() => {
+        if (isFocus) {
+            usernameRef.current?.focus();
+        }
+    }, [isFocus]);
 
     return (
         <View className="justify-stretch w-full">
             <View className="mb-4">
                 <Text>Username</Text>
                 <CustomInput
+                    ref={usernameRef}
                     placeholder="Username"
                     value={form.username}
                     onChangeText={(value) => handleChange('username', value)}

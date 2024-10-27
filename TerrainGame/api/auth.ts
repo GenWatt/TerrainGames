@@ -9,6 +9,7 @@ export const loginWithGoogle = async (idToken: string) => {
 }
 
 export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
+    console.log("lole" + landMarkApi.defaults.baseURL);
     return await landMarkApi.get('/auth/me');
 }
 

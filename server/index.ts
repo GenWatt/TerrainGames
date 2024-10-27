@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { connectTerrainDb } from './src/db';
 import routes from './src/routes';
 import { errorHandler } from './src/middleware/errorHandler';
+import morgan from 'morgan';
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 connectTerrainDb();
 
 app.use(cors());
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
