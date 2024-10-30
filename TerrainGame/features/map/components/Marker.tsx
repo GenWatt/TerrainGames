@@ -1,17 +1,26 @@
 import { View, Text } from 'react-native'
 import Mapbox from "@rnmapbox/maps";
+import { useCreateTripStore, Waypoint } from '@/store/createTripStore';
 
 export interface MarkerProps {
     index: number;
-    position: number[];
+    waypoint: Waypoint;
 }
 
-export default function Marker({ index, position }: MarkerProps) {
+export default function Marker({ index, waypoint }: MarkerProps) {
+    const selectWaypoint = useCreateTripStore((state) => state.selectWaypoint);
+
+    const handleSelect = (payload: GeoJSON.Feature) => {
+        console.log('handleSelect', payload);
+        selectWaypoint(waypoint);
+    }
+
     return (
         <Mapbox.PointAnnotation
             key={index.toFixed()}
             id={index.toString()}
-            coordinate={position}
+            coordinate={waypoint.position}
+            onSelected={handleSelect}
         >
             <View>
                 <View className="bg-primary w-10 h-10 rounded-full shadow-lg shadow-primary justify-center items-center relative">

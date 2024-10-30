@@ -5,6 +5,7 @@ export type UserStore = {
     user: IUser;
     setUser: (user: IUser) => void;
     logout: () => void;
+    hasRole: (role: UserRole) => boolean;
 }
 
 const initialState: IUser = {
@@ -21,8 +22,13 @@ const initialState: IUser = {
     },
 }
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>((set, get) => ({
     user: initialState,
+
     setUser: (user: IUser) => set({ user }),
     logout: () => set({ user: initialState }),
+    hasRole: (role: UserRole) => {
+        console.log(get().user.role);
+        return get().user.role === role
+    },
 }));

@@ -7,20 +7,20 @@ export function useAuthCheck() {
     const rootNavigationState = useRootNavigationState();
     const { getObjectAsync, removeItemAsync } = useStorage();
 
-    useEffect(() => {
-        async function checkLogin() {
-            const savedUser = await getObjectAsync('user');
+    // useEffect(() => {
+    //     async function checkLogin() {
+    //         const savedUser = await getObjectAsync('user');
 
-            if (!rootNavigationState?.key) return;
-            console.log('rootNavigationState', rootNavigationState.key, savedUser);
-            if (savedUser) {
-                router.replace('/(tabs)');
-            } else {
-                await removeItemAsync('user');
-                router.replace('/auth/login');
-            }
-        }
+    //         if (!rootNavigationState?.key) return;
+    //         console.log('rootNavigationState', rootNavigationState.key, savedUser);
+    //         if (savedUser) {
+    //             router.replace('/(tabs)');
+    //         } else {
+    //             await removeItemAsync('user');
+    //             router.replace('/auth/login');
+    //         }
+    //     }
 
-        checkLogin();
-    }, [!rootNavigationState?.key]);
+    //     checkLogin();
+    // }, [!rootNavigationState?.key]);
 }

@@ -129,13 +129,15 @@ class AuthService {
             return new Result(ResultTypes.NOT_AUTHORIZED, error.details[0].message, 400);
         }
 
+        console.log('data', data);
         const { username, password } = data;
 
         const user = await User.findOne({ username });
+        console.log('user', user);
         if (!user) {
             return new Result(ResultTypes.INVALID_CREDENTIALS, 'Invalid email or password', 400);
         }
-
+        console.log('user', user);
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return new Result(ResultTypes.INVALID_CREDENTIALS, 'Invalid email or password', 400);
