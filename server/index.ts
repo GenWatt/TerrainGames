@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectTerrainDb } from './src/db';
-import routes from './src/routes';
-import { errorHandler } from './src/middleware/errorHandler';
+import { connectTerrainDb } from './src/core/db';
+import routes from './src/api/routes';
+import { errorHandler } from './src/api/middleware/errorHandler';
 import morgan from 'morgan';
 
 dotenv.config();

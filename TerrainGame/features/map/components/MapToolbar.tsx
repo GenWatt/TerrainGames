@@ -5,7 +5,7 @@ import useMe from '@/api/queries/useMe';
 import useMapToolbar, { ToolbarAction } from '../hooks/useMapToolbar';
 
 export default function MapToolbar() {
-    const { actions, selectedAction, handleToolbarAction } = useMapToolbar();
+    const { actions, selectedAction, handleToolbarActionCallback } = useMapToolbar();
 
     return (
         <View className='absolute gap-2 right-2 top-2 z-10'>
@@ -14,7 +14,7 @@ export default function MapToolbar() {
                     key={action.name}
                     selected={selectedAction === action.name}
                     action={action}
-                    onPress={() => handleToolbarAction(action)}
+                    onPress={handleToolbarActionCallback}
                 />
             ))}
         </View>
@@ -24,7 +24,7 @@ export default function MapToolbar() {
 export interface ToolbarItemProps {
     selected: boolean;
     action: ToolbarAction;
-    onPress: () => void;
+    onPress: (action: ToolbarAction) => void;
 }
 
 function ToolbarItem({ selected, action, onPress }: ToolbarItemProps) {
@@ -37,10 +37,14 @@ function ToolbarItem({ selected, action, onPress }: ToolbarItemProps) {
     const { selectedColor, activeColor, icon } = action;
     const finalClass = selected ? `${selectedColor} ${activeColor}` : `${activeColor}`;
 
+    const handlePress = () => {
+        onPress(action);
+    }
+
     return (
         <CircleButton
             className={finalClass}
-            onPress={onPress}
+            onPress={handlePress}
         >
             <Ionicons name={icon} size={24} color={selected ? "black" : "white"} />
         </CircleButton>

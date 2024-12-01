@@ -1,4 +1,4 @@
-import { User, UserType } from "../models/User";
+import { User, UserType } from "../domain/models/User";
 import { UserRole } from "../../../shared/types";
 import GoogleService from "./GoogleService";
 import Joi from "joi";
@@ -12,6 +12,7 @@ export enum ResultTypes {
     TOKEN_NOT_PROVIDED = "TOKEN_NOT_PROVIDED",
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
     VALIDATION_ERROR = 'VALIDATION_ERROR',
+    FORBIDDEN = 'FORBIDDEN',
 }
 
 export class Result<T = undefined> {

@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useCreateTripStore } from '@/store/createTripStore';
 import { useMapStore } from '@/store/mapStore';
 import { UserRole } from '@/types';
+import useSaveTripMutation from '@/api/mutations/useSaveTripMutation';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type ToolbarAction = {
     name: string;
@@ -13,9 +15,11 @@ export type ToolbarAction = {
 };
 
 export default function useMapToolbar() {
-    const { clearPositions, setIsEditing } = useCreateTripStore((state) => state);
+    const { clearPositions, setIsEditing, getTrip } = useCreateTripStore((state) => state);
     const [selectedAction, setSelectedAction] = useState<string | null>(null);
     const camera = useMapStore((state) => state.camera);
+    const { mutateAsync } = useSaveTripMutation();
+    const queryClient = useQueryClient();
 
     const handleToogle = (actionName: string) => {
         if (selectedAction === actionName) {
@@ -30,7 +34,7 @@ export default function useMapToolbar() {
         clearPositions();
     };
 
-    const handleToolbarAction = ({ name, isToggle }: ToolbarAction) => {
+    const handleToolbarAction = async ({ name, isToggle }: ToolbarAction) => {
         console.log('handleToolbarAction', name);
         setIsEditing(false);
         if (name === 'create') {
@@ -40,6 +44,10 @@ export default function useMapToolbar() {
         } else if (name === 'fly' && camera) {
             console.log('fly');
             camera.flyTo([-71.06017112731934, 42.36272976137689], 12);
+        } else if (name === 'save') {
+            console.log('save');
+            await mutateAsync(getTrip());
+            queryClient.invalidateQueries({ queryKey: ['trips'] });
         }
 
         if (isToggle && selectedAction !== name) {
@@ -54,11 +62,19 @@ export default function useMapToolbar() {
         { icon: 'add', name: 'create', isToggle: true, roles: [UserRole.ADMIN], selectedColor: 'bg-primary' },
         { icon: 'trash', name: 'clear', isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-danger' },
         { icon: 'navigate', name: 'fly', isToggle: false, activeColor: 'active:bg-primary' },
+        { icon: 'save', name: 'save', isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-primary' },
     ];
+
+    const handleToolbarActionCallback = useCallback(
+        (action: ToolbarAction) => {
+            handleToolbarAction(action);
+        },
+        [handleToolbarAction]
+    )
 
     return {
         actions,
         selectedAction,
-        handleToolbarAction,
+        handleToolbarActionCallback,
     };
 }

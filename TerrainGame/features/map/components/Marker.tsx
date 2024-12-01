@@ -15,12 +15,18 @@ export default function Marker({ index, waypoint }: MarkerProps) {
         selectWaypoint(waypoint);
     }
 
+    const handleDeselect = () => {
+        console.log('handleDeselect');
+        selectWaypoint(null);
+    }
+
     return (
         <Mapbox.PointAnnotation
             key={index.toFixed()}
             id={index.toString()}
             coordinate={waypoint.position}
             onSelected={handleSelect}
+            onDeselected={handleDeselect}
         >
             <View>
                 <View className="bg-primary w-10 h-10 rounded-full shadow-lg shadow-primary justify-center items-center relative">

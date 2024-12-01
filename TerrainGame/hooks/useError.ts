@@ -9,6 +9,7 @@ export default function useError() {
     const { setObjectAsync } = useStorage();
 
     const handleError = (error: any) => {
+        console.log('error', error);
         if (!error) {
             return;
         }

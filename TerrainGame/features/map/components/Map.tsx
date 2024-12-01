@@ -1,11 +1,13 @@
-import Mapbox, { LocationPuck, MapView } from "@rnmapbox/maps";
+import Mapbox, { LineLayer, LocationPuck, MapView, ShapeSource } from "@rnmapbox/maps";
 import Marker from "./Marker";
 import MapToolbar from "./MapToolbar";
 import { View, Text } from 'react-native';
 import useMap from "../hooks/useMap";
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useCreateTripStore } from "@/store/createTripStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import Waypoint from "@/features/waypoint/Waypoint";
+import { FeatureCollection, LineString } from 'geojson';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -16,12 +18,32 @@ export default function Map() {
 
     useEffect(() => {
         if (!selectedWaypoint && sheetRef.current) {
+            console.log("hey")
             sheetRef.current.close();
         }
+        console.log("selectedWaypoint", selectedWaypoint);
     }, [selectedWaypoint]);
 
+    const lineGeoJSON: FeatureCollection<LineString> = useMemo(() => {
+        return {
+            type: "FeatureCollection",
+            features: [
+                {
+                    type: "Feature",
+                    geometry: {
+                        type: "LineString",
+                        coordinates: waypoints.map((wp) => wp.position)
+                    },
+                    properties: {}
+                }
+            ]
+        };
+    }, [waypoints]);
+
     if (!hasLocationPermission) {
-        return <View className="bg-background"></View>;
+        return <View className="bg-background">
+            <Text className="text-darkForeground">No location permission</Text>
+        </View>;
     }
 
     return (
@@ -32,16 +54,26 @@ export default function Map() {
                 {/* My postion */}
                 <LocationPuck puckBearing={'heading'} pulsing={"default"} />
 
+                {waypoints.length > 1 && <ShapeSource id="lineSource" shape={lineGeoJSON}>
+                    <LineLayer
+                        id="lineLayer"
+                        style={{
+                            lineColor: "#73ff83",
+                            lineWidth: 4,
+                            lineJoin: "round",
+                            lineCap: "round"
+                        }}
+                    />
+                </ShapeSource>}
+
                 {waypoints.map((waypoint, index) => (
                     <Marker key={index} index={index} waypoint={waypoint} />
                 ))}
             </MapView>
 
-            <BottomSheet index={selectedWaypoint ? 1 : 0} snapPoints={[200, 400]} enablePanDownToClose>
+            <BottomSheet ref={sheetRef} index={selectedWaypoint ? 1 : -1} snapPoints={[200, 400]} enablePanDownToClose>
                 <BottomSheetView>
-                    <View>
-                        <Text>Selected waypoint</Text>
-                    </View>
+                    <Waypoint />
                 </BottomSheetView>
             </BottomSheet>
         </>
