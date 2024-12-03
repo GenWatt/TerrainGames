@@ -7,7 +7,7 @@
         "./*"
       ],
       "@shared/*": [
-        "../shared/*"
+        "./node_modules/shared/types/*"
       ]
     },
     "jsx": "react-jsx"

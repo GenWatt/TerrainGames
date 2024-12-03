@@ -1,5 +1,5 @@
 import { login, register } from "@/api/auth";
-import { ILoginForm, IRegisterForm } from "@/types";
+import { ILoginForm, IRegisterForm, UserRole } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import useStorage from "./useStorage";
@@ -9,6 +9,8 @@ import { useUserStore } from "@/store/userStore";
 export default function useAuth() {
     const router = useRouter();
     const setUser = useUserStore(state => state.setUser);
+    const user = useUserStore(state => state.user);
+    const logoutAction = useUserStore(state => state.logout);
 
     const registerMutation = useMutation({
         mutationFn: register,
@@ -43,10 +45,26 @@ export default function useAuth() {
         await loginMutation.mutateAsync(loginData);
     }
 
+    const logout = async () => {
+        await setObjectAsync('user', null);
+        logoutAction();
+        router.push({ pathname: '/auth/login', params: {} });
+    }
+
+    const hasRoles = (roles: UserRole[]) => {
+        if (!user) {
+            return false;
+        }
+        console.log('user', user);
+        return roles.includes(user.role);
+    }
+
     return {
         registerAsync,
         registerMutation,
         loginAsync,
         loginMutation,
+        hasRoles,
+        logout
     }
 }

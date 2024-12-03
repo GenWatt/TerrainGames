@@ -6,7 +6,7 @@ import useMap from "../hooks/useMap";
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useCreateTripStore } from "@/store/createTripStore";
 import { useEffect, useMemo, useRef } from "react";
-import Waypoint from "@/features/waypoint/Waypoint";
+import Waypoint from "@/features/waypoint/componets/Waypoint";
 import { FeatureCollection, LineString } from 'geojson';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);

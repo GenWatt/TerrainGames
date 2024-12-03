@@ -12,7 +12,7 @@ function useMe() {
         return { user: null, error, isLoading };
     }
 
-    return { user: data.data, error, isLoading };
+    return { user: data.data.data, error, isLoading };
 }
 
 export default useMe

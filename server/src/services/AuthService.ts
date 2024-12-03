@@ -7,12 +7,15 @@ import bcrypt from "bcrypt";
 
 export enum ResultTypes {
     ALREADY_EXISTS = 'ALREADY_EXISTS',
+    GET = 'GET',
     CREATED = 'CREATED',
+    DELETED = 'DELETED',
     NOT_AUTHORIZED = 'NOT_AUTHORIZED',
     TOKEN_NOT_PROVIDED = "TOKEN_NOT_PROVIDED",
     INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
     VALIDATION_ERROR = 'VALIDATION_ERROR',
     FORBIDDEN = 'FORBIDDEN',
+    SUCCESS = 'SUCCESS',
 }
 
 export class Result<T = undefined> {

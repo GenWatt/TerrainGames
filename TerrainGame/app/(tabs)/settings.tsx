@@ -1,22 +1,17 @@
-import { StyleSheet, View, Text } from 'react-native';
+import CustomButton from '@/components/ui/Buttons/CustomButton';
+import useAuth from '@/hooks/useAuth';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text } from 'react-native';
 
 export default function TabTwoScreen() {
+  const { logout } = useAuth();
+
   return (
-    <View>
-      <Text>Tab Two</Text>
+    <View className='p-4 bg-background flex-1'>
+      <CustomButton onPress={logout}>
+        <Ionicons name="log-out" size={24} color="black" />
+        <Text>Logout</Text>
+      </CustomButton>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-});

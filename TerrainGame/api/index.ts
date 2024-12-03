@@ -2,7 +2,6 @@
 import { IApiResult, IUser } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosError } from 'axios';
-import { useNavigation, useRouter } from 'expo-router';
 
 const API_URL = process.env.EXPO_PUBLIC_LANDMARK_LEGENDS_API_URL;
 

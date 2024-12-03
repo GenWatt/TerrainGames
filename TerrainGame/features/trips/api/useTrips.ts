@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAllTrips } from '../trip'
+import { getAllTrips } from '../../../api/trip'
 import useError from '@/hooks/useError'
 
 function useTrips() {
@@ -15,7 +15,9 @@ function useTrips() {
         handleError(error)
     }
 
-    return { data, error, isLoading }
+    const trips = data?.data.data
+
+    return { trips, error, isLoading }
 }
 
 export default useTrips

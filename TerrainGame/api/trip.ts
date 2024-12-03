@@ -7,6 +7,10 @@ export const saveTrip = async (trip: ITrip) => {
     return await landMarkApi.post('/trip', { trip });
 }
 
-export const getAllTrips = async (): Promise<AxiosResponse<ITrip[], IApiResult>> => {
+export const getAllTrips = async (): Promise<AxiosResponse<IApiResult<ITrip[]>, IApiResult>> => {
     return await landMarkApi.get('/trip');
+}
+
+export const deleteTrip = async (tripId: string) => {
+    return await landMarkApi.delete(`/trip/${tripId}`);
 }
