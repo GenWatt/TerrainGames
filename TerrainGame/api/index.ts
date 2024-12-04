@@ -16,6 +16,7 @@ landMarkApi.interceptors.request.use(
         const user: IUser | null = savedUser ? JSON.parse(savedUser) : null;
 
         if (user) {
+            console.log('user', user);
             config.headers.Authorization = `Bearer ${user.accessToken}`;
         }
         return config;

@@ -6,6 +6,6 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
         ? { message: 'Internal server error' }
         : { message: err.message, type: err.type, data: err.data };
 
-    console.log(err);
+    console.log("Middleware Error -", err);
     res.status(status).json(payload);
 }

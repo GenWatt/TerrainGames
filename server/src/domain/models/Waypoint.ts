@@ -11,26 +11,47 @@ export enum WaypointTypes {
 
 export interface IWaypoint extends Document {
     type: WaypointTypes;
-    position: [number, number];
+    position: {
+        type: 'Point';
+        coordinates: [number, number];
+    };
     title: string;
     description: string;
-    quizes?: IQuiz[];
-    imageUrls?: string[];
-    text?: string;
-    taskDescription?: string;
-    taskImages?: string[];
 }
 
 const waypointSchema = new Schema<IWaypoint>({
     type: { type: String, enum: Object.values(WaypointTypes), required: true },
-    position: { type: [Number], required: true },
+    position: {
+        type: { type: String, enum: ['Point'], required: true },
+        coordinates: { type: [Number], required: true }
+    },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    quizes: [{ type: Schema.Types.ObjectId, ref: 'Quiz' }],
-    imageUrls: [String],
-    text: String,
-    taskDescription: String,
-    taskImages: [String],
-});
+}, { discriminatorKey: 'type', collection: 'waypoints' });
+
+waypointSchema.index({ position: '2dsphere' });
 
 export const Waypoint = model<IWaypoint>('Waypoint', waypointSchema);
+
+// QUIZ
+
+export interface IQuizWaypoint extends IWaypoint {
+    quizes: IQuiz[];
+}
+
+const quizWaypointSchema = new Schema<IQuizWaypoint>({
+    quizes: [{ type: Schema.Types.ObjectId, ref: 'Quiz' }]
+});
+
+export const QuizWaypoint = Waypoint.discriminator<IQuizWaypoint>('QUIZ', quizWaypointSchema);
+
+// INFO
+export interface IInfoWaypoint extends IWaypoint {
+    imageUrls: string[];
+}
+
+const infoWaypointSchema = new Schema<IInfoWaypoint>({
+    imageUrls: [String],
+});
+
+export const InfoWaypoint = Waypoint.discriminator<IInfoWaypoint>('INFO', infoWaypointSchema);

@@ -16,6 +16,7 @@ export enum ResultTypes {
     VALIDATION_ERROR = 'VALIDATION_ERROR',
     FORBIDDEN = 'FORBIDDEN',
     SUCCESS = 'SUCCESS',
+    INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
 }
 
 export class Result<T = undefined> {

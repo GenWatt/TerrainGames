@@ -1,11 +1,18 @@
 import * as path from 'path';
 import fs from 'fs';
 import { ICommand, IHandler } from './types';
+import { container } from '../shared/DIContainer';
 
-class Mediator {
+export interface IMediator {
+    send(command: ICommand): Promise<any>;
+}
+
+export default class Mediator implements IMediator {
     private handlers = new Map<ICommand, IHandler>();
+    private excludeServices = ['command'];
 
     constructor() {
+        console.log('Mediator constructor');
         const handlerPath = path.join(__dirname, 'handlers');
         const commandPath = path.join(__dirname, 'commands');
         const queryPath = path.join(__dirname, 'queries');
@@ -24,7 +31,10 @@ class Mediator {
             } else {
                 const handlerModule = require(fullPath);
                 const handlerClass = Object.values(handlerModule)[0];
-                const handlerInstance: IHandler = new (handlerClass as any)();
+
+                const dependencies = container.resolveDependencies(handlerClass);
+                console.log('Dependencies', dependencies);
+                const handlerInstance = new (handlerClass as any)(...dependencies);
 
                 let keyModule;
                 try {
@@ -43,6 +53,24 @@ class Mediator {
         }
     }
 
+    private resolveDependencies(handlerClass: any): any[] {
+        // Assuming the constructor parameter names match the registered service names
+        const paramNames = this.getParamNames(handlerClass);
+        console.log('ParamNames', paramNames);
+        return paramNames.map(name => container.resolve(name));
+    }
+
+    private getParamNames(func: Function): string[] {
+        const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+        const ARGUMENT_NAMES = /([^\s,]+)/g;
+        const fnStr = func.toString().replace(STRIP_COMMENTS, '');
+        const result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+
+        return result === null ? [] : result
+            .filter((service) => !this.excludeServices.includes(service))
+            .map((service) => service.charAt(0).toUpperCase() + service.slice(1));;
+    }
+
     async send(command: ICommand) {
         const handler = this.handlers.get(command.constructor);
 
@@ -52,6 +80,4 @@ class Mediator {
 
         throw new Error('No handler found for this command');
     }
-}
-
-export const mediator = new Mediator();
+};

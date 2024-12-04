@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/useAuth"
+import useMe from "@/api/queries/useMe"
 import { UserRole } from "@/types"
 
 export interface WithRolesProps {
@@ -7,7 +7,7 @@ export interface WithRolesProps {
 }
 
 function WithRoles({ roles, children }: WithRolesProps) {
-    const { hasRoles } = useAuth()
+    const { hasRoles } = useMe()
 
     return (
         <>

@@ -4,6 +4,7 @@ import { useMapStore } from '@/store/mapStore';
 import { UserRole } from '@/types';
 import useSaveTripMutation from '@/api/mutations/useSaveTripMutation';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigation, useRouter } from 'expo-router';
 
 export type ToolbarAction = {
     name: string;
@@ -20,6 +21,7 @@ export default function useMapToolbar() {
     const camera = useMapStore((state) => state.camera);
     const { mutateAsync } = useSaveTripMutation();
     const queryClient = useQueryClient();
+    const navigate = useRouter();
 
     const handleToogle = (actionName: string) => {
         if (selectedAction === actionName) {
@@ -46,8 +48,9 @@ export default function useMapToolbar() {
             camera.flyTo([-71.06017112731934, 42.36272976137689], 12);
         } else if (name === 'save') {
             console.log('save');
-            await mutateAsync(getTrip());
-            queryClient.invalidateQueries({ queryKey: ['trips'] });
+            navigate.push({ pathname: '/(modals)/createTripModal' });
+            // await mutateAsync(getTrip());
+            // queryClient.invalidateQueries({ queryKey: ['trips'] });
         }
 
         if (isToggle && selectedAction !== name) {

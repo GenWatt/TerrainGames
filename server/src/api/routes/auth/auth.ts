@@ -1,11 +1,11 @@
 import express from 'express';
 import AuthController from '../../controllers/authController';
-import AuthService from '../../../services/AuthService';
 import { authMiddleware } from '../../middleware/auth';
+import { container } from '../../../shared/DIContainer';
 // import { UserRole } from '../../types/enums';
 
 const router = express.Router();
-const authController = new AuthController(new AuthService());
+const authController = container.resolve<AuthController>('AuthController');
 
 // Create admin
 router.post('/auth/admin', async (req, res, next) => { await authController.createAdmin(req, res, next) });

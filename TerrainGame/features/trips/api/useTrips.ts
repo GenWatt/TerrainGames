@@ -11,9 +11,7 @@ function useTrips() {
         retry: 0,
     })
 
-    if (error) {
-        handleError(error)
-    }
+    handleError(error)
 
     const trips = data?.data.data
 

@@ -53,6 +53,7 @@ export default function RootLayout() {
               <Stack.Screen name="+not-found" />
               <Stack.Screen name="auth/login" options={{ headerShown: false }} />
               <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+              <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
             </Stack>
           </QueryClientProvider>
           <Toast />

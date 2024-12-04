@@ -5,7 +5,7 @@ export interface CustomButtonProps extends PressableProps { }
 
 function CustomButton({ children, className, ...props }: CustomButtonProps) {
     return (
-        <Pressable className={clsx("bg-primary rounded-xl p-2 self-start", className)} {...props}>
+        <Pressable className={clsx("bg-primary rounded-xl p-3 self-start", className)} {...props}>
             {children}
         </Pressable>
     )

@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { CreateTripCommand } from '../../application/commands/trips/CreateTripCommand';
-import { mediator } from '../../application/mediator';
 import { GetAllTripsQuery } from '../../application/queries/trips/GetAllTripsQuery';
 import { DeleteTripCommand } from '../../application/commands/trips/DeleteTripCommand';
+import { IMediator } from '../../application/Mediator';
 
 class TripController {
+    constructor(private mediator: IMediator) { }
+
     public async create(req: Request, res: Response, next: NextFunction) {
-        const result = await mediator.send(new CreateTripCommand(req.body.trip));
+        const result = await this.mediator.send(new CreateTripCommand(req.body.trip));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);
@@ -16,7 +18,7 @@ class TripController {
     }
 
     public async getAll(req: Request, res: Response, next: NextFunction) {
-        const result = await mediator.send(new GetAllTripsQuery());
+        const result = await this.mediator.send(new GetAllTripsQuery());
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);
@@ -26,8 +28,7 @@ class TripController {
     }
 
     public async delete(req: Request, res: Response, next: NextFunction) {
-        console.log(req.params.id);
-        const result = await mediator.send(new DeleteTripCommand(req.params.id));
+        const result = await this.mediator.send(new DeleteTripCommand(req.params.id));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);

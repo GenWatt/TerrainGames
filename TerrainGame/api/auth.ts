@@ -4,13 +4,13 @@ import { IUser } from "@/types";
 import { AxiosResponse } from "axios";
 
 export const loginWithGoogle = async (idToken: string) => {
-    console.log("lole" + landMarkApi.defaults.baseURL);
     return await landMarkApi.post('/auth/register', { token: idToken });
 }
 
-export const getMe = async (): Promise<AxiosResponse<IApiResult<IUser>, IApiResult>> => {
-    console.log("lole" + landMarkApi.defaults.baseURL);
-    return await landMarkApi.get('/auth/me');
+export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
+    const response = await landMarkApi.get('/auth/me');
+    console.log('response', response);
+    return response;
 }
 
 export const login = async (loginData: ILoginForm): Promise<AxiosResponse<IUser, IApiResult>> => {
