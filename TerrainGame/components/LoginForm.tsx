@@ -1,7 +1,8 @@
 import useLoginFormViewModel from "@/hooks/viewModels/useLoginFormViewModel";
-import { Button, View, Text, TextInput } from "react-native";
-import CustomInput, { CustomInputProps } from "./ui/CustomInput";
+import { View, Text, TextInput } from "react-native";
+import CustomInput from "./ui/CustomInput";
 import { useEffect, useRef } from "react";
+import CustomButton from "./ui/Buttons/CustomButton";
 
 export interface ILoginFormProps {
     isFocus?: boolean;
@@ -18,10 +19,11 @@ export default function LoginForm({ isFocus = true }: ILoginFormProps) {
     }, [isFocus]);
 
     return (
-        <View className="justify-stretch w-full">
+        <View className="">
             <View className="mb-4">
-                <Text>Username</Text>
+                <Text className="text-foreground mb-2">Username</Text>
                 <CustomInput
+                    className=""
                     ref={usernameRef}
                     placeholder="Username"
                     value={form.username}
@@ -30,7 +32,7 @@ export default function LoginForm({ isFocus = true }: ILoginFormProps) {
             </View>
 
             <View className="mb-4">
-                <Text>Password</Text>
+                <Text className="text-foreground mb-2">Password</Text>
                 <CustomInput
                     placeholder="Password"
                     value={form.password}
@@ -38,7 +40,10 @@ export default function LoginForm({ isFocus = true }: ILoginFormProps) {
                     secureTextEntry
                 />
             </View>
-            <Button title="Submit" onPress={handleSubmit} />
+
+            <CustomButton className="w-full" onPress={handleSubmit}>
+                <Text className="text-center text-2xl font-bold">Log In</Text>
+            </CustomButton>
         </View>
     )
 }

@@ -8,6 +8,7 @@ import { useCreateTripStore } from "@/store/createTripStore";
 import { useEffect, useMemo, useRef } from "react";
 import Waypoint from "@/features/waypoint/componets/Waypoint";
 import { FeatureCollection, LineString } from 'geojson';
+import Colors from "@/constants/Colors";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -71,11 +72,17 @@ export default function Map() {
                 ))}
             </MapView>
 
-            <BottomSheet ref={sheetRef} index={selectedWaypoint ? 1 : -1} snapPoints={[200, 400]} enablePanDownToClose>
-                <BottomSheetView>
+            {selectedWaypoint && <BottomSheet
+                handleStyle={{ backgroundColor: Colors.dark.dim }}
+                handleIndicatorStyle={{ backgroundColor: Colors.dark.primary }}
+                ref={sheetRef}
+                index={selectedWaypoint ? 1 : -1}
+                snapPoints={[200, 400]}
+                enablePanDownToClose>
+                <BottomSheetView className="bg-background flex-1">
                     <Waypoint />
                 </BottomSheetView>
-            </BottomSheet>
+            </BottomSheet>}
         </>
     )
 }

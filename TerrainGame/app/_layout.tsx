@@ -8,8 +8,8 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import "../global.css";
 import { useAuthCheck } from '@/hooks/useAuthCheck';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { StatusBar } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { StatusBar, View } from 'react-native';
+import Colors from '@/constants/Colors';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 

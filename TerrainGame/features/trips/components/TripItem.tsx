@@ -6,6 +6,7 @@ import WithRoles from '@/features/shared/componets/auth/WithRoles'
 import { UserRole } from '@/types'
 import useDeleteTripMutation from '../api/useDeleteTripMutation'
 import Animated, { useSharedValue, withSequence, withTiming, runOnJS, useAnimatedStyle } from 'react-native-reanimated'
+import Badge from '@/components/ui/Badge'
 
 export interface TripItemProps {
     trip: ITrip
@@ -48,6 +49,13 @@ function TripItem({ trip }: TripItemProps) {
             <Text className="text-lg font-semibold text-primary mb-1">
                 {trip.title}
             </Text>
+
+            <View className='flex-row'>
+                <Badge>
+                    <Text className='text-darkForeground'>{trip.country}</Text>
+                </Badge>
+            </View>
+
             <Text className="text-sm text-foreground mb-3">
                 {trip.description}
             </Text>

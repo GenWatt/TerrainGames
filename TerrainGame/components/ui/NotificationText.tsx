@@ -15,7 +15,7 @@ export default function NotificationText({ type, children, className, ...props }
             case 'error':
                 return 'text-red-500';
             case 'info':
-                return 'text-blue-500';
+                return 'text-lime-300';
             default:
                 return '';
         }

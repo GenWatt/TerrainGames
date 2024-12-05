@@ -19,8 +19,7 @@ export default function useMapToolbar() {
     const { clearPositions, setIsEditing, getTrip } = useCreateTripStore((state) => state);
     const [selectedAction, setSelectedAction] = useState<string | null>(null);
     const camera = useMapStore((state) => state.camera);
-    const { mutateAsync } = useSaveTripMutation();
-    const queryClient = useQueryClient();
+
     const navigate = useRouter();
 
     const handleToogle = (actionName: string) => {

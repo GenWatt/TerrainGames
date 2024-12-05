@@ -10,7 +10,7 @@ export class CreateTripCommandHandler implements IHandler<ITrip> {
     constructor(private tripRepository: ITripRepository) { }
 
     async handle(command: CreateTripCommand) {
-        const { waypoints, title, description } = command.trip;
+        const { waypoints, title, description, city, country } = command.trip;
 
         const waypointsWithPoint = waypoints.map(waypoint => ({ ...waypoint, position: { type: 'Point', coordinates: waypoint.position } }))
 
@@ -20,7 +20,9 @@ export class CreateTripCommandHandler implements IHandler<ITrip> {
         const trip = new Trip({
             title,
             description,
-            waypoints: waypointIds
+            waypoints: waypointIds,
+            city,
+            country
         });
 
         const savedTrip = await this.tripRepository.create(trip);

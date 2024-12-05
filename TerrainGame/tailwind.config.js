@@ -1,21 +1,6 @@
+const Colors = require('./constants/Colors');
 
-const Colors = {
-  dark: {
-    foreground: '#ecf4fe',
-    foreground2: '#d7e7f7',
-    background: '#1c1a1b',
-    primary: '#73ff83',
-    darkForeground: '#0e2f1a',
-    dim: '#364239C1',
-    danger: '#ff0000',
-  },
-  light: {
-    background: '#FFFFFF',
-    foreground: '#000000',
-    primary: '#FFA500',
-  },
-}
-
+console.log(Colors);
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}", "./features/**/*.{js,jsx,ts,tsx}"],

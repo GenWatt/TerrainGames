@@ -49,10 +49,17 @@ export type Waypoint = (QuizWaypoint | InfoWaypoint | TaskWaypoint) & { _id?: st
 
 export type CreateTripStateType = {
     waypoints: Waypoint[];
-    title: string;
-    description: string;
+    tripDetails: ITripDetails;
+
     isEditing: boolean;
     selectedWaypoint: Waypoint | null;
+}
+
+export type ITripDetails = {
+    title: string;
+    description: string;
+    country: string;
+    city: string;
 }
 
 export type ITrip = {
@@ -60,6 +67,8 @@ export type ITrip = {
     title: string;
     description: string;
     waypoints: Waypoint[];
+    country: string;
+    city: string;
 }
 
 export type CreateTripActionsType = {
@@ -69,14 +78,20 @@ export type CreateTripActionsType = {
     selectWaypoint: (waypoint: Waypoint | null) => void;
     updateWaypoint: (waypoint: Waypoint) => void;
     getTrip: () => ITrip;
+    updateTripDetails: (tripDetails: ITripDetails) => void;
 }
 
 export type CreateTripStoreType = CreateTripStateType & CreateTripActionsType;
 
 export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
     waypoints: [],
-    title: 'LOL',
-    description: 'LOL@',
+    tripDetails: {
+        title: '',
+        description: '',
+        country: '',
+        city: '',
+    },
+
     isEditing: false,
     selectedWaypoint: null,
 
@@ -103,8 +118,9 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
         set({ waypoints, selectedWaypoint: updatedWaypoint });
     },
     getTrip: () => {
-        const { title, description, waypoints } = get();
-        return { title, description, waypoints };
-    }
+        const { tripDetails, waypoints } = get();
+        return { ...tripDetails, waypoints };
+    },
+    updateTripDetails: (tripDetails: ITripDetails) => set({ tripDetails }),
 }));
 

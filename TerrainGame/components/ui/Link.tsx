@@ -11,6 +11,7 @@ export default function Link({ to, replace, ...props }: LinkProps) {
     const router = useRouter();
 
     const handlePress = () => {
+        //@ts-ignore
         router.push({ pathname: to, params: {} });
     }
 

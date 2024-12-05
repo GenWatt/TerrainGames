@@ -1,6 +1,7 @@
 import { View } from "react-native"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import CustomButton from "@/components/ui/Buttons/CustomButton"
+import Colors from "@/constants/Colors"
 
 export interface AdminActionsProps {
     tripId: string
@@ -15,7 +16,7 @@ function AdminActions({ onDelete, tripId }: AdminActionsProps) {
     return (
         <View>
             {onDelete && <CustomButton className="mt-2 bg-danger" onPress={handleDelete}>
-                <Ionicons name="trash" size={24} color={'#fff'} />
+                <Ionicons name="trash" size={20} color={Colors.dark.background} />
             </CustomButton>}
         </View>
     )
