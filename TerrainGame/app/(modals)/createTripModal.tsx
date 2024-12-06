@@ -9,15 +9,16 @@ import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "expo-router"
 import { View, Text } from "react-native"
 import { useForm, Controller } from "react-hook-form"
+import { useEffect } from "react"
 
 function createTripModal() {
     const router = useRouter()
     const { mutateAsync } = useSaveTripMutation();
     const queryClient = useQueryClient();
 
-    const { getTrip, tripDetails, updateTripDetails } = useCreateTripStore();
+    const { getTrip, tripDetails, updateTripDetails, isEditing } = useCreateTripStore();
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: {
             title: '',
             description: '',
@@ -25,6 +26,17 @@ function createTripModal() {
             city: ''
         }
     });
+
+    useEffect(() => {
+        if (isEditing && tripDetails) {
+            reset({
+                title: tripDetails.title,
+                description: tripDetails.description,
+                country: tripDetails.country,
+                city: tripDetails.city
+            });
+        }
+    }, [isEditing, tripDetails, reset]);
 
     const handleCloseModal = () => {
         router.back()
@@ -45,7 +57,7 @@ function createTripModal() {
                 </CircleButton>
 
                 <Text className="text-lg text-primary">
-                    Create Trip Modal
+                    {isEditing ? 'Edit' : 'Create'} Trip Modal
                 </Text>
             </View>
 
@@ -128,7 +140,9 @@ function createTripModal() {
             <View className="mt-3">
                 <CustomButton className='flex-row gap-2 items-center' onPress={handleSubmit(onSubmit)}>
                     <Ionicons name="save" size={24} color={Colors.dark.darkForeground} />
-                    <Text className="text-center text-2xl font-bold">Save</Text>
+                    <Text className="text-center text-2xl font-bold">
+                        {isEditing ? 'Edit' : 'Create'}
+                    </Text>
                 </CustomButton>
             </View>
         </View>

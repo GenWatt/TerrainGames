@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { Waypoint } from '@/store/createTripStore';
+import { IWaypoint } from '@/store/createTripStore';
 
 interface WaypointDisplayProps {
-    waypoint: Waypoint;
+    waypoint: IWaypoint;
 }
 
 const WaypointDisplay: React.FC<WaypointDisplayProps> = ({ waypoint }) => {

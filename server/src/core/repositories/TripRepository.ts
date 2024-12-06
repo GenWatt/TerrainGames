@@ -7,7 +7,7 @@ export default class TripRepository implements ITripRepository {
     }
 
     async get(id: string) {
-        return await Trip.findById(id);
+        return await Trip.findById(id).populate('waypoints');
     }
 
     async update(trip: ITrip, id: string) {

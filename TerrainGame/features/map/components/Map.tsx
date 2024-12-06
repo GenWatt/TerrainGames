@@ -14,7 +14,7 @@ Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
 export default function Map() {
     const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, waypoints } = useMap();
-    const selectedWaypoint = useCreateTripStore((state) => state.selectedWaypoint);
+    const { selectWaypoint, selectedWaypoint } = useCreateTripStore();
     const sheetRef = useRef<BottomSheet>(null);
 
     useEffect(() => {
@@ -25,6 +25,10 @@ export default function Map() {
         console.log("selectedWaypoint", selectedWaypoint);
     }, [selectedWaypoint]);
 
+    const handleClose = () => {
+        selectWaypoint(null);
+    }
+
     const lineGeoJSON: FeatureCollection<LineString> = useMemo(() => {
         return {
             type: "FeatureCollection",
@@ -33,7 +37,7 @@ export default function Map() {
                     type: "Feature",
                     geometry: {
                         type: "LineString",
-                        coordinates: waypoints.map((wp) => wp.position)
+                        coordinates: waypoints.map((wp) => wp.position.coordinates)
                     },
                     properties: {}
                 }
@@ -55,7 +59,7 @@ export default function Map() {
                 {/* My postion */}
                 <LocationPuck puckBearing={'heading'} pulsing={"default"} />
 
-                {waypoints.length > 1 && <ShapeSource id="lineSource" shape={lineGeoJSON}>
+                {waypoints.length > 1 && <ShapeSource id="lineSource" shape={lineGeoJSON} >
                     <LineLayer
                         id="lineLayer"
                         style={{
@@ -67,9 +71,7 @@ export default function Map() {
                     />
                 </ShapeSource>}
 
-                {waypoints.map((waypoint, index) => (
-                    <Marker key={index} index={index} waypoint={waypoint} />
-                ))}
+                <Marker waypoints={waypoints} />
             </MapView>
 
             {selectedWaypoint && <BottomSheet
@@ -78,6 +80,7 @@ export default function Map() {
                 ref={sheetRef}
                 index={selectedWaypoint ? 1 : -1}
                 snapPoints={[200, 400]}
+                onClose={handleClose}
                 enablePanDownToClose>
                 <BottomSheetView className="bg-background flex-1">
                     <Waypoint />

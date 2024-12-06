@@ -17,6 +17,8 @@ export enum ResultTypes {
     FORBIDDEN = 'FORBIDDEN',
     SUCCESS = 'SUCCESS',
     INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
+    NOT_FOUND = 'NOT_FOUND',
+    UPDATED = 'UPDATED',
 }
 
 export class Result<T = undefined> {

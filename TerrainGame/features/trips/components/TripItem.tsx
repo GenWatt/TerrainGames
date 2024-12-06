@@ -1,5 +1,5 @@
 import WaypointList from '@/features/shared/componets/waypoint/WaypointList'
-import { ITrip } from '@/store/createTripStore'
+import { ITrip, useCreateTripStore } from '@/store/createTripStore'
 import { View, Text } from 'react-native'
 import AdminActions from './AdminActions'
 import WithRoles from '@/features/shared/componets/auth/WithRoles'
@@ -7,6 +7,7 @@ import { UserRole } from '@/types'
 import useDeleteTripMutation from '../api/useDeleteTripMutation'
 import Animated, { useSharedValue, withSequence, withTiming, runOnJS, useAnimatedStyle } from 'react-native-reanimated'
 import Badge from '@/components/ui/Badge'
+import { useRouter } from 'expo-router'
 
 export interface TripItemProps {
     trip: ITrip
@@ -14,6 +15,8 @@ export interface TripItemProps {
 
 function TripItem({ trip }: TripItemProps) {
     const { deleteAction } = useDeleteTripMutation()
+    const { editTrip } = useCreateTripStore()
+    const router = useRouter()
 
     const scale = useSharedValue(1);
     const translateX = useSharedValue(0);
@@ -41,6 +44,12 @@ function TripItem({ trip }: TripItemProps) {
         deleteAction(id);
     }
 
+    const handleEdit = () => {
+        console.log('edit trip', trip)
+        editTrip(trip);
+        router.push({ pathname: '/(tabs)' })
+    }
+
     return (
         <Animated.View
             style={animatedStyle}
@@ -65,7 +74,7 @@ function TripItem({ trip }: TripItemProps) {
             </View>
 
             <WithRoles roles={[UserRole.ADMIN]}>
-                <AdminActions tripId={trip._id || ''} onDelete={handleDelete} />
+                <AdminActions tripId={trip._id || ''} onDelete={handleDelete} onEdit={handleEdit} />
             </WithRoles>
         </Animated.View>
     )

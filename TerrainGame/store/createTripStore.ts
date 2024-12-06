@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
+import Mapbox from '@rnmapbox/maps';
 
 export enum WaypointTypes {
     QUIZ = 'QUIZ',
@@ -20,7 +21,10 @@ export type Quiz = {
 
 export type QuizWaypoint = {
     type: WaypointTypes.QUIZ;
-    position: Position;
+    position: {
+        type: string;
+        coordinates: Position;
+    }
     title: string;
     description: string;
     quizes: Quiz[];
@@ -28,7 +32,10 @@ export type QuizWaypoint = {
 
 export type InfoWaypoint = {
     type: WaypointTypes.INFO;
-    position: Position;
+    position: {
+        type: string;
+        coordinates: Position;
+    }
     title: string;
     description: string;
     imageUrls: string[];
@@ -37,7 +44,10 @@ export type InfoWaypoint = {
 
 export type TaskWaypoint = {
     type: WaypointTypes.TASK;
-    position: Position;
+    position: {
+        type: string;
+        coordinates: Position;
+    }
     title: string;
     description: string;
     imageUrls: string[];
@@ -45,14 +55,24 @@ export type TaskWaypoint = {
     taskImages: string[];
 };
 
-export type Waypoint = (QuizWaypoint | InfoWaypoint | TaskWaypoint) & { _id?: string };
+export type IWaypoint = (QuizWaypoint | InfoWaypoint | TaskWaypoint) & { _id?: string };
+
+export enum ToolbarActionTypes {
+    ADD_POSITION = 'ADD_POSITION',
+    DELETE_ALL = 'DELETE_ALL',
+    FLT_TO = 'FLT_TO',
+    ADD_TRIP = 'ADD_TRIP',
+    EDIT_TRIP = 'EDIT_TRIP',
+    NONE = 'NONE',
+}
 
 export type CreateTripStateType = {
-    waypoints: Waypoint[];
+    waypoints: IWaypoint[];
     tripDetails: ITripDetails;
 
     isEditing: boolean;
-    selectedWaypoint: Waypoint | null;
+    selectedWaypoint: IWaypoint | null;
+    action: ToolbarActionTypes;
 }
 
 export type ITripDetails = {
@@ -60,25 +80,38 @@ export type ITripDetails = {
     description: string;
     country: string;
     city: string;
+    position: {
+        type: string;
+        coordinates: Position;
+    }
 }
 
 export type ITrip = {
     _id?: string;
     title: string;
     description: string;
-    waypoints: Waypoint[];
+    waypoints: IWaypoint[];
     country: string;
     city: string;
+    position: {
+        type: string;
+        coordinates: Position;
+    }
 }
 
 export type CreateTripActionsType = {
     setIsEditing: (isEditing: boolean) => void;
     addPosition: (position: Position) => void;
     clearPositions: () => void;
-    selectWaypoint: (waypoint: Waypoint | null) => void;
-    updateWaypoint: (waypoint: Waypoint) => void;
+
+    selectWaypoint: (waypoint: IWaypoint | null) => void;
+    deselectWaypoint: () => void;
+    selectAction: (action: ToolbarActionTypes) => void;
+
+    updateWaypoint: (waypoint: IWaypoint) => void;
     getTrip: () => ITrip;
     updateTripDetails: (tripDetails: ITripDetails) => void;
+    editTrip: (trip: ITrip) => void;
 }
 
 export type CreateTripStoreType = CreateTripStateType & CreateTripActionsType;
@@ -90,17 +123,25 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
         description: '',
         country: '',
         city: '',
+        position: {
+            type: 'Point',
+            coordinates: []
+        }
     },
 
     isEditing: false,
     selectedWaypoint: null,
+    action: ToolbarActionTypes.NONE,
 
     setIsEditing: (isEditing: boolean) => set({ isEditing }),
     addPosition: (position: Position) => {
         const waypoints = get().waypoints;
-        const waypoint: Waypoint = {
+        const waypoint: IWaypoint = {
             type: WaypointTypes.INFO,
-            position,
+            position: {
+                type: 'Point',
+                coordinates: position,
+            },
             title: 'Title',
             description: 'Description',
             imageUrls: [],
@@ -110,8 +151,11 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
         set({ waypoints: [...waypoints, waypoint] });
     },
     clearPositions: () => set({ waypoints: [] }),
-    selectWaypoint: (selectedWaypoint: Waypoint | null) => set({ selectedWaypoint }),
-    updateWaypoint: (updatedWaypoint: Waypoint) => {
+    selectAction: (action: ToolbarActionTypes) => set({ action }),
+    selectWaypoint: (selectedWaypoint: IWaypoint | null) => set({ selectedWaypoint }),
+    deselectWaypoint: () => set({ selectedWaypoint: null }),
+
+    updateWaypoint: (updatedWaypoint: IWaypoint) => {
         const waypoints = get().waypoints.map(waypoint =>
             waypoint.position === updatedWaypoint.position ? updatedWaypoint : waypoint
         );
@@ -122,5 +166,18 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
         return { ...tripDetails, waypoints };
     },
     updateTripDetails: (tripDetails: ITripDetails) => set({ tripDetails }),
+    editTrip: (trip: ITrip) => {
+        set({
+            waypoints: trip.waypoints,
+            tripDetails: {
+                title: trip.title,
+                description: trip.description,
+                country: trip.country,
+                city: trip.city,
+                position: trip.position
+            },
+            isEditing: true,
+        });
+    }
 }));
 

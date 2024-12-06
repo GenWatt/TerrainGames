@@ -1,13 +1,11 @@
 import { useCallback, useState } from 'react';
-import { useCreateTripStore } from '@/store/createTripStore';
+import { ToolbarActionTypes, useCreateTripStore } from '@/store/createTripStore';
 import { useMapStore } from '@/store/mapStore';
 import { UserRole } from '@/types';
-import useSaveTripMutation from '@/api/mutations/useSaveTripMutation';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigation, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 export type ToolbarAction = {
-    name: string;
+    name: ToolbarActionTypes;
     icon: any;
     isToggle: boolean;
     roles?: UserRole[];
@@ -16,19 +14,19 @@ export type ToolbarAction = {
 };
 
 export default function useMapToolbar() {
-    const { clearPositions, setIsEditing, getTrip } = useCreateTripStore((state) => state);
+    const { clearPositions, setIsEditing, isEditing, selectAction } = useCreateTripStore((state) => state);
     const [selectedAction, setSelectedAction] = useState<string | null>(null);
     const camera = useMapStore((state) => state.camera);
 
     const navigate = useRouter();
 
     const handleToogle = (actionName: string) => {
-        if (selectedAction === actionName) {
-            setIsEditing(false);
-            return;
-        }
+        // if (selectedAction === actionName) {
+        //     setIsEditing(false);
+        //     return;
+        // }
 
-        setIsEditing(true);
+        // setIsEditing(true);
     };
 
     const handleClearPress = () => {
@@ -37,23 +35,21 @@ export default function useMapToolbar() {
 
     const handleToolbarAction = async ({ name, isToggle }: ToolbarAction) => {
         console.log('handleToolbarAction', name);
-        setIsEditing(false);
-        if (name === 'create') {
+
+        if (name === ToolbarActionTypes.ADD_POSITION) {
             handleToogle(name);
-        } else if (name === 'clear') {
+        } else if (name === ToolbarActionTypes.DELETE_ALL) {
             handleClearPress();
-        } else if (name === 'fly' && camera) {
+        } else if (name === ToolbarActionTypes.FLT_TO && camera) {
             console.log('fly');
             camera.flyTo([-71.06017112731934, 42.36272976137689], 12);
-        } else if (name === 'save') {
+        } else if (name === ToolbarActionTypes.ADD_TRIP) {
             console.log('save');
             navigate.push({ pathname: '/(modals)/createTripModal' });
-            // await mutateAsync(getTrip());
-            // queryClient.invalidateQueries({ queryKey: ['trips'] });
         }
 
         if (isToggle && selectedAction !== name) {
-            setSelectedAction(name);
+            selectAction(name);
             return;
         }
 
@@ -61,10 +57,10 @@ export default function useMapToolbar() {
     };
 
     const actions: ToolbarAction[] = [
-        { icon: 'add', name: 'create', isToggle: true, roles: [UserRole.ADMIN], selectedColor: 'bg-primary' },
-        { icon: 'trash', name: 'clear', isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-danger' },
-        { icon: 'navigate', name: 'fly', isToggle: false, activeColor: 'active:bg-primary' },
-        { icon: 'save', name: 'save', isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-primary' },
+        { icon: 'add', name: ToolbarActionTypes.ADD_POSITION, isToggle: true, roles: [UserRole.ADMIN], selectedColor: 'bg-primary' },
+        { icon: 'trash', name: ToolbarActionTypes.DELETE_ALL, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-danger' },
+        { icon: 'navigate', name: ToolbarActionTypes.FLT_TO, isToggle: false, activeColor: 'active:bg-primary' },
+        { icon: isEditing ? 'create' : 'save', name: ToolbarActionTypes.ADD_TRIP, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-primary' },
     ];
 
     const handleToolbarActionCallback = useCallback(

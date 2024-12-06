@@ -1,11 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import { useRouter } from 'expo-router';
+import { useRouter, useSegments } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import useStorage from './useStorage';
 import { ApiError, ResultTypes } from '@/types';
 
 export default function useError() {
     const router = useRouter();
+    const segments = useSegments();
     const { setObjectAsync } = useStorage();
 
     const handleError = (error: any) => {
@@ -19,6 +20,9 @@ export default function useError() {
             const errorData = axiosError.response?.data;
 
             if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
+                if (segments[0] === 'auth') return;
+
+                console.log('not authorized!!!');
                 router.push({ pathname: "/auth/login", params: {} });
                 setObjectAsync('user', null);
 

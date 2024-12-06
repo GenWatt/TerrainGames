@@ -16,7 +16,7 @@ function useMap() {
 
     const handlePress = (feature: GeoJSON.Feature) => {
         selectWaypoint(null);
-        if (feature.geometry.type === 'Point' && isEditing) {
+        if (feature.geometry.type === 'Point') {
             addPosition(feature.geometry.coordinates);
         }
     }

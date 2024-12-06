@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Button } from 'react-native';
-import { Waypoint } from '@/store/createTripStore';
+import { IWaypoint } from '@/store/createTripStore';
 import CustomInput from '@/components/ui/CustomInput';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Colors from '@/constants/Colors';
 
 interface WaypointEditProps {
-    waypoint: Waypoint;
-    onSave: (waypoint: Waypoint) => void;
+    waypoint: IWaypoint;
+    onSave: (waypoint: IWaypoint) => void;
 }
 
 const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave }) => {
     const [editedWaypoint, setEditedWaypoint] = React.useState(waypoint);
+
+    useEffect(() => {
+        setEditedWaypoint(waypoint);
+    }, [waypoint]);
 
     const handleSave = () => {
         onSave(editedWaypoint);

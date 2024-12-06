@@ -1,9 +1,9 @@
-import { Waypoint } from "@/store/createTripStore"
+import { IWaypoint } from "@/store/createTripStore"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { View, Text } from "react-native"
 
 export interface WaypointListProps {
-    waypoints: Waypoint[]
+    waypoints: IWaypoint[]
 }
 
 function WaypointList({ waypoints }: WaypointListProps) {
