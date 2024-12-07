@@ -4,6 +4,7 @@ import { useCreateTripStore, IWaypoint } from '@/store/createTripStore';
 import { useMemo, useRef } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
+import { useRouter } from 'expo-router';
 
 export interface MarkerProps {
     waypoints: IWaypoint[];
@@ -11,6 +12,7 @@ export interface MarkerProps {
 
 export default function Marker({ waypoints }: MarkerProps) {
     const selectWaypoint = useCreateTripStore((state) => state.selectWaypoint);
+    const router = useRouter();
 
     const markersGeoJSON: FeatureCollection<Point> = useMemo(() => {
         return {
@@ -29,22 +31,12 @@ export default function Marker({ waypoints }: MarkerProps) {
         };
     }, [waypoints]);
 
-    const handleSelect = (payload: GeoJSON.Feature) => {
-        // ref.current?._onDeselected();
-        console.log('handleSelect', payload);
-        // selectWaypoint(waypoint, ref);
-    }
-
-    const handleDeselect = () => {
-        console.log('handleDeselect');
-        // selectWaypoint(null, { current: null });
-    }
-
     const handleMarkerPress = async (event: any) => {
         // const { screenPointX, screenPointY } = event.properties;
         const index: number = event.features[0].properties.id;
         console.log('handleMarkerPress', index);
         selectWaypoint(waypoints[index - 1]);
+        router.push({ pathname: '/(modals)/waypointModal' });
     };
 
     return (

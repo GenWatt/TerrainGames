@@ -14,9 +14,8 @@ landMarkApi.interceptors.request.use(
     async (config) => {
         const savedUser = await AsyncStorage.getItem('user');
         const user: IUser | null = savedUser ? JSON.parse(savedUser) : null;
-        console.log('user', user);
+
         if (user) {
-            console.log('user', user);
             config.headers.Authorization = `Bearer ${user.accessToken}`;
         }
         return config;

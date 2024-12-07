@@ -1,54 +1,121 @@
 import React, { useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
-import { IWaypoint } from '@/store/createTripStore';
-import CustomInput from '@/components/ui/CustomInput';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import { IWaypoint, WaypointTypes } from '@/store/createTripStore';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Colors from '@/constants/Colors';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import RNPickerSelect from 'react-native-picker-select';
+import InfoWaypointForm from './InfoWaypointForm';
+import QuizWaypointForm from './QuizWaypointForm';
 
 interface WaypointEditProps {
     waypoint: IWaypoint;
     onSave: (waypoint: IWaypoint) => void;
+    onDelete: (waypoint: IWaypoint) => void;
 }
 
-const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave }) => {
-    const [editedWaypoint, setEditedWaypoint] = React.useState(waypoint);
+const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete }) => {
+    const methods = useForm<IWaypoint>({
+        defaultValues: waypoint,
+    });
+
+    const { control, handleSubmit, watch, reset } = methods;
+    const selectedType = watch('type');
 
     useEffect(() => {
-        setEditedWaypoint(waypoint);
-    }, [waypoint]);
+        reset(waypoint);
+    }, [waypoint, reset]);
 
     const handleSave = () => {
-        onSave(editedWaypoint);
+        const newValues = methods.getValues();
+        console.log('newValues', newValues);
+        onSave(newValues);
     };
 
+    const handleDelete = () => {
+        onDelete(waypoint);
+    }
+
     return (
-        <View className="justify-stretch w-full p-4">
-            <View className="mb-4">
-                <Text className='text-foreground mb-2'>Title</Text>
-                <CustomInput
-                    placeholder="Title"
-                    value={editedWaypoint.title}
-                    onChangeText={(value) => setEditedWaypoint({ ...editedWaypoint, title: value })}
-                />
+        <FormProvider {...methods}>
+            <View className="justify-stretch w-full p-4">
+                <View className="mb-4">
+                    <Text className='text-foreground mb-2'>Waypoint Type</Text>
+                    <Controller
+                        control={control}
+                        name="type"
+                        render={({ field: { onChange, value } }) => (
+                            <RNPickerSelect
+                                onValueChange={onChange}
+                                items={Object.values(WaypointTypes).map((type) => ({
+                                    label: type,
+                                    value: type,
+                                }))}
+                                value={value}
+                                style={{
+                                    inputIOS: styles.inputIOS,
+                                    inputAndroid: styles.inputAndroid,
+                                    iconContainer: styles.iconContainer
+                                }}
+                                useNativeAndroidPickerStyle={false}
+                                Icon={() => {
+                                    return <Ionicons name="chevron-down" size={24} color={Colors.dark.foreground} />;
+                                }}
+                            />
+                        )}
+                    />
+                </View>
 
+                {selectedType === WaypointTypes.INFO && <InfoWaypointForm />}
+                {selectedType === WaypointTypes.QUIZ && <QuizWaypointForm />}
+                {/* {selectedType === WaypointTypes.TASK && <TaskWaypointForm />} */}
+
+                <View className='flex-row gap-2'>
+                    <CustomButton className='flex-row gap-2 items-center' onPress={handleSave}>
+                        <Ionicons name="save" size={24} color={Colors.dark.darkForeground} />
+                        <Text className="text-center text-2xl font-bold">Save</Text>
+                    </CustomButton>
+
+                    <CustomButton className='flex-row gap-2 items-center' onPress={handleDelete}>
+                        <Ionicons name="remove-circle" size={24} color={Colors.dark.darkForeground} />
+                        <Text className="text-center text-2xl font-bold">Delete</Text>
+                    </CustomButton>
+                </View>
             </View>
-
-            <View className="mb-4">
-                <Text className='text-foreground mb-2'>Description</Text>
-                <CustomInput
-                    placeholder="Description"
-                    value={editedWaypoint.description}
-                    onChangeText={(value) => setEditedWaypoint({ ...editedWaypoint, description: value })}
-                />
-            </View>
-
-            <CustomButton className='flex-row gap-2 items-center' onPress={handleSave}>
-                <Ionicons name="save" size={24} color={Colors.dark.darkForeground} />
-                <Text className="text-center text-2xl font-bold">Save</Text>
-            </CustomButton>
-        </View>
+        </FormProvider>
     );
 };
+
+const styles = StyleSheet.create({
+    inputIOS: {
+        height: 50,
+        width: '100%',
+        color: Colors.dark.foreground,
+        backgroundColor: Colors.dark.background,
+        borderColor: Colors.dark.primary,
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 8,
+        paddingVertical: 10,
+    },
+    inputAndroid: {
+        height: 50,
+        width: '100%',
+        color: Colors.dark.foreground,
+        backgroundColor: Colors.dark.background,
+        borderColor: Colors.dark.primary,
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 8,
+        paddingVertical: 10,
+    },
+    iconContainer: {
+        top: Platform.OS === 'ios' ? 10 : 15,
+        right: 12,
+        backgroundColor: 'transparent',
+    },
+});
+
 
 export default WaypointEdit;

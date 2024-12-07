@@ -12,7 +12,7 @@ function useMe() {
         if (!user) {
             return false;
         }
-        console.log('user', user);
+
         return roles.includes(user.role);
     }
 

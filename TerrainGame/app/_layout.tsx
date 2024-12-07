@@ -12,6 +12,7 @@ import { StatusBar, View } from 'react-native';
 import Colors from '@/constants/Colors';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Header from '@/components/ui/Header';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -54,6 +55,7 @@ export default function RootLayout() {
               <Stack.Screen name="auth/login" options={{ headerShown: false }} />
               <Stack.Screen name="auth/register" options={{ headerShown: false }} />
               <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
+              <Stack.Screen name="(modals)/waypointModal" options={{ presentation: 'card', header: () => <Header title="Edit Waypoint" /> }} />
             </Stack>
           </QueryClientProvider>
           <Toast />

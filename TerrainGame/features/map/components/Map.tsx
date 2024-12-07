@@ -19,15 +19,14 @@ export default function Map() {
 
     useEffect(() => {
         if (!selectedWaypoint && sheetRef.current) {
-            console.log("hey")
             sheetRef.current.close();
         }
         console.log("selectedWaypoint", selectedWaypoint);
     }, [selectedWaypoint]);
 
-    const handleClose = () => {
-        selectWaypoint(null);
-    }
+    // const handleClose = () => {
+    //     selectWaypoint(null);
+    // }
 
     const lineGeoJSON: FeatureCollection<LineString> = useMemo(() => {
         return {
@@ -74,18 +73,17 @@ export default function Map() {
                 <Marker waypoints={waypoints} />
             </MapView>
 
-            {selectedWaypoint && <BottomSheet
+            {/* {selectedWaypoint && <BottomSheet
                 handleStyle={{ backgroundColor: Colors.dark.dim }}
                 handleIndicatorStyle={{ backgroundColor: Colors.dark.primary }}
                 ref={sheetRef}
                 index={selectedWaypoint ? 1 : -1}
                 snapPoints={[200, 400]}
-                onClose={handleClose}
-                enablePanDownToClose>
+                onClose={handleClose}>
                 <BottomSheetView className="bg-background flex-1">
-                    <Waypoint />
+                   
                 </BottomSheetView>
-            </BottomSheet>}
+            </BottomSheet>} */}
         </>
     )
 }

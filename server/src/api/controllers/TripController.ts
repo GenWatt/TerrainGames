@@ -3,6 +3,7 @@ import { CreateTripCommand } from '../../application/commands/trips/CreateTripCo
 import { GetAllTripsQuery } from '../../application/queries/trips/GetAllTripsQuery';
 import { DeleteTripCommand } from '../../application/commands/trips/DeleteTripCommand';
 import { IMediator } from '../../application/Mediator';
+import { UpdateTripCommand } from '../../application/commands/trips/UpdateTripCommand';
 
 class TripController {
     constructor(private mediator: IMediator) { }
@@ -29,6 +30,22 @@ class TripController {
 
     public async delete(req: Request, res: Response, next: NextFunction) {
         const result = await this.mediator.send(new DeleteTripCommand(req.params.id));
+
+        if (result.isSuccess) {
+            return res.status(result.statusCode).json(result);
+        }
+
+        next(result.error);
+    }
+
+    public async update(req: Request, res: Response, next: NextFunction) {
+        // console log quiezes
+        req.body.trip.waypoints.forEach((waypoint: any) => {
+            console.log(waypoint);
+            waypoint.quiezes && console.log(waypoint.quiezes);
+        });
+
+        const result = await this.mediator.send(new UpdateTripCommand(req.params.id, req.body.trip));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);

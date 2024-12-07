@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
-import Mapbox from '@rnmapbox/maps';
 
 export enum WaypointTypes {
     QUIZ = 'QUIZ',
@@ -76,6 +75,7 @@ export type CreateTripStateType = {
 }
 
 export type ITripDetails = {
+    _id?: string;
     title: string;
     description: string;
     country: string;
@@ -86,22 +86,14 @@ export type ITripDetails = {
     }
 }
 
-export type ITrip = {
-    _id?: string;
-    title: string;
-    description: string;
+export type ITrip = ITripDetails & {
     waypoints: IWaypoint[];
-    country: string;
-    city: string;
-    position: {
-        type: string;
-        coordinates: Position;
-    }
 }
 
 export type CreateTripActionsType = {
     setIsEditing: (isEditing: boolean) => void;
     addPosition: (position: Position) => void;
+    removeWaypoint: (waypoint: IWaypoint) => void;
     clearPositions: () => void;
 
     selectWaypoint: (waypoint: IWaypoint | null) => void;
@@ -119,6 +111,7 @@ export type CreateTripStoreType = CreateTripStateType & CreateTripActionsType;
 export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
     waypoints: [],
     tripDetails: {
+        _id: '',
         title: '',
         description: '',
         country: '',
@@ -150,6 +143,10 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
         set({ waypoints: [...waypoints, waypoint] });
     },
+    removeWaypoint: (waypoint: IWaypoint) => {
+        const waypoints = get().waypoints.filter(wp => wp.position !== waypoint.position);
+        set({ waypoints });
+    },
     clearPositions: () => set({ waypoints: [] }),
     selectAction: (action: ToolbarActionTypes) => set({ action }),
     selectWaypoint: (selectedWaypoint: IWaypoint | null) => set({ selectedWaypoint }),
@@ -157,19 +154,22 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
     updateWaypoint: (updatedWaypoint: IWaypoint) => {
         const waypoints = get().waypoints.map(waypoint =>
-            waypoint.position === updatedWaypoint.position ? updatedWaypoint : waypoint
+            waypoint._id === updatedWaypoint._id ? updatedWaypoint : waypoint
         );
         set({ waypoints, selectedWaypoint: updatedWaypoint });
     },
     getTrip: () => {
         const { tripDetails, waypoints } = get();
+        console.log('getTrip', tripDetails);
         return { ...tripDetails, waypoints };
     },
-    updateTripDetails: (tripDetails: ITripDetails) => set({ tripDetails }),
+    updateTripDetails: (tripDetails: ITripDetails) => set({ tripDetails: { ...tripDetails } }),
     editTrip: (trip: ITrip) => {
+        console.log('edit trip', trip._id);
         set({
             waypoints: trip.waypoints,
             tripDetails: {
+                _id: trip._id,
                 title: trip.title,
                 description: trip.description,
                 country: trip.country,

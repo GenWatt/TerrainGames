@@ -40,7 +40,14 @@ export interface IQuizWaypoint extends IWaypoint {
 }
 
 const quizWaypointSchema = new Schema<IQuizWaypoint>({
-    quizes: [{ type: Schema.Types.ObjectId, ref: 'Quiz' }]
+    quizes: [{
+        question: { type: String, required: true },
+        imageUrls: { type: [String] },
+        answers: { type: [String], required: true },
+        correctAnswer: { type: String, required: true },
+        explanation: { type: String },
+        answerTime: { type: Number },
+    }]
 });
 
 export const QuizWaypoint = Waypoint.discriminator<IQuizWaypoint>('QUIZ', quizWaypointSchema);
