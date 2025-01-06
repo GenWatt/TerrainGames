@@ -1,15 +1,17 @@
 import { IRegisterForm } from "@/types";
 import { useState } from "react";
 import useAuth from "../useAuth";
-import { getError } from "@/api";
+import useError from "../useError";
 
 export default function useRegisterFormViewModel() {
     const { registerAsync, registerMutation } = useAuth();
+    const { getErrorMessage } = useError();
     const [form, setForm] = useState<IRegisterForm>({
         username: '',
         password: '',
         email: '',
     })
+    const [error, setError] = useState<string | null>(null);
 
     const handleChange = (name: string, value: string) => {
         setForm({
@@ -19,14 +21,18 @@ export default function useRegisterFormViewModel() {
     };
 
     const handleSubmit = async () => {
-        await registerAsync(form);
+        try {
+            await registerAsync(form);
+        } catch (error) {
+            setError(getErrorMessage(error));
+        }
     };
 
-    const registerError = getError(registerMutation.error);
     return {
         registerMutation,
         form,
         handleChange,
-        handleSubmit
+        handleSubmit,
+        error
     };
 }

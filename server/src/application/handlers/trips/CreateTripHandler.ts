@@ -3,8 +3,8 @@ import { Waypoint } from "../../../domain/models/Waypoint";
 import { CreateTripCommand } from "../../commands/trips/CreateTripCommand";
 import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
-import { ResultTypes } from "../../../services/AuthService";
 import ITripRepository from "../../../domain/repositories/trips/ITripRepository";
+import { ResultTypes } from "../../../domain/types/enums";
 
 export class CreateTripCommandHandler implements IHandler<ITrip> {
     constructor(private tripRepository: ITripRepository) { }

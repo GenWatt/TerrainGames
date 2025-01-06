@@ -23,3 +23,14 @@ export enum Theme {
     LIGHT = 'light',
     DARK = 'dark',
 }
+
+export type RegisterUserDTO = {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export type LoginUserDTO = {
+    username: string;
+    password: string;
+}

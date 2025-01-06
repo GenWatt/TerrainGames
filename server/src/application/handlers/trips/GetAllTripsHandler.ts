@@ -1,7 +1,7 @@
 import { ITrip } from "../../../domain/models/Trip";
 import ITripRepository from "../../../domain/repositories/trips/ITripRepository";
 import { Result } from "../../../domain/Result";
-import { ResultTypes } from "../../../services/AuthService";
+import { ResultTypes } from "../../../domain/types/enums";
 import { GetAllTripsQuery } from "../../queries/trips/GetAllTripsQuery";
 import { IHandler } from "../../types";
 

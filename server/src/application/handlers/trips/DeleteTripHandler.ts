@@ -1,7 +1,7 @@
 import Trip from "../../../domain/models/Trip";
 import { Waypoint } from "../../../domain/models/Waypoint";
 import { Result } from "../../../domain/Result";
-import { ResultTypes } from "../../../services/AuthService";
+import { ResultTypes } from "../../../domain/types/enums";
 import { DeleteTripCommand } from "../../commands/trips/DeleteTripCommand";
 import { IHandler } from "../../types";
 

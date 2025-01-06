@@ -1,75 +1,48 @@
 import { NextFunction, Request, Response } from 'express';
-import AuthService from '../../services/AuthService';
+import { RegisterCommand } from '../../application/commands/auth/RegisterUserCommand';
+import { IMediator } from '../../application/Mediator';
+import { LoginUserCommand } from '../../application/commands/auth/LoginUserCommand';
+import { CreateAdminCommand } from '../../application/commands/auth/CreateAdminCommand';
 
 class AuthController {
-    public constructor(private authService: AuthService) {
-        this.authService = authService;
-    }
+    public constructor(private mediator: IMediator) { }
 
     googleCallback(req: Request, res: Response) {
         res.redirect('myapp://auth?token=${token}');
     }
 
     async createAdmin(req: Request, res: Response, next: NextFunction) {
-        try {
-            const result = await this.authService.createAdmin();
+        const result = await this.mediator.send(new CreateAdminCommand({
+            username: 'Adminek',
+            email: process.env.ADMIN_EMAIL!,
+            password: process.env.ADMIN_PASSWORD!
+        }));
 
-            res.status(result.statusCode).send(result.message);
+        if (result.isSuccess) {
+            return res.status(result.statusCode).json(result);
         }
-        catch (err) {
-            next(err);
-        }
-    }
 
-    async register(req: Request, res: Response, next: NextFunction) {
-        try {
-            const token = req.body.token;
-            const result = await this.authService.register(token);
-
-            if (result.data) {
-                res.status(result.statusCode).send(result.data);
-                return;
-            }
-
-            res.status(result.statusCode).send(result.message);
-        }
-        catch (err) {
-            next(err);
-        }
+        next(result);
     }
 
     async login(req: Request, res: Response, next: NextFunction) {
-        try {
-            const loginData = req.body;
-            const result = await this.authService.login(loginData);
+        const result = await this.mediator.send(new LoginUserCommand(req.body));
 
-            if (result.data) {
-                res.status(result.statusCode).send(result.data);
-                return;
-            }
+        if (result.isSuccess) {
+            return res.status(result.statusCode).json(result);
+        }
 
-            res.status(result.statusCode).send(result.message);
-        }
-        catch (err) {
-            next(err);
-        }
+        next(result);
     }
 
     async registerUser(req: Request, res: Response, next: NextFunction) {
-        try {
-            const loginData = req.body;
-            const result = await this.authService.registerUser(loginData);
+        const result = await this.mediator.send(new RegisterCommand(req.body));
 
-            if (result.data) {
-                res.status(result.statusCode).send(result.data);
-                return;
-            }
+        if (result.isSuccess) {
+            return res.status(result.statusCode).json(result);
+        }
 
-            res.status(result.statusCode).send(result);
-        }
-        catch (err) {
-            next(err);
-        }
+        next(result);
     }
 }
 

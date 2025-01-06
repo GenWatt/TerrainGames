@@ -1,10 +1,10 @@
 import * as path from 'path';
 import fs from 'fs';
-import { ICommand, IHandler } from './types';
+import { ICommand, IHandler, IResult } from './types';
 import { container } from '../shared/DIContainer';
 
 export interface IMediator {
-    send(command: ICommand): Promise<any>;
+    send<T>(command: ICommand): Promise<IResult<T | null>>;
 }
 
 export default class Mediator implements IMediator {
@@ -71,7 +71,7 @@ export default class Mediator implements IMediator {
             .map((service) => service.charAt(0).toUpperCase() + service.slice(1));;
     }
 
-    async send(command: ICommand) {
+    async send<T>(command: ICommand): Promise<IResult<T | null>> {
         const handler = this.handlers.get(command.constructor);
 
         if (handler) {

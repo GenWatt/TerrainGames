@@ -5,13 +5,15 @@ import NotificationText from "./ui/NotificationText";
 import CustomButton from "./ui/Buttons/CustomButton";
 
 export default function RegisterForm() {
-    const { form, handleChange, handleSubmit, registerMutation } = useRegisterFormViewModel();
+    const { form, handleChange, handleSubmit, error } = useRegisterFormViewModel();
 
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+            <Text className="text-danger">{error}</Text>
+
             <View>
                 <View className="mb-4">
                     <Text className="text-foreground mb-2">Username</Text>
@@ -42,7 +44,6 @@ export default function RegisterForm() {
                     />
                 </View>
 
-                {/* {registerMutation.error && <NotificationText type="error">{registerMutation.error.response?.data}</NotificationText>} */}
                 <CustomButton className="w-full" onPress={handleSubmit}>
                     <Text className="text-center text-2xl font-bold">Register</Text>
                 </CustomButton>

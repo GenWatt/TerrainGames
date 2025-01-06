@@ -1,9 +1,8 @@
 import { login, register } from "@/api/auth";
-import { ILoginForm, IRegisterForm, UserRole } from "@/types";
+import { ILoginForm, IRegisterForm } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import useStorage from "./useStorage";
-import { AxiosError } from "axios";
 import { useUserStore } from "@/store/userStore";
 
 export default function useAuth() {
@@ -16,9 +15,6 @@ export default function useAuth() {
         onSuccess(data, variables, context) {
             router.push({ pathname: '/auth/login', params: {} });
         },
-        onError(error: AxiosError, variables, context) {
-            console.log('error', error.response?.data);
-        }
     });
 
     const { setObjectAsync } = useStorage();
@@ -26,13 +22,10 @@ export default function useAuth() {
     const loginMutation = useMutation({
         mutationFn: login,
         async onSuccess(data, variables, context) {
-            console.log('data', data.data);
-            await setObjectAsync('user', data.data);
-            setUser(data.data);
+            console.log('Login data', data.data);
+            await setObjectAsync('user', data.data.data);
+            setUser(data.data.data);
             router.push({ pathname: '/(tabs)' });
-        },
-        onError(error, variables, context) {
-            console.log('error', error.message);
         }
     })
 

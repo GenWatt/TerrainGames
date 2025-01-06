@@ -19,6 +19,8 @@ export default function useError() {
             const axiosError = error as AxiosError<ApiError>;
             const errorData = axiosError.response?.data;
 
+            console.log('errorData', errorData);
+
             if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
                 if (segments[0] === 'auth') return;
 
@@ -57,5 +59,13 @@ export default function useError() {
         });
     }
 
-    return { handleError };
+    const getErrorMessage = (error: any) => {
+        if (axios.isAxiosError(error)) {
+            return error.response?.data.message;
+        }
+
+        return 'An error occurred'
+    };
+
+    return { handleError, getErrorMessage };
 }

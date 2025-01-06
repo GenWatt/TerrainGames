@@ -9,7 +9,7 @@ export interface ILoginFormProps {
 }
 
 export default function LoginForm({ isFocus = true }: ILoginFormProps) {
-    const { form, handleChange, handleSubmit } = useLoginFormViewModel();
+    const { form, handleChange, handleSubmit, error } = useLoginFormViewModel();
     const usernameRef = useRef<null | TextInput>(null);
 
     useEffect(() => {
@@ -19,11 +19,12 @@ export default function LoginForm({ isFocus = true }: ILoginFormProps) {
     }, [isFocus]);
 
     return (
-        <View className="">
+        <View>
+            <Text className="text-danger">{error}</Text>
+
             <View className="mb-4">
                 <Text className="text-foreground mb-2">Username</Text>
                 <CustomInput
-                    className=""
                     ref={usernameRef}
                     placeholder="Username"
                     value={form.username}

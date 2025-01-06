@@ -1,5 +1,5 @@
 import { IResult } from "../application/types";
-import { ResultTypes } from "../services/AuthService";
+import { ResultTypes } from "./types/enums";
 
 export class Result<T> implements IResult<T> {
     data: T | null;

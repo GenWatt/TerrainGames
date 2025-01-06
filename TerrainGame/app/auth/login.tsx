@@ -33,11 +33,3 @@ export default function LoginScreen() {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    loginImage: {
-        width: '100%',
-        height: 300,
-        marginBottom: 16,
-    }
-})

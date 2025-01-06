@@ -15,7 +15,7 @@ class TripController {
             return res.status(result.statusCode).json(result);
         }
 
-        next(result.error);
+        next(result);
     }
 
     public async getAll(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +25,7 @@ class TripController {
             return res.status(result.statusCode).json(result);
         }
 
-        next(result.error);
+        next(result);
     }
 
     public async delete(req: Request, res: Response, next: NextFunction) {
@@ -35,7 +35,7 @@ class TripController {
             return res.status(result.statusCode).json(result);
         }
 
-        next(result.error);
+        next(result);
     }
 
     public async update(req: Request, res: Response, next: NextFunction) {
@@ -51,7 +51,7 @@ class TripController {
             return res.status(result.statusCode).json(result);
         }
 
-        next(result.error);
+        next(result);
     }
 }
 

@@ -4,7 +4,7 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
     const status = err.statusCode || 500;
     const payload = status === 500
         ? { message: 'Internal server error' }
-        : { message: err.message, type: err.type, data: err.data };
+        : { message: err.error, type: err.type, data: err.data };
 
     console.log("Middleware Error -", err);
     res.status(status).json(payload);
