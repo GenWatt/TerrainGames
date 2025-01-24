@@ -1,7 +1,6 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import Mapbox, { ShapeSource, SymbolLayer } from "@rnmapbox/maps";
+import { ShapeSource, SymbolLayer } from "@rnmapbox/maps";
 import { useCreateTripStore, IWaypoint } from '@/store/createTripStore';
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
 import { useRouter } from 'expo-router';
@@ -10,7 +9,7 @@ export interface MarkerProps {
     waypoints: IWaypoint[];
 }
 
-export default function Marker({ waypoints }: MarkerProps) {
+export default function RoadMarker({ waypoints }: MarkerProps) {
     const selectWaypoint = useCreateTripStore((state) => state.selectWaypoint);
     const router = useRouter();
 

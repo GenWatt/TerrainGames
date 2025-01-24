@@ -22,9 +22,11 @@ export default function useAuth() {
     const loginMutation = useMutation({
         mutationFn: login,
         async onSuccess(data, variables, context) {
-            console.log('Login data', data.data);
-            await setObjectAsync('user', data.data.data);
-            setUser(data.data.data);
+            const { data: userData } = data.data;
+
+            console.log('Login data', userData);
+            await setObjectAsync('user', userData);
+            setUser(userData);
             router.push({ pathname: '/(tabs)' });
         }
     })

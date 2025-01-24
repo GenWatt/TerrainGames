@@ -13,7 +13,7 @@ function useTrips() {
 
     handleError(error)
 
-    const trips = data?.data.data
+    const trips = data?.data.data || []
 
     return { trips, error, isLoading }
 }

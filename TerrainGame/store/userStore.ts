@@ -3,7 +3,7 @@ import { IUser, Theme, UserRole } from '@/types';
 
 export type UserStore = {
     user: IUser;
-    setUser: (user: IUser) => void;
+    setUser: (user: IUser | undefined) => void;
     logout: () => void;
     hasRole: (role: UserRole) => boolean;
 }
@@ -25,10 +25,9 @@ const initialState: IUser = {
 export const useUserStore = create<UserStore>((set, get) => ({
     user: initialState,
 
-    setUser: (user: IUser) => set({ user }),
+    setUser: (user) => set({ user }),
     logout: () => set({ user: initialState }),
-    hasRole: (role: UserRole) => {
-        console.log(get().user.role);
+    hasRole: (role) => {
         return get().user.role === role
     },
 }));

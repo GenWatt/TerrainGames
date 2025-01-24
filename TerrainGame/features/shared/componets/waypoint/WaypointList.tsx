@@ -1,14 +1,15 @@
 import { IWaypoint } from "@/store/createTripStore"
 import Ionicons from "@expo/vector-icons/Ionicons"
-import { View, Text } from "react-native"
+import { clsx } from "clsx"
+import { View, Text, ViewProps } from "react-native"
 
-export interface WaypointListProps {
+export interface WaypointListProps extends ViewProps {
     waypoints: IWaypoint[]
 }
 
-function WaypointList({ waypoints }: WaypointListProps) {
+function WaypointList({ waypoints, className, ...props }: WaypointListProps) {
     return (
-        <View className="flex-row">
+        <View className={clsx("flex-row", className)} {...props}>
             {waypoints.map((waypoint, index) => (
                 <View
                     key={waypoint._id}

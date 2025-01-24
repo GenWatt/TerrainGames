@@ -13,7 +13,7 @@ export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
     return response;
 }
 
-export const login = async (loginData: ILoginForm): Promise<AxiosResponse<IUser, IApiResult>> => {
+export const login = async (loginData: ILoginForm): Promise<AxiosResponse<IApiResult<IUser>, IApiResult>> => {
     return await landMarkApi.post('/auth/login', loginData);
 }
 

@@ -1,32 +1,21 @@
 import Mapbox, { LineLayer, LocationPuck, MapView, ShapeSource } from "@rnmapbox/maps";
-import Marker from "./Marker";
+import RoadMarker from "./RoadMarker";
 import MapToolbar from "./MapToolbar";
 import { View, Text } from 'react-native';
 import useMap from "../hooks/useMap";
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { useCreateTripStore } from "@/store/createTripStore";
-import { useEffect, useMemo, useRef } from "react";
-import Waypoint from "@/features/waypoint/componets/Waypoint";
+import { useMemo } from "react";
 import { FeatureCollection, LineString } from 'geojson';
-import Colors from "@/constants/Colors";
+import useTrips from "@/features/trips/api/useTrips";
+import TripMarker from "./TripMarker";
+import TripDetails from "./TripDetails";
+import { useTripStore } from "../store/TripStore";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
 export default function Map() {
     const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, waypoints } = useMap();
-    const { selectWaypoint, selectedWaypoint } = useCreateTripStore();
-    const sheetRef = useRef<BottomSheet>(null);
-
-    useEffect(() => {
-        if (!selectedWaypoint && sheetRef.current) {
-            sheetRef.current.close();
-        }
-        console.log("selectedWaypoint", selectedWaypoint);
-    }, [selectedWaypoint]);
-
-    // const handleClose = () => {
-    //     selectWaypoint(null);
-    // }
+    const { selectedTrip, deselectTrip } = useTripStore();
+    const { trips } = useTrips();
 
     const lineGeoJSON: FeatureCollection<LineString> = useMemo(() => {
         return {
@@ -70,20 +59,11 @@ export default function Map() {
                     />
                 </ShapeSource>}
 
-                <Marker waypoints={waypoints} />
+                <RoadMarker waypoints={waypoints} />
+                <TripMarker trips={trips} />
             </MapView>
 
-            {/* {selectedWaypoint && <BottomSheet
-                handleStyle={{ backgroundColor: Colors.dark.dim }}
-                handleIndicatorStyle={{ backgroundColor: Colors.dark.primary }}
-                ref={sheetRef}
-                index={selectedWaypoint ? 1 : -1}
-                snapPoints={[200, 400]}
-                onClose={handleClose}>
-                <BottomSheetView className="bg-background flex-1">
-                   
-                </BottomSheetView>
-            </BottomSheet>} */}
+            <TripDetails trip={selectedTrip} onClose={deselectTrip} />
         </>
     )
 }

@@ -5,7 +5,6 @@ function createTripModal() {
     return (<View className="bg-background flex-1">
         <Waypoint />
     </View>
-
     )
 }
 
