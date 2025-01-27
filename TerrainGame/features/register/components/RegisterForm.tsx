@@ -1,8 +1,7 @@
 import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
-import useRegisterFormViewModel from "@/hooks/viewModels/useRegisterFormViewModel";
-import CustomInput from "./ui/CustomInput";
-import NotificationText from "./ui/NotificationText";
-import CustomButton from "./ui/Buttons/CustomButton";
+import CustomInput from "../../../components/ui/CustomInput";
+import CustomButton from "../../../components/ui/Buttons/CustomButton";
+import useRegisterFormViewModel from "@/features/register/hooks/useRegisterFormViewModel";
 
 export default function RegisterForm() {
     const { form, handleChange, handleSubmit, error } = useRegisterFormViewModel();

@@ -1,6 +1,6 @@
 import Mapbox from "@rnmapbox/maps";
-import { useCreateTripStore } from '@/store/createTripStore';
-import { useMapStore } from "@/store/mapStore";
+import { useCreateTripStore } from '@/features/shared/stores/createTripStore';
+import { useMapStore } from "@/features/map/store/mapStore";
 import useUserLocation from "@/features/shared/hooks/useUserLocation";
 
 function useMap() {
@@ -8,7 +8,7 @@ function useMap() {
 
     const isEditing = useCreateTripStore((state) => state.isEditing);
     const addPosition = useCreateTripStore((state) => state.addPosition);
-    const waypoints = useCreateTripStore((state) => state.waypoints);
+    const waypoints = useCreateTripStore((state) => state.trip.waypoints);
     const selectWaypoint = useCreateTripStore((state) => state.selectWaypoint);
 
     const setMapCamera = useMapStore((state) => state.setMapCamera);

@@ -1,8 +1,8 @@
-import useLoginFormViewModel from "@/hooks/viewModels/useLoginFormViewModel";
+import useLoginFormViewModel from "@/features/login/hooks/useLoginFormViewModel";
 import { View, Text, TextInput } from "react-native";
-import CustomInput from "./ui/CustomInput";
 import { useEffect, useRef } from "react";
-import CustomButton from "./ui/Buttons/CustomButton";
+import CustomButton from "@/components/ui/Buttons/CustomButton";
+import CustomInput from "@/components/ui/CustomInput";
 
 export interface ILoginFormProps {
     isFocus?: boolean;

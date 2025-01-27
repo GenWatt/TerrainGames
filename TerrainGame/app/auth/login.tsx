@@ -1,11 +1,10 @@
 import * as WebBrowser from 'expo-web-browser';
 
-import { View, Image, StyleSheet, ScrollView, Text } from 'react-native';
-import GoogleButton from '@/components/ui/GoogleButton';
-import useLoginViewModel from '@/hooks/viewModels/useLoginViewModel';
+import { View, Image, ScrollView, Text } from 'react-native';
+import useLoginViewModel from '@/features/login/hooks/useLoginViewModel';
 //@ts-ignore
 import LoginImage from '@/assets/images/LandmarkLegendsLogin.webp';
-import LoginForm from '@/components/LoginForm';
+import LoginForm from '@/features/login/components/LoginForm';
 import Link from '@/components/ui/Link';
 
 WebBrowser.maybeCompleteAuthSession();

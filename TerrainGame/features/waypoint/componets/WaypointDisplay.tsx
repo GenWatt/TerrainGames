@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { IWaypoint } from '@/store/createTripStore';
+import { IWaypoint } from '@/features/shared/stores/createTripStore';
 
 interface WaypointDisplayProps {
     waypoint: IWaypoint;

@@ -1,10 +1,9 @@
 import { Images, ShapeSource, SymbolLayer } from "@rnmapbox/maps";
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
-import { ITrip } from "@/store/createTripStore";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { View, Text } from "react-native";
+import { ITrip } from "@/features/shared/stores/createTripStore";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { useTripStore } from "../store/TripStore";
 
 export interface TripMarkerProps {
@@ -22,12 +21,12 @@ export default function TripMarker({ trips }: TripMarkerProps) {
                 type: "Feature",
                 geometry: {
                     type: "Point",
-                    coordinates: trip.position.coordinates
+                    coordinates: trip.tripDetails.position.coordinates
                 },
                 properties: {
                     id: trip._id,
-                    title: trip.title,
-                    description: trip.description,
+                    title: trip.tripDetails.title,
+                    description: trip.tripDetails.description,
                     waypoints: trip.waypoints
                 }
             }))

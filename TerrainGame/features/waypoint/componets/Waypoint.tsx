@@ -1,10 +1,10 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { useCreateTripStore, IWaypoint } from '@/store/createTripStore';
+import { useCreateTripStore, IWaypoint } from '@/features/shared/stores/createTripStore';
 import WaypointDisplay from './WaypointDisplay';
 import WaypointEdit from './WaypointEdit';
 import { UserRole } from '@/types';
-import useMe from '@/api/queries/useMe';
+import useMe from '@/features/shared/api/useMe';
 import { useRouter } from 'expo-router';
 
 const Waypoint: React.FC = () => {

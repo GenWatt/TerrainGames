@@ -12,8 +12,8 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
 
     async handle(command: UpdateTripCommand): Promise<Result<ITrip | null>> {
         const { tripId, trip } = command;
-        const { waypoints, title, description, city, country } = trip;
-
+        const { waypoints, tripDetails } = trip;
+        console.log(tripDetails);
         const editedTrip = await this.tripRepository.get(tripId);
 
         if (!editedTrip) {
@@ -38,12 +38,9 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
         const waypointIds = [...savedWaypoints, ...waypointsToedit].map(waypoint => waypoint._id) as string[];
 
         const updatedTripData: ITrip = {
-            title,
-            description,
+            tripDetails,
             // @ts-ignore
             waypoints: waypointIds,
-            city,
-            country,
             position: waypoints[0].position
         };
 

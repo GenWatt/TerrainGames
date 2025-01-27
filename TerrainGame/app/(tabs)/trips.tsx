@@ -5,7 +5,7 @@ import { View, Text, ScrollView } from 'react-native';
 
 export default function TripsScreen() {
     const { trips, isLoading } = useTrips();
-    console.log(trips, "lolek");
+
     return (
         <ScrollView className="bg-background p-4">
             <View className="mb-4">

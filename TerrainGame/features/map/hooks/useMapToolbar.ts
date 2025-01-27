@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { ToolbarActionTypes, useCreateTripStore } from '@/store/createTripStore';
-import { useMapStore } from '@/store/mapStore';
+import { ToolbarActionTypes, useCreateTripStore } from '@/features/shared/stores/createTripStore';
+import { useMapStore } from '@/features/map/store/mapStore';
 import { UserRole } from '@/types';
 import { useRouter } from 'expo-router';
 
@@ -14,30 +14,20 @@ export type ToolbarAction = {
 };
 
 export default function useMapToolbar() {
-    const { clearPositions, setIsEditing, isEditing, selectAction } = useCreateTripStore((state) => state);
+    const { clearPositions, isEditing, selectAction, trip } = useCreateTripStore((state) => state);
     const [selectedAction, setSelectedAction] = useState<string | null>(null);
     const camera = useMapStore((state) => state.camera);
 
     const navigate = useRouter();
 
-    const handleToogle = (actionName: string) => {
-        // if (selectedAction === actionName) {
-        //     setIsEditing(false);
-        //     return;
-        // }
-
-        // setIsEditing(true);
-    };
-
-    const handleClearPress = () => {
-        clearPositions();
-    };
-
     const handleToolbarAction = async ({ name, isToggle }: ToolbarAction) => {
         console.log('handleToolbarAction', name);
 
         if (name === ToolbarActionTypes.ADD_POSITION) {
-            handleToogle(name);
+            // Toggle the action
+            if (isToggle) {
+                setSelectedAction(selectedAction === name ? null : name);
+            }
         } else if (name === ToolbarActionTypes.DELETE_ALL) {
             handleClearPress();
         } else if (name === ToolbarActionTypes.FLT_TO && camera) {
@@ -45,15 +35,16 @@ export default function useMapToolbar() {
             camera.flyTo([-71.06017112731934, 42.36272976137689], 12);
         } else if (name === ToolbarActionTypes.ADD_TRIP) {
             console.log('save');
-            navigate.push({ pathname: '/(modals)/createTripModal' });
+            navigate.push({ pathname: '/(modals)/createTripModal', params: { _id: trip._id } });
         }
 
-        if (isToggle && selectedAction !== name) {
+        if (isToggle) {
             selectAction(name);
-            return;
         }
+    };
 
-        setSelectedAction(null);
+    const handleClearPress = () => {
+        clearPositions();
     };
 
     const actions: ToolbarAction[] = [
@@ -68,7 +59,7 @@ export default function useMapToolbar() {
             handleToolbarAction(action);
         },
         [handleToolbarAction]
-    )
+    );
 
     return {
         actions,

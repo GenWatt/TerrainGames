@@ -1,4 +1,4 @@
-import { ITrip } from '@/store/createTripStore';
+import { ITrip } from '@/features/shared/stores/createTripStore';
 import { create } from 'zustand';
 
 export type TripStateType = {

@@ -1,6 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { getAllTrips } from '../../../api/trip'
-import useError from '@/hooks/useError'
+import useError from '@/features/shared/hooks/useError'
+import { landMarkApi } from '@/features/shared/api';
+import { ITrip } from '@/features/shared/stores/createTripStore';
+import { IApiResult } from '@/types';
+import { AxiosResponse } from 'axios';
+
+export const getAllTrips = async (): Promise<AxiosResponse<IApiResult<ITrip[]>, IApiResult>> => {
+    return await landMarkApi.get('/trip');
+}
+
 
 function useTrips() {
     const { handleError } = useError()

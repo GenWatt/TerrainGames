@@ -1,4 +1,3 @@
-
 import { IApiResult, IUser } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosError } from 'axios';
@@ -14,7 +13,7 @@ landMarkApi.interceptors.request.use(
     async (config) => {
         const savedUser = await AsyncStorage.getItem('user');
         const user: IUser | null = savedUser ? JSON.parse(savedUser) : null;
-        console.log('user token', user);
+        console.log('user token - ' + config.url, user);
         if (user) {
             config.headers.Authorization = `Bearer ${user.accessToken}`;
         }
@@ -37,6 +36,3 @@ export const getError = (error: any) => {
         return error.response?.data as AxiosError<IApiResult>;
     }
 }
-
-
-

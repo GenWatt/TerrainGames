@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 class AuthService {
     public generateToken(user: IUser): string {
-        return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+        return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET!, { expiresIn: '5s' });
     }
 
     public verifyPassword(password: string, hash: string): Promise<boolean> {

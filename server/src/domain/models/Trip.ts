@@ -2,9 +2,13 @@ import mongoose, { Schema, Document } from 'mongoose';
 import { IWaypoint } from './Waypoint';
 
 export interface ITrip {
+    waypoints: IWaypoint[];
+    tripDetails: ITripDetails;
+}
+
+export interface ITripDetails {
     title: string;
     description: string;
-    waypoints: IWaypoint[];
     country: string;
     city: string;
     position: {
@@ -28,15 +32,24 @@ export interface ITripNotPopulated {
 export type ITripSchema = ITrip & Document;
 
 const TripSchema: Schema = new Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    waypoints: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Waypoint' }],
-    country: { type: String, required: false },
-    city: { type: String, required: false },
-    position: {
-        type: { type: String, enum: ['Point'], required: true },
-        coordinates: { type: [Number], required: true }
+    tripDetails: {
+        title: { type: String, required: true },
+        description: { type: String, required: true },
+        country: { type: String, required: true },
+        city: { type: String, required: true },
+        position: {
+            type: {
+                type: String,
+                enum: ['Point'],
+                required: true,
+            },
+            coordinates: {
+                type: [Number],
+                required: true,
+            },
+        },
     },
+    waypoints: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Waypoint' }],
 });
 
 TripSchema.index({ position: '2dsphere' });

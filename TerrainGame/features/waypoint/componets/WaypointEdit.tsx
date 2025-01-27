@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { IWaypoint, WaypointTypes } from '@/store/createTripStore';
+import { IWaypoint, WaypointTypes } from '@/features/shared/stores/createTripStore';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Colors from '@/constants/Colors';

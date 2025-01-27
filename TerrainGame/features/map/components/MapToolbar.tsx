@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import CircleButton from '../../../components/ui/Buttons/CircleButton';
-import useMe from '@/api/queries/useMe';
+import useMe from '@/features/shared/api/useMe';
 import useMapToolbar, { ToolbarAction } from '../hooks/useMapToolbar';
 
 export default function MapToolbar() {
@@ -20,7 +20,6 @@ export default function MapToolbar() {
         </View>
     );
 }
-
 export interface ToolbarItemProps {
     selected: boolean;
     action: ToolbarAction;
@@ -34,12 +33,12 @@ function ToolbarItem({ selected, action, onPress }: ToolbarItemProps) {
         return null;
     }
 
-    const { selectedColor, activeColor, icon } = action;
+    const { selectedColor, activeColor, icon, isToggle } = action;
     const finalClass = selected ? `${selectedColor} ${activeColor}` : `${activeColor}`;
 
     const handlePress = () => {
         onPress(action);
-    }
+    };
 
     return (
         <CircleButton

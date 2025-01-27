@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterForm from "@/features/register/components/RegisterForm";
 import Link from "@/components/ui/Link";
 import { ScrollView, View, Text, Image, KeyboardAvoidingView, Platform } from "react-native";
 import RegisterImage from "@/assets/images/RegisterImage.png";

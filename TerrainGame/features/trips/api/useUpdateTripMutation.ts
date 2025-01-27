@@ -1,7 +1,12 @@
-import { updateTrip } from "@/api/trip"
-import useError from "@/hooks/useError"
-import { ITrip } from "@/store/createTripStore"
+import { landMarkApi } from "@/features/shared/api";
+import useError from "@/features/shared/hooks/useError"
+import { ITrip } from "@/features/shared/stores/createTripStore"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+export const updateTrip = async (trip: ITrip) => {
+    console.log('updateTrip', trip._id);
+    return await landMarkApi.put(`/trip/${trip._id}`, { trip });
+}
 
 function useUpdateTripMutation() {
     const { handleError } = useError()

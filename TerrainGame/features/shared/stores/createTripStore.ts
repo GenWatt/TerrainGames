@@ -66,8 +66,7 @@ export enum ToolbarActionTypes {
 }
 
 export type CreateTripStateType = {
-    waypoints: IWaypoint[];
-    tripDetails: ITripDetails;
+    trip: ITrip;
 
     isEditing: boolean;
     selectedWaypoint: IWaypoint | null;
@@ -75,7 +74,6 @@ export type CreateTripStateType = {
 }
 
 export type ITripDetails = {
-    _id?: string;
     title: string;
     description: string;
     country: string;
@@ -86,7 +84,9 @@ export type ITripDetails = {
     }
 }
 
-export type ITrip = ITripDetails & {
+export type ITrip = {
+    _id?: string;
+    tripDetails: ITripDetails;
     waypoints: IWaypoint[];
 }
 
@@ -109,17 +109,18 @@ export type CreateTripActionsType = {
 export type CreateTripStoreType = CreateTripStateType & CreateTripActionsType;
 
 export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
-    waypoints: [],
-    tripDetails: {
-        _id: '',
-        title: '',
-        description: '',
-        country: '',
-        city: '',
-        position: {
-            type: 'Point',
-            coordinates: []
-        }
+    trip: {
+        tripDetails: {
+            title: '',
+            description: '',
+            country: '',
+            city: '',
+            position: {
+                type: 'Point',
+                coordinates: [0, 0],
+            }
+        },
+        waypoints: [],
     },
 
     isEditing: false,
@@ -128,7 +129,7 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
     setIsEditing: (isEditing: boolean) => set({ isEditing }),
     addPosition: (position: Position) => {
-        const waypoints = get().waypoints;
+        const trip = get().trip;
         const waypoint: IWaypoint = {
             type: WaypointTypes.INFO,
             position: {
@@ -141,43 +142,45 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
             text: 'Text',
         }
 
-        set({ waypoints: [...waypoints, waypoint] });
+        if (trip.waypoints.length === 0) {
+            set({ trip: { ...trip, tripDetails: { ...trip.tripDetails, position: waypoint.position }, waypoints: [waypoint] } });
+        } else {
+            set({ trip: { ...trip, waypoints: [...trip.waypoints, waypoint] } });
+        }
     },
     removeWaypoint: (waypoint: IWaypoint) => {
-        const waypoints = get().waypoints.filter(wp => wp.position !== waypoint.position);
-        set({ waypoints });
+        const trip = get().trip;
+        const waypoints = trip.waypoints.filter(wp => wp.position !== waypoint.position);
+        set({ trip: { ...trip, waypoints } });
     },
-    clearPositions: () => set({ waypoints: [] }),
+    clearPositions: () => {
+        const trip = get().trip;
+        set({ trip: { ...trip, waypoints: [] } });
+    },
     selectAction: (action: ToolbarActionTypes) => set({ action }),
     selectWaypoint: (selectedWaypoint: IWaypoint | null) => set({ selectedWaypoint }),
     deselectWaypoint: () => set({ selectedWaypoint: null }),
 
     updateWaypoint: (updatedWaypoint: IWaypoint) => {
-        const waypoints = get().waypoints.map(waypoint =>
+        const trip = get().trip;
+        const waypoints = trip.waypoints.map(waypoint =>
             waypoint._id === updatedWaypoint._id ? updatedWaypoint : waypoint
         );
-        set({ waypoints, selectedWaypoint: updatedWaypoint });
+        set({ trip: { ...trip, waypoints }, selectedWaypoint: updatedWaypoint });
     },
     getTrip: () => {
-        const { tripDetails, waypoints } = get();
-        console.log('getTrip', tripDetails);
-        return { ...tripDetails, waypoints };
+        const { trip } = get();
+        console.log('getTrip', trip);
+        return trip;
     },
-    updateTripDetails: (tripDetails: ITripDetails) => set({ tripDetails: { ...tripDetails } }),
+    updateTripDetails: (tripDetails: ITripDetails) => {
+        const trip = get().trip;
+        set({ trip: { ...trip, tripDetails } });
+    },
     editTrip: (trip: ITrip) => {
-        console.log('edit trip', trip._id);
         set({
-            waypoints: trip.waypoints,
-            tripDetails: {
-                _id: trip._id,
-                title: trip.title,
-                description: trip.description,
-                country: trip.country,
-                city: trip.city,
-                position: trip.position
-            },
+            trip,
             isEditing: true,
         });
     }
 }));
-

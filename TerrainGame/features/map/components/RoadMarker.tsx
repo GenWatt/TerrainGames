@@ -1,5 +1,5 @@
 import { ShapeSource, SymbolLayer } from "@rnmapbox/maps";
-import { useCreateTripStore, IWaypoint } from '@/store/createTripStore';
+import { useCreateTripStore, IWaypoint } from '@/features/shared/stores/createTripStore';
 import { useMemo } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';

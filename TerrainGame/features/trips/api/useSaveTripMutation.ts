@@ -1,5 +1,11 @@
+import { landMarkApi } from "@/features/shared/api";
+import { ITrip } from "@/features/shared/stores/createTripStore";
 import { useMutation } from "@tanstack/react-query"
-import { saveTrip } from "../trip"
+
+export const saveTrip = async (trip: ITrip) => {
+    return await landMarkApi.post('/trip', { trip });
+}
+
 
 function useSaveTripMutation() {
     const { mutateAsync, data, error } = useMutation({

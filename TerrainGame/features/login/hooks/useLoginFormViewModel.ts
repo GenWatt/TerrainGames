@@ -1,15 +1,14 @@
-import { IRegisterForm } from "@/types";
+import { ILoginForm } from "@/types";
 import { useState } from "react";
-import useAuth from "../useAuth";
-import useError from "../useError";
+import useAuth from "../../shared/hooks/useAuth";
+import useError from "../../shared/hooks/useError";
 
-export default function useRegisterFormViewModel() {
-    const { registerAsync, registerMutation } = useAuth();
+export default function useLoginFormViewModel() {
+    const { loginAsync, loginMutation } = useAuth();
     const { getErrorMessage } = useError();
-    const [form, setForm] = useState<IRegisterForm>({
+    const [form, setForm] = useState<ILoginForm>({
         username: '',
         password: '',
-        email: '',
     })
     const [error, setError] = useState<string | null>(null);
 
@@ -22,17 +21,18 @@ export default function useRegisterFormViewModel() {
 
     const handleSubmit = async () => {
         try {
-            await registerAsync(form);
-        } catch (error) {
-            setError(getErrorMessage(error));
+            setError(null);
+            await loginAsync(form);
+        } catch (err) {
+            setError(getErrorMessage(err));
         }
     };
 
     return {
-        registerMutation,
+        loginMutation,
         form,
         handleChange,
         handleSubmit,
         error
-    };
+    }
 }

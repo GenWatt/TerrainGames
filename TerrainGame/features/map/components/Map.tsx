@@ -63,7 +63,7 @@ export default function Map() {
                 <TripMarker trips={trips} />
             </MapView>
 
-            <TripDetails trip={selectedTrip} onClose={deselectTrip} />
+            {selectedTrip && <TripDetails trip={selectedTrip} onClose={deselectTrip} />}
         </>
     )
 }

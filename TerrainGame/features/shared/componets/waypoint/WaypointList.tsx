@@ -1,4 +1,4 @@
-import { IWaypoint } from "@/store/createTripStore"
+import { IWaypoint } from "@/features/shared/stores/createTripStore"
 import Ionicons from "@expo/vector-icons/Ionicons"
 import { clsx } from "clsx"
 import { View, Text, ViewProps } from "react-native"

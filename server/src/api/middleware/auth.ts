@@ -10,7 +10,7 @@ export const authMiddleware = (roles: UserRole[] = []) => {
         const token = req.headers.authorization?.split(' ')[1];
         console.log(req.headers.authorization + ' token');
         if (!token || token === 'undefined') {
-            console.log('User not authorized (Token not found)');
+            console.log('User not authorized (Token not found) - ' + req.url);
             return next(Result.failure('User not authorized (Token not found)', ResultTypes.NOT_AUTHORIZED, 401));
         }
 

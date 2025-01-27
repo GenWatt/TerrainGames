@@ -6,7 +6,7 @@ import 'react-native-reanimated';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import "../global.css";
-import { useAuthCheck } from '@/hooks/useAuthCheck';
+import { useAuthCheck } from '@/features/shared/hooks/useAuthCheck';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar, View } from 'react-native';
 import Colors from '@/constants/Colors';

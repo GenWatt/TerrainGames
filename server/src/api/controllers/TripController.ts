@@ -9,6 +9,7 @@ class TripController {
     constructor(private mediator: IMediator) { }
 
     public async create(req: Request, res: Response, next: NextFunction) {
+        console.log(req.body);
         const result = await this.mediator.send(new CreateTripCommand(req.body.trip));
 
         if (result.isSuccess) {

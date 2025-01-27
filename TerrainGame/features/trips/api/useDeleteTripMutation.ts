@@ -1,6 +1,10 @@
-import { deleteTrip } from "@/api/trip"
-import useError from "@/hooks/useError"
+import { landMarkApi } from "@/features/shared/api";
+import useError from "@/features/shared/hooks/useError"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+export const deleteTrip = async (tripId: string) => {
+    return await landMarkApi.delete(`/trip/${tripId}`);
+}
 
 function useDeleteTripMutation() {
     const { handleError } = useError()

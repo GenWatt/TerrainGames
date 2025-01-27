@@ -1,5 +1,5 @@
 import WaypointList from '@/features/shared/componets/waypoint/WaypointList'
-import { ITrip, useCreateTripStore } from '@/store/createTripStore'
+import { ITrip, useCreateTripStore } from '@/features/shared/stores/createTripStore'
 import { View, Text } from 'react-native'
 import AdminActions from './AdminActions'
 import WithRoles from '@/features/shared/componets/auth/WithRoles'
@@ -45,10 +45,11 @@ function TripItem({ trip }: TripItemProps) {
     }
 
     const handleEdit = () => {
-        console.log('edit trip', trip)
         editTrip(trip);
         router.push({ pathname: '/(tabs)' })
     }
+
+    const { tripDetails } = trip;
 
     return (
         <Animated.View
@@ -56,17 +57,17 @@ function TripItem({ trip }: TripItemProps) {
             className="bg-card rounded-2xl p-4 mb-4 shadow-md border-2 border-primary"
         >
             <Text className="text-lg font-semibold text-primary mb-1">
-                {trip.title}
+                {tripDetails.title}
             </Text>
 
             <View className='flex-row'>
                 <Badge>
-                    <Text className='text-darkForeground'>{trip.country}</Text>
+                    <Text className='text-darkForeground'>{tripDetails.country}</Text>
                 </Badge>
             </View>
 
             <Text className="text-sm text-foreground mb-3">
-                {trip.description}
+                {tripDetails.description}
             </Text>
 
             <View className="border-t border-gray-600 pt-2">

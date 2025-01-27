@@ -1,4 +1,4 @@
-import { ITrip } from '@/store/createTripStore'
+import { ITrip } from '@/features/shared/stores/createTripStore'
 import { View } from 'react-native'
 import TripItem from './TripItem'
 

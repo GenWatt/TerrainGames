@@ -1,13 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import { useRouter, useSegments } from 'expo-router';
+import { useSegments } from 'expo-router';
 import Toast from 'react-native-toast-message';
-import useStorage from './useStorage';
 import { ApiError, ResultTypes } from '@/types';
+import useAuth from './useAuth';
 
 export default function useError() {
-    const router = useRouter();
     const segments = useSegments();
-    const { setObjectAsync } = useStorage();
+    const { logoutAsync } = useAuth();
 
     const handleError = (error: any) => {
         console.log('error', error);
@@ -25,8 +24,7 @@ export default function useError() {
                 if (segments[0] === 'auth') return;
 
                 console.log('not authorized!!!');
-                router.push({ pathname: "/auth/login", params: {} });
-                setObjectAsync('user', null);
+                logoutAsync();
 
                 return;
             }
