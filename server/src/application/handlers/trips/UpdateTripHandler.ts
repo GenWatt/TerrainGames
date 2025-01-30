@@ -13,7 +13,7 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
     async handle(command: UpdateTripCommand): Promise<Result<ITrip | null>> {
         const { tripId, trip } = command;
         const { waypoints, tripDetails } = trip;
-        console.log(tripDetails);
+        console.log(waypoints.length);
         const editedTrip = await this.tripRepository.get(tripId);
 
         if (!editedTrip) {
