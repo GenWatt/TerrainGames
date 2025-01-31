@@ -1,21 +1,28 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { ToolbarActionTypes, useCreateTripStore } from '@/features/shared/stores/createTripStore';
 import { useMapStore } from '@/features/map/store/MapStore';
 import { UserRole } from '@/types';
 import { useRouter } from 'expo-router';
+import { AppModes, useTripStore } from '@/features/shared/stores/TripStore';
 
 export type ToolbarAction = {
     name: ToolbarActionTypes;
     icon: any;
     isToggle: boolean;
+    isShow?: boolean;
     roles?: UserRole[];
     activeColor?: string;
     selectedColor?: string;
 };
 
-export default function useMapToolbar() {
-    const { clearPositions, isEditing, selectAction, trip, action } = useCreateTripStore((state) => state);
+export interface useMapToolbarProps {
+    location: number[];
+}
+
+export default function useMapToolbar({ location }: useMapToolbarProps) {
+    const { clearPositions, isEditing, selectAction, trip, action, editTrip } = useCreateTripStore((state) => state);
     const camera = useMapStore((state) => state.camera);
+    const { isEditOrCreateMode, canEnterEditMode } = useTripStore();
 
     const navigate = useRouter();
 
@@ -28,10 +35,13 @@ export default function useMapToolbar() {
             handleClearPress();
         } else if (name === ToolbarActionTypes.FLT_TO && camera) {
             console.log('fly');
-            camera.flyTo([-71.06017112731934, 42.36272976137689], 12);
+            camera.flyTo(location, 12);
         } else if (name === ToolbarActionTypes.ADD_TRIP) {
             console.log('save');
             navigate.push({ pathname: '/(modals)/createTripModal', params: { _id: trip._id } });
+        } else if (name === ToolbarActionTypes.CANCEL) {
+            console.log('cancel');
+            editTrip(null);
         }
 
         if (isToggle) {
@@ -44,10 +54,12 @@ export default function useMapToolbar() {
     };
 
     const actions: ToolbarAction[] = [
-        { icon: 'add', name: ToolbarActionTypes.ADD_POSITION, isToggle: true, roles: [UserRole.ADMIN], selectedColor: 'bg-primary' },
-        { icon: 'trash', name: ToolbarActionTypes.DELETE_ALL, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-danger' },
-        { icon: 'navigate', name: ToolbarActionTypes.FLT_TO, isToggle: false, activeColor: 'active:bg-primary' },
-        { icon: isEditing ? 'create' : 'save', name: ToolbarActionTypes.ADD_TRIP, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-primary' },
+        { icon: 'add', name: ToolbarActionTypes.ADD_POSITION, isToggle: true, roles: [UserRole.ADMIN], selectedColor: 'bg-primary', isShow: canEnterEditMode() },
+        { icon: 'navigate', name: ToolbarActionTypes.FLT_TO, isToggle: false, activeColor: 'active:bg-primary', isShow: true },
+
+        { icon: 'trash', name: ToolbarActionTypes.DELETE_ALL, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-danger', isShow: trip.waypoints.length > 0 },
+        { icon: isEditing ? 'create' : 'save', name: ToolbarActionTypes.ADD_TRIP, isToggle: false, roles: [UserRole.ADMIN], activeColor: 'active:bg-primary', isShow: trip.waypoints.length > 1 },
+        { icon: 'close', name: ToolbarActionTypes.CANCEL, isToggle: false, isShow: isEditOrCreateMode(), activeColor: 'active:bg-danger', roles: [UserRole.ADMIN] },
     ];
 
     const handleToolbarActionCallback = useCallback(

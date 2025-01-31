@@ -3,7 +3,6 @@ import { useCreateTripStore, ITripDetails, ITrip } from '@/features/shared/store
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import useUpdateTripMutation from '../api/useUpdateTripMutation';
-import { AppModes, useTripStore } from '@/features/shared/stores/TripStore';
 
 function useTripModal() {
     const router = useRouter();
@@ -11,7 +10,6 @@ function useTripModal() {
     const { updateAction } = useUpdateTripMutation();
     const queryClient = useQueryClient();
     const { isEditing, trip, updateTripDetails, editTrip } = useCreateTripStore();
-    const { changeMode } = useTripStore();
 
     const handleCloseModal = () => {
         router.back();
@@ -34,7 +32,6 @@ function useTripModal() {
             await saveTrip(newTrip);
         }
 
-        changeMode(AppModes.VIEW);
         editTrip(null);
     }
 

@@ -8,7 +8,6 @@ import useDeleteTripMutation from '../api/useDeleteTripMutation'
 import Animated, { useSharedValue, withSequence, withTiming, runOnJS, useAnimatedStyle } from 'react-native-reanimated'
 import Badge from '@/components/ui/Badge'
 import { useRouter } from 'expo-router'
-import { AppModes, useTripStore } from '@/features/shared/stores/TripStore'
 
 export interface TripItemProps {
     trip: ITrip
@@ -17,7 +16,6 @@ export interface TripItemProps {
 function TripItem({ trip }: TripItemProps) {
     const { deleteAction } = useDeleteTripMutation()
     const { editTrip } = useCreateTripStore()
-    const { changeMode } = useTripStore()
     const router = useRouter()
 
     const scale = useSharedValue(1);
@@ -48,7 +46,6 @@ function TripItem({ trip }: TripItemProps) {
 
     const handleEdit = () => {
         editTrip(trip);
-        changeMode(AppModes.EDIT_TRIP);
         router.push({ pathname: '/(tabs)' })
     }
 

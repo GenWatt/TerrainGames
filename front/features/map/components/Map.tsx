@@ -5,6 +5,7 @@ import useMap from "../hooks/useMap";
 import TripMarker from "./TripMarker";
 import MapTrip from "./MapTrip";
 import { ITrip } from "@/features/shared/stores/createTripStore";
+import { AppModes } from "@/features/shared/stores/TripStore";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -13,10 +14,13 @@ const PITCH = 45;
 
 export interface MapProps {
     trips: ITrip[];
+    selectedTrip?: ITrip;
 }
 
-export default function Map({ trips }: MapProps) {
-    const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, editedTrip } = useMap();
+export default function Map({ trips, selectedTrip }: MapProps) {
+    const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, mode } = useMap();
+
+    const isViewMode = mode === AppModes.VIEW;
 
     if (!hasLocationPermission) {
         return <View className="bg-background">
@@ -26,15 +30,15 @@ export default function Map({ trips }: MapProps) {
 
     return (
         <>
-            <MapToolbar />
+            <MapToolbar location={userLocationArray} />
             <MapView scaleBarEnabled={false} styleURL={styleUrl} style={{ flex: 1 }} onPress={handlePress}>
                 <Mapbox.Camera ref={handleMapRef} zoomLevel={ZOOM_LEVEL} centerCoordinate={userLocationArray} pitch={PITCH} />
                 {/* My postion */}
                 <LocationPuck puckBearing={'heading'} pulsing={"default"} />
 
-                <MapTrip waypoints={editedTrip.waypoints} />
+                {selectedTrip && <MapTrip waypoints={selectedTrip.waypoints} />}
 
-                <TripMarker trips={trips} />
+                {isViewMode && <TripMarker trips={trips} />}
             </MapView>
         </>
     )

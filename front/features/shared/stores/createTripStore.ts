@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
+import { AppModes, useTripStore } from './TripStore';
 
 export enum WaypointTypes {
     QUIZ = 'QUIZ',
@@ -62,6 +63,7 @@ export enum ToolbarActionTypes {
     FLT_TO = 'FLT_TO',
     ADD_TRIP = 'ADD_TRIP',
     EDIT_TRIP = 'EDIT_TRIP',
+    CANCEL = 'CANCEL',
     NONE = 'NONE',
 }
 
@@ -184,9 +186,12 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
     editTrip: (trip) => {
         if (!trip) {
             set({ trip: initialTrip, isEditing: false });
+
+            useTripStore.getState().changeMode(AppModes.VIEW);
             return;
         }
 
         set({ trip, isEditing: true, });
+        useTripStore.getState().changeMode(AppModes.EDIT_TRIP);
     }
 }));

@@ -4,12 +4,16 @@ import CircleButton from '../../../components/ui/Buttons/CircleButton';
 import useMe from '@/features/shared/api/useMe';
 import useMapToolbar, { ToolbarAction } from '../hooks/useMapToolbar';
 
-export default function MapToolbar() {
-    const { actions, action: selectedAction, handleToolbarActionCallback } = useMapToolbar();
+export interface MapToolbarProps {
+    location: number[];
+}
+
+export default function MapToolbar({ location }: MapToolbarProps) {
+    const { actions, action: selectedAction, handleToolbarActionCallback } = useMapToolbar({ location });
 
     return (
         <View className='absolute gap-2 right-2 top-2 z-10'>
-            {actions.map((action) => (
+            {actions.filter(action => action.isShow).map((action) => (
                 <ToolbarItem
                     key={action.name}
                     selected={selectedAction === action.name}
@@ -33,7 +37,7 @@ function ToolbarItem({ selected, action, onPress }: ToolbarItemProps) {
         return null;
     }
 
-    const { selectedColor, activeColor, icon, isToggle } = action;
+    const { selectedColor, activeColor, icon } = action;
     const finalClass = selected ? `${selectedColor} ${activeColor}` : `${activeColor}`;
 
     const handlePress = () => {

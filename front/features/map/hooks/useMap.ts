@@ -6,8 +6,8 @@ import { AppModes, useTripStore } from "@/features/shared/stores/TripStore";
 
 function useMap() {
     const { hasLocationPermission, userLocation } = useUserLocation();
-    const { action: selectedAction, selectWaypoint, trip: editedTrip, addPosition, isEditing } = useCreateTripStore((state) => state);
-    const { changeMode } = useTripStore();
+    const { action: selectedAction, selectWaypoint, addPosition, isEditing } = useCreateTripStore((state) => state);
+    const { changeMode, mode } = useTripStore();
 
     const setMapCamera = useMapStore((state) => state.setMapCamera);
     const styleUrl = Mapbox.StyleURL.TrafficNight;
@@ -31,12 +31,12 @@ function useMap() {
         userLocation,
         isEditing,
         addPosition,
-        editedTrip,
         setMapCamera,
         styleUrl,
         handlePress,
         handleMapRef,
-        userLocationArray
+        userLocationArray,
+        mode
     }
 }
 
