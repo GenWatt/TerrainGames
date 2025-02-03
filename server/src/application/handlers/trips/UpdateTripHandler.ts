@@ -6,6 +6,7 @@ import { Result } from "../../../domain/Result";
 import ITripRepository from "../../../domain/repositories/trips/ITripRepository";
 import { UpdateTripCommand } from "../../commands/trips/UpdateTripCommand";
 import { ResultTypes } from "../../../domain/types/enums";
+import { tripSchema } from "../../validators/trips/CreateTripValidator";
 
 export class UpdateTripCommandHandler implements IHandler<ITrip> {
     constructor(private tripRepository: ITripRepository) { }
@@ -13,7 +14,13 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
     async handle(command: UpdateTripCommand): Promise<Result<ITrip | null>> {
         const { tripId, trip } = command;
         const { waypoints, tripDetails } = trip;
-        console.log(waypoints.length);
+
+        const result = tripSchema.safeParse(trip);
+
+        if (!result.success) {
+            return Result.failure(result.error.errors.map(e => e.message).join(", "), ResultTypes.BAD_REQUEST, 400);
+        }
+
         const editedTrip = await this.tripRepository.get(tripId);
 
         if (!editedTrip) {

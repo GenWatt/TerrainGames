@@ -1,9 +1,8 @@
 import { Images, ShapeSource, SymbolLayer } from "@rnmapbox/maps";
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
 import { ITrip } from "@/features/shared/stores/createTripStore";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { useTripStore } from "../../shared/stores/TripStore";
 
 export interface TripMarkerProps {
@@ -12,7 +11,6 @@ export interface TripMarkerProps {
 
 export default function TripMarker({ trips }: TripMarkerProps) {
     const { selectTrip } = useTripStore();
-    const bottomSheetRef = useRef<BottomSheet>(null);
 
     const tripsGeoJSON: FeatureCollection<Point> = useMemo(() => {
         return {
@@ -39,7 +37,6 @@ export default function TripMarker({ trips }: TripMarkerProps) {
 
         if (selectedTrip) {
             selectTrip(selectedTrip);
-            bottomSheetRef.current?.expand();
         }
     };
 

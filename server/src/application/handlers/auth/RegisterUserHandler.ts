@@ -3,7 +3,7 @@ import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
 import { User } from "../../../domain/models/User";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
-import { RegisterUserValidator } from "../../validators/RegisterUserValidator";
+import { RegisterUserValidator } from "../../validators/auth/RegisterUserValidator";
 import { UserDTO } from "../../DTO/UserDTO";
 import { ResultTypes } from "../../../domain/types/enums";
 

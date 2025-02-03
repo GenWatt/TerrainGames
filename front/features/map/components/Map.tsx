@@ -5,7 +5,6 @@ import useMap from "../hooks/useMap";
 import TripMarker from "./TripMarker";
 import MapTrip from "./MapTrip";
 import { ITrip } from "@/features/shared/stores/createTripStore";
-import { AppModes } from "@/features/shared/stores/TripStore";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -18,9 +17,7 @@ export interface MapProps {
 }
 
 export default function Map({ trips, selectedTrip }: MapProps) {
-    const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, mode } = useMap();
-
-    const isViewMode = mode === AppModes.VIEW;
+    const { hasLocationPermission, userLocationArray, styleUrl, handlePress, handleMapRef, areTripMarkersVisible } = useMap();
 
     if (!hasLocationPermission) {
         return <View className="bg-background">
@@ -38,7 +35,7 @@ export default function Map({ trips, selectedTrip }: MapProps) {
 
                 {selectedTrip && <MapTrip waypoints={selectedTrip.waypoints} />}
 
-                {isViewMode && <TripMarker trips={trips} />}
+                {areTripMarkersVisible && <TripMarker trips={trips} />}
             </MapView>
         </>
     )

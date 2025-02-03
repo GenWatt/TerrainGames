@@ -3,7 +3,7 @@ import { Result } from "../../../domain/Result";
 import AuthService from "../../../services/AuthService";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
 import { LoginUserCommand } from "../../commands/auth/LoginUserCommand";
-import { LoginUserValidator } from "../../validators/LoginUserValidator";
+import { LoginUserValidator } from "../../validators/auth/LoginUserValidator";
 import { ResultTypes } from "../../../domain/types/enums";
 import { UserDTO } from "../../DTO/UserDTO";
 

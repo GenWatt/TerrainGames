@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 import { AppModes, useTripStore } from './TripStore';
+import { ToolbarActionFeatures } from '../types';
 
 export enum WaypointTypes {
     QUIZ = 'QUIZ',
@@ -57,22 +58,13 @@ export type TaskWaypoint = {
 
 export type IWaypoint = (QuizWaypoint | InfoWaypoint | TaskWaypoint) & { _id?: string };
 
-export enum ToolbarActionTypes {
-    ADD_POSITION = 'ADD_POSITION',
-    DELETE_ALL = 'DELETE_ALL',
-    FLT_TO = 'FLT_TO',
-    ADD_TRIP = 'ADD_TRIP',
-    EDIT_TRIP = 'EDIT_TRIP',
-    CANCEL = 'CANCEL',
-    NONE = 'NONE',
-}
 
 export type CreateTripStateType = {
     trip: ITrip;
 
     isEditing: boolean;
     selectedWaypoint: IWaypoint | null;
-    action: ToolbarActionTypes;
+    action: ToolbarActionFeatures;
 }
 
 export type ITripDetails = {
@@ -100,7 +92,7 @@ export type CreateTripActionsType = {
 
     selectWaypoint: (waypoint: IWaypoint | null) => void;
     deselectWaypoint: () => void;
-    selectAction: (action: ToolbarActionTypes) => void;
+    selectAction: (action: ToolbarActionFeatures) => void;
 
     updateWaypoint: (waypoint: IWaypoint) => void;
     getTrip: () => ITrip;
@@ -129,7 +121,7 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
     isEditing: false,
     selectedWaypoint: null,
-    action: ToolbarActionTypes.NONE,
+    action: ToolbarActionFeatures.NONE,
 
     setIsEditing: (isEditing: boolean) => set({ isEditing }),
     addPosition: (position: Position) => {
@@ -163,7 +155,7 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
         set({ trip: { ...trip, waypoints: [] } });
     },
-    selectAction: (action: ToolbarActionTypes) => set({ action }),
+    selectAction: (action: ToolbarActionFeatures) => set({ action }),
     selectWaypoint: (selectedWaypoint: IWaypoint | null) => set({ selectedWaypoint }),
     deselectWaypoint: () => set({ selectedWaypoint: null }),
 

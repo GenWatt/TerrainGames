@@ -4,7 +4,7 @@ import AuthService from "../../../services/AuthService";
 import { UserRole } from "../../../../../shared/types";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
 import { CreateAdminCommand } from "../../commands/auth/CreateAdminCommand";
-import { CreateAdminValidator } from "../../validators/CreateAdminValidator";
+import { CreateAdminValidator } from "../../validators/auth/CreateAdminValidator";
 import { User } from "../../../domain/models/User";
 import { UserDTO } from "../../DTO/UserDTO";
 import { ResultTypes } from "../../../domain/types/enums";
