@@ -1,18 +1,21 @@
 import { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
-import useMe from "../api/useMe"
+import useConverter, { MetricUnit } from "./useConverter"
 
 function useMesurement() {
-    const { user } = useMe()
+    const { formatDistance, convertDistance } = useConverter()
 
     const getTotalTripDistance = (waypoints: Position[]) => {
         const totalDistance = waypoints.reduce((acc, waypoint, index) => {
             if (index === waypoints.length - 1) return acc
 
             const distance = getDistanceToWaypoint(waypoint, waypoints[index + 1])
-            return acc + distance
-        }, 0)
+            return { value: acc.value + distance.value, unit: distance.unit }
+        }, { value: 0, unit: MetricUnit.METER })
 
-        return Math.round(totalDistance)
+        console.log('totalDistance', totalDistance)
+        const formattedDistance = formatDistance(totalDistance)
+        console.log('formattedDistance', formattedDistance)
+        return formattedDistance
     }
 
     const getDistanceToWaypoint = (location: Position, destination: Position) => {
@@ -27,8 +30,10 @@ function useMesurement() {
             Math.sin(da2 / 2) * Math.sin(da2 / 2);
 
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        console.log('c * R', R * c)
+        const formattedDistance = convertDistance({ value: R * c, unit: MetricUnit.METER })
 
-        return R * c; // in metres
+        return formattedDistance; // in metres
     }
 
     return {

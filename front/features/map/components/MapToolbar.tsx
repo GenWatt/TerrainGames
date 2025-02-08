@@ -10,7 +10,7 @@ export interface MapToolbarProps {
 
 export default function MapToolbar({ location }: MapToolbarProps) {
     const { actions, action: selectedAction, handleToolbarActionCallback } = useMapToolbar({ location });
-    console.log('actions', actions.filter(action => action.isShow));
+
     return (
         <View className='absolute gap-2 right-2 top-2 z-10'>
             {actions.filter(action => action.isShow).map((action) => (

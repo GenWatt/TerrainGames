@@ -15,18 +15,19 @@ export interface SliderProps extends ViewProps {
     width: number;
     itemProps?: ViewProps;
     sliderContainerProps?: ViewProps;
+    canStop?: boolean;
 }
 
-const Slider: React.FC<SliderProps> = ({ children, className, interval = 3000, width, itemProps, sliderContainerProps, ...props }) => {
+const Slider: React.FC<SliderProps> = ({ children, className, interval = 3000, width, itemProps, sliderContainerProps, canStop, ...props }) => {
     const { animatedStyle, panResponder, currentIndex, progress, togglePlay, isPlaying } = useSlider({ children, interval, width });
 
     return (
         <View className={clsx(className, 'overflow-hidden')} style={{ width }} {...props}>
-            {isPlaying && <SliderProgressbar progress={progress} />
-            }
-            <Pressable onPress={togglePlay} className='absolute bottom-1 left-1 z-10 p-1 bg-primary/50 rounded-full'>
+            {isPlaying && <SliderProgressbar progress={progress} />}
+
+            {canStop && <Pressable onPress={togglePlay} className='absolute bottom-1 left-1 z-10 p-1 bg-primary/50 rounded-full'>
                 <Ionicons name={isPlaying ? 'play' : 'pause'} size={12} color={Colors.dark.foreground2} />
-            </Pressable>
+            </Pressable>}
 
             <SliderContainer animatedStyle={animatedStyle} width={width} itemProps={itemProps} panResponder={panResponder} {...sliderContainerProps}>
                 {children}

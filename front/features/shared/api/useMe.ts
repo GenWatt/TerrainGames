@@ -5,7 +5,6 @@ import { AxiosResponse } from "axios";
 import { landMarkApi } from ".";
 
 export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
-    console.log('getMe');
     const response = await landMarkApi.get('/auth/me');
     return response;
 }
@@ -14,7 +13,7 @@ let previousErrorCount = 0;
 
 function useMe() {
     const { handleError } = useError();
-    const { data, error, isLoading, errorUpdateCount } = useQuery({ queryKey: ['me'], queryFn: getMe, retry: 0 });
+    const { data, error, isLoading, errorUpdateCount, ...rest } = useQuery({ queryKey: ['me'], queryFn: getMe, retry: 0 });
 
     const hasRoles = (roles: UserRole[]) => {
         const user = data?.data;
@@ -33,7 +32,7 @@ function useMe() {
 
     const user = data?.data;
 
-    return { user, error, isLoading, hasRoles };
+    return { user, error, isLoading, hasRoles, ...rest };
 }
 
 export default useMe

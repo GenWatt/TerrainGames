@@ -1,10 +1,17 @@
-import { View, ActivityIndicator, Text } from 'react-native';
+import Colors from '@/constants/Colors';
+import clsx from 'clsx';
+import { View, ActivityIndicator, Text, ViewProps } from 'react-native';
 
-function Loader() {
+export interface LoaderProps extends ViewProps {
+    showText?: boolean;
+    color?: string;
+}
+
+function Loader({ showText = true, color, className, ...props }: LoaderProps) {
     return (
-        <View className="flex-1 justify-center items-center bg-background">
-            <ActivityIndicator size="large" color="#00ff00" />
-            <Text className="text-lg text-foreground mt-4">Loading...</Text>
+        <View className={clsx("flex-1 justify-center items-center", className)} {...props}>
+            <ActivityIndicator size="large" color={color || Colors.dark.primary} />
+            {showText && <Text className="text-lg text-foreground mt-4">Loading...</Text>}
         </View>
     )
 }

@@ -16,6 +16,11 @@ export interface IApiResult<T = undefined> {
     data?: T;
 }
 
+export enum MetricType {
+    METRIC = 'METRIC',
+    IMPERIAL = 'IMPERIAL',
+}
+
 export type IUser = {
     _id: string;
     username: string;
@@ -27,6 +32,7 @@ export type IUser = {
     createdAt: Date;
     prefs: {
         theme: Theme;
+        metricSystem: MetricType;
     };
 }
 
@@ -72,4 +78,3 @@ export type IQuiz = {
     createdAt: Date;
     updatedAt: Date;
 }
-

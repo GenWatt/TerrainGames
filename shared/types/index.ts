@@ -8,9 +8,17 @@ export type IUser = {
     avatar: string;
     accessToken: string;
     createdAt: Date;
-    prefs: {
-        theme: Theme;
-    };
+    prefs: UserPrefs;
+}
+
+export type UserPrefs = {
+    theme: Theme;
+    metricSystem: MetricTypes;
+}
+
+export enum MetricTypes {
+    METRIC = 'metric',
+    IMPERIAL = 'imperial',
 }
 
 export enum UserRole {
@@ -33,4 +41,9 @@ export type RegisterUserDTO = {
 export type LoginUserDTO = {
     username: string;
     password: string;
+}
+
+export enum TemperatureUnits {
+    CELSIUS = '°C',
+    FAHRENHEIT = '°F',
 }
