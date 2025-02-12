@@ -1,22 +1,25 @@
-import useError from "@/features/shared/hooks/useError";
 import { useQuery } from "@tanstack/react-query";
 import { IApiResult, IUser, UserRole } from "@/types";
 import { AxiosResponse } from "axios";
 import { landMarkApi } from ".";
+import { useEffect } from "react";
+import { useUserStore } from "../stores/userStore";
 
 export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
     const response = await landMarkApi.get('/auth/me');
     return response;
 }
 
-let previousErrorCount = 0;
-
 function useMe() {
-    const { handleError } = useError();
-    const { data, error, isLoading, errorUpdateCount, ...rest } = useQuery({ queryKey: ['me'], queryFn: getMe, retry: 0 });
+    const { login, logout } = useUserStore();
+    const { data, ...rest } = useQuery({
+        queryKey: ['me'],
+        queryFn: getMe,
+    });
 
     const hasRoles = (roles: UserRole[]) => {
         const user = data?.data;
+
         if (!user) {
             return false;
         }
@@ -24,15 +27,17 @@ function useMe() {
         return roles.includes(user.role);
     }
 
-    if (errorUpdateCount !== previousErrorCount) {
-        handleError(error);
-        previousErrorCount = errorUpdateCount;
-        console.log('me data', errorUpdateCount);
-    }
+    useEffect(() => {
+        if (data?.data) {
+            login(data.data);
+        } else {
+            logout();
+        }
+    }, [data]);
 
     const user = data?.data;
 
-    return { user, error, isLoading, hasRoles, ...rest };
+    return { user, hasRoles, ...rest };
 }
 
 export default useMe

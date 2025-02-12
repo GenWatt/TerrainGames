@@ -11,8 +11,10 @@ export default function useAuth() {
 
     const { loginAsync, loginMutation } = useLoginMutation();
     const { registerAsync, registerMutation } = useRegisterMutation();
-    const queryClient = useQueryClient();
+
     const { changeMode } = useTripStore();
+
+    const queryClient = useQueryClient();
 
     const logoutAsync = async () => {
         await setObjectAsync('user', null);

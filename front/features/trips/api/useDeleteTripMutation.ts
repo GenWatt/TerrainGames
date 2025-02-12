@@ -1,5 +1,4 @@
 import { landMarkApi } from "@/features/shared/api";
-import useError from "@/features/shared/hooks/useError"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const deleteTrip = async (tripId: string) => {
@@ -7,22 +6,23 @@ export const deleteTrip = async (tripId: string) => {
 }
 
 function useDeleteTripMutation() {
-    const { handleError } = useError()
-    const { mutateAsync, data, error } = useMutation({
-        mutationFn: deleteTrip,
-    })
-
-    handleError(error)
-
     const queryClient = useQueryClient()
 
-    const deleteAction = async (id: string) => {
-        await mutateAsync(id)
+    const handleSuccess = () => {
         queryClient.invalidateQueries({ queryKey: ['trips'] });
     }
 
-    return { deleteAction, data, error }
+    const { mutateAsync, ...rest } = useMutation({
+        mutationFn: deleteTrip,
+        mutationKey: ['deleteTrip'],
+        onSuccess: handleSuccess
+    })
 
+    const deleteAction = async (id: string) => {
+        await mutateAsync(id)
+    }
+
+    return { deleteAction, ...rest }
 }
 
 export default useDeleteTripMutation

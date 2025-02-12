@@ -1,52 +1,49 @@
-import { MetricType } from "@/types";
+import { Temperature, TemperatureUnit } from "@/types";
 import useMe from "../api/useMe";
 
-export enum TemperatureUnit {
-    CELSIUS = "°C",
-    FAHRENHEIT = "°F"
-}
-
-export type Temperature = {
+export type TemperatureValue = {
     unit: TemperatureUnit;
     value: number;
 };
 
 class TemperatureConverter {
-    private userPrefs = useMe().user?.prefs.metricSystem;
+    public constructor(private preferedUnit: Temperature) { }
 
-    private isMetricPreferred(): boolean {
-        return this.userPrefs === MetricType.METRIC;
+    private isCelsiusPreferred(): boolean {
+        return this.preferedUnit === Temperature.CELSIUS;
     }
 
-    public convert(temp: Temperature): Temperature {
-        return this.isMetricPreferred() ? this.toCelsius(temp) : this.toFahrenheit(temp);
+    public convert(temp: TemperatureValue): TemperatureValue {
+        return this.isCelsiusPreferred() ? this.toCelsius(temp) : this.toFahrenheit(temp);
     }
 
-    private toCelsius(temp: Temperature): Temperature {
+    private toCelsius(temp: TemperatureValue): TemperatureValue {
         if (temp.unit === TemperatureUnit.FAHRENHEIT) {
             return { value: (temp.value - 32) * (5 / 9), unit: TemperatureUnit.CELSIUS };
         }
         return temp;
     }
 
-    private toFahrenheit(temp: Temperature): Temperature {
+    private toFahrenheit(temp: TemperatureValue): TemperatureValue {
         if (temp.unit === TemperatureUnit.CELSIUS) {
             return { value: temp.value * (9 / 5) + 32, unit: TemperatureUnit.FAHRENHEIT };
         }
         return temp;
     }
 
-    public format(temp: Temperature): string {
+    public format(temp: TemperatureValue): string {
         const formattedValue = Number.isInteger(temp.value) ? temp.value.toFixed(0) : temp.value.toFixed(1);
         return `${formattedValue} ${temp.unit}`;
     }
 }
 
 function useTemperatureConverter() {
-    const converter = new TemperatureConverter();
+    const { user } = useMe();
+    const converter = new TemperatureConverter(user?.prefs.temperatureUnit || Temperature.CELSIUS);
+
     return {
-        convertTemperature: (temp: Temperature) => converter.convert(temp),
-        formatTemperature: (temp: Temperature) => converter.format(temp)
+        convertTemperature: (temp: TemperatureValue) => converter.convert(temp),
+        formatTemperature: (temp: TemperatureValue) => converter.format(temp)
     };
 }
 

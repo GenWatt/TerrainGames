@@ -9,3 +9,5 @@ export const SettingsRouter = Router();
 const settingsController = container.resolve<SettingsController>('SettingsController');
 
 SettingsRouter.put('/settings/metric', authMiddleware(), asyncHandler(settingsController.changeMetric.bind(settingsController)));
+
+SettingsRouter.put('/settings/temperatureUnit', authMiddleware(), asyncHandler(settingsController.changeTemperatureUnit.bind(settingsController)));

@@ -21,6 +21,16 @@ export enum MetricType {
     IMPERIAL = 'IMPERIAL',
 }
 
+export enum TemperatureUnit {
+    CELSIUS = "°C",
+    FAHRENHEIT = "°F"
+}
+
+export enum Temperature {
+    CELSIUS = "CELSIUS",
+    FAHRENHEIT = "FAHRENHEIT"
+}
+
 export type IUser = {
     _id: string;
     username: string;
@@ -33,6 +43,7 @@ export type IUser = {
     prefs: {
         theme: Theme;
         metricSystem: MetricType;
+        temperatureUnit: Temperature;
     };
 }
 

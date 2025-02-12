@@ -13,7 +13,7 @@ export class CreateTripCommandHandler implements IHandler<ITrip> {
     async handle(command: CreateTripCommand): Promise<Result<ITrip | null>> {
         const { waypoints, tripDetails } = command.trip;
 
-        const result = tripSchema.safeParse(command.trip);
+        const result = tripSchema.safeParse(command);
 
         if (!result.success) {
             return Result.failure(result.error.errors.map(e => e.message).join(", "), ResultTypes.BAD_REQUEST, 400);

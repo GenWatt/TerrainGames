@@ -12,7 +12,6 @@ export class ChangeMetricHandler implements IHandler<UserPrefs> {
 
     async handle(command: ChangeMetricCommand): Promise<Result<UserPrefs>> {
         const { metric, userId } = command;
-        console.log(command);
         const result = ChangeMetricValidator.safeParse(command);
 
         if (!result.success) {

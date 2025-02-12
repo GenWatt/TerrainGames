@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { IUser, MetricTypes, TemperatureUnits, Theme, UserRole } from "../../../../shared/types";
+import { IUser, MetricTypes, Temperature, Theme, UserRole } from "../../../../shared/types";
 
 const userSchema = new mongoose.Schema<IUser & Document>({
     username: {
@@ -48,8 +48,8 @@ const userSchema = new mongoose.Schema<IUser & Document>({
         },
         temperatureUnit: {
             type: String,
-            default: TemperatureUnits.CELSIUS,
-            enum: [TemperatureUnits.CELSIUS, TemperatureUnits.FAHRENHEIT],
+            default: Temperature.CELSIUS,
+            enum: [Temperature.CELSIUS, Temperature.FAHRENHEIT],
         },
     },
 });

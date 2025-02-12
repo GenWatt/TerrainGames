@@ -1,40 +1,43 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import 'react-native-reanimated';
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import "../global.css";
 import { useAuthCheck } from '@/features/shared/hooks/useAuthCheck';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { StatusBar, View } from 'react-native';
+import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StatusBar } from 'react-native';
 import Colors from '@/constants/Colors';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Header from '@/components/ui/Header';
+import useError from '@/features/shared/hooks/useError';
+import Auth from '@/features/shared/componets/Auth';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    },
-    mutations: {
-      onError: (error) => {
-        console.error("LOLLE", error);
-      },
-    }
-  },
-});
-
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  const [loaded] = useFonts({ SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf') });
+  const { handleError } = useError();
+
+  const queryClient = useMemo(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5,
+        refetchOnWindowFocus: false,
+        retry: 1,
+      },
+      mutations: {
+        onError: handleError,
+      },
+    },
+    queryCache: new QueryCache({
+      onError: handleError,
+    }),
+  }), []);
 
   useAuthCheck();
 
@@ -44,9 +47,7 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <SafeAreaProvider>
@@ -54,14 +55,16 @@ export default function RootLayout() {
         <StatusBar barStyle="light-content" backgroundColor={Colors.dark.background} />
         <SafeAreaView style={{ flex: 1 }} edges={['top']}>
           <QueryClientProvider client={queryClient}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-              <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-              <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
-              <Stack.Screen name="(modals)/waypointModal" options={{ presentation: 'card', header: () => <Header title="Edit Waypoint" /> }} />
-            </Stack>
+            <Auth>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+                <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+                <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
+                <Stack.Screen name="(modals)/waypointModal" options={{ presentation: 'card', header: () => <Header title="Edit Waypoint" /> }} />
+              </Stack>
+            </Auth>
           </QueryClientProvider>
           <Toast />
         </SafeAreaView>

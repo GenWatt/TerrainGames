@@ -2,11 +2,11 @@ import axios, { AxiosError } from 'axios';
 import { useSegments } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { ApiError, ResultTypes } from '@/types';
-import useAuth from './useAuth';
+import { useUserStore } from '../stores/userStore';
 
 export default function useError() {
     const segments = useSegments();
-    const { logoutAsync } = useAuth();
+    const { logout } = useUserStore();
 
     const handleError = (error: any) => {
         if (!error) {
@@ -17,12 +17,9 @@ export default function useError() {
             const axiosError = error as AxiosError<ApiError>;
             const errorData = axiosError.response?.data;
 
-
             if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
                 if (segments[0] === 'auth') return;
-
-                console.log('not authorized!!!');
-                logoutAsync();
+                logout();
 
                 return;
             }

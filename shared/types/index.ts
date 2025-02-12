@@ -14,6 +14,7 @@ export type IUser = {
 export type UserPrefs = {
     theme: Theme;
     metricSystem: MetricTypes;
+    temperatureUnit: TemperatureUnits;
 }
 
 export enum MetricTypes {
@@ -46,4 +47,9 @@ export type LoginUserDTO = {
 export enum TemperatureUnits {
     CELSIUS = '°C',
     FAHRENHEIT = '°F',
+}
+
+export enum Temperature {
+    CELSIUS = 'CELSIUS',
+    FAHRENHEIT = 'FAHRENHEIT',
 }

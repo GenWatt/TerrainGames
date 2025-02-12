@@ -14,8 +14,7 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
     async handle(command: UpdateTripCommand): Promise<Result<ITrip | null>> {
         const { tripId, trip } = command;
         const { waypoints, tripDetails } = trip;
-
-        const result = tripSchema.safeParse(trip);
+        const result = tripSchema.safeParse(command);
 
         if (!result.success) {
             return Result.failure(result.error.errors.map(e => e.message).join(", "), ResultTypes.BAD_REQUEST, 400);

@@ -13,17 +13,18 @@ function useLoginMutation() {
     const { setObjectAsync } = useStorage();
     const queryClient = useQueryClient();
 
+    const handleSuccess = (data: AxiosResponse<IApiResult<IUser>, IApiResult>) => {
+        const { data: userData } = data.data;
+
+        setObjectAsync('user', userData);
+        queryClient.invalidateQueries({ queryKey: ['me'] });
+        router.push({ pathname: '/(tabs)' });
+    }
+
     const loginMutation = useMutation({
         mutationFn: login,
-        async onSuccess(data, variables, context) {
-            const { data: userData } = data.data;
-
-            await setObjectAsync('user', userData);
-            queryClient.invalidateQueries({ queryKey: ['me'] });
-            router.push({ pathname: '/(tabs)' });
-            console.log('Query client');
-
-        }
+        mutationKey: ['login'],
+        onSuccess: handleSuccess
     })
 
     const loginAsync = async (loginData: ILoginForm) => {
