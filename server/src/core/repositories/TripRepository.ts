@@ -21,4 +21,17 @@ export default class TripRepository implements ITripRepository {
     async getAll(): Promise<ITrip[]> {
         return await Trip.find().populate('waypoints');
     }
+
+    async getAllWithinBounds(neLat: number, neLng: number, swLat: number, swLng: number): Promise<ITrip[]> {
+        return await Trip.find({
+            'tripDetails.position.coordinates': {
+                $geoWithin: {
+                    $box: [
+                        [swLng, swLat],
+                        [neLng, neLat]
+                    ]
+                }
+            }
+        }).populate('waypoints');
+    }
 }

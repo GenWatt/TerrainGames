@@ -42,6 +42,10 @@ const FEATUERS_FLAGS: IFeatureFlags[] = [
     {
         feature: OtherFeatures.TRIP_MARKERS,
         modes: [AppModes.VIEW]
+    },
+    {
+        feature: OtherFeatures.FETCH_TRIPS,
+        modes: [AppModes.VIEW]
     }
 ];
 

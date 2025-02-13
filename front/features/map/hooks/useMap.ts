@@ -5,6 +5,8 @@ import useUserLocation from "@/features/shared/hooks/useUserLocation";
 import { AppModes, useTripStore } from "@/features/shared/stores/TripStore";
 import { OtherFeatures, ToolbarActionFeatures } from "@/features/shared/types";
 import useFeatureFlags from "@/features/shared/hooks/useFeatureFlags";
+import { useRef } from "react";
+import { GestureResponderEvent } from "react-native";
 
 function useMap() {
     const { hasLocationPermission, userLocation } = useUserLocation();
@@ -12,7 +14,27 @@ function useMap() {
     const { changeMode } = useTripStore();
     const { isFeatureAvailable } = useFeatureFlags();
 
-    const setMapCamera = useMapStore((state) => state.setMapCamera);
+    const mapRef = useRef<Mapbox.MapView | null>(null);
+
+    const { setMapCamera, setPositionAndBounds, camera: mapCamera } = useMapStore();
+
+    const setBounds = async () => {
+        if (mapRef.current) {
+            const bounds = await mapRef.current.getVisibleBounds()
+            const center = await mapRef.current.getCenter()
+
+            setPositionAndBounds(center, bounds)
+        }
+    }
+
+    const handleTouchEnd = async (_: GestureResponderEvent) => {
+        await setBounds()
+    }
+
+    const handleMapLoaded = async () => {
+        await setBounds()
+    }
+
     const styleUrl = Mapbox.StyleURL.TrafficNight;
 
     const handlePress = (feature: GeoJSON.Feature) => {
@@ -24,7 +46,7 @@ function useMap() {
     }
 
     const handleMapRef = (camera: Mapbox.Camera | null) => {
-        if (camera) setMapCamera(camera);
+        if (camera && !mapCamera) setMapCamera(camera);
     }
 
     const userLocationArray = userLocation ? [userLocation.longitude, userLocation.latitude] : [18.9480, 49.7921];
@@ -41,7 +63,10 @@ function useMap() {
         handlePress,
         handleMapRef,
         userLocationArray,
-        areTripMarkersVisible
+        areTripMarkersVisible,
+        mapRef,
+        handleTouchEnd,
+        handleMapLoaded
     }
 }
 

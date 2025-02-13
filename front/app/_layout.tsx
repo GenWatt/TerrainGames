@@ -16,6 +16,13 @@ import Header from '@/components/ui/Header';
 import useError from '@/features/shared/hooks/useError';
 import Auth from '@/features/shared/componets/Auth';
 
+import 'mapbox-gl/dist/mapbox-gl.css';
+// import { NativeWindStyleSheet } from "nativewind";
+
+// NativeWindStyleSheet.setOutput({
+//   default: "native",
+// });
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 

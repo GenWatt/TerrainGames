@@ -17,7 +17,14 @@ const app = express();
 
 connectTerrainDb();
 
-app.use(cors());
+const allowedOrigins = ['http://localhost:8081', '']; // Add your allowed origins here
+
+const corsOptions = {
+    origin: allowedOrigins,
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

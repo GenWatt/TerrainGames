@@ -5,11 +5,17 @@ import { DeleteTripCommand } from '../../application/commands/trips/DeleteTripCo
 import { IMediator } from '../../application/Mediator';
 import { UpdateTripCommand } from '../../application/commands/trips/UpdateTripCommand';
 
+export type Bounds = {
+    neLat: string,
+    neLng: string,
+    swLat: string,
+    swLng: string
+}
+
 class TripController {
     constructor(private mediator: IMediator) { }
 
     public async create(req: Request, res: Response, next: NextFunction) {
-        console.log(req.body);
         const result = await this.mediator.send(new CreateTripCommand(req.body.trip));
 
         if (result.isSuccess) {
@@ -19,8 +25,10 @@ class TripController {
         next(result);
     }
 
-    public async getAll(req: Request, res: Response, next: NextFunction) {
-        const result = await this.mediator.send(new GetAllTripsQuery());
+    public async getAll(req: Request<null, null, null, Bounds>, res: Response, next: NextFunction) {
+        const { neLat, neLng, swLat, swLng } = req.query;
+
+        const result = await this.mediator.send(new GetAllTripsQuery(+neLat, +neLng, +swLat, +swLng));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);

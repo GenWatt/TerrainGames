@@ -1,6 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 
-import { View, Image, ScrollView, Text } from 'react-native';
+import { View, Image, ScrollView, Text, StyleSheet } from 'react-native';
 import useLoginViewModel from '@/features/login/hooks/useLoginViewModel';
 //@ts-ignore
 import LoginImage from '@/assets/images/LandmarkLegendsLogin.webp';
@@ -15,15 +15,14 @@ export default function LoginScreen() {
     return (
         <ScrollView className='bg-background'>
             <View className='items-center'>
-
                 <View>
                     <Text className="text-2xl font-bold text-foreground text-center">Login to</Text>
-                    <Text className="text-4xl font-bold text-primary">Landmark Legends</Text>
+                    <Text className="text-4xl font-bold text-primary text-center">Landmark Legends</Text>
 
-                    <Image className='rounded-2xl w-80 h-72 self-center my-3' source={LoginImage} resizeMode="cover" />
+                    <Image style={styles.image} source={LoginImage} resizeMode="cover" />
                 </View>
 
-                <View className='mb-4 w-8/12'>
+                <View className='mb-4 w-8/12 max-w-md'>
                     <LoginForm />
                 </View>
                 {/* <GoogleButton onPress={async () => await promptAsync()} /> */}
@@ -32,3 +31,13 @@ export default function LoginScreen() {
         </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    image: {
+        borderRadius: 16, // rounded-2xl
+        width: 288, // w-72 (72 * 4 px)
+        height: 288, // h-72
+        alignSelf: 'center', // self-center
+        marginVertical: 12, // my-3 (3 * 4 px)
+    },
+});
