@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import useMap from "../hooks/useMap";
 import { ITrip } from "@/features/shared/stores/createTripStore";
 import Mapbox, { MapView, LocationPuck } from "@rnmapbox/maps";
-import MapTrip from "./MapTrip";
+import DrawTrip from "./DrawTrip";
 import TripMarker from "./TripMarker";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
@@ -27,7 +27,6 @@ export default function Map({ trips, selectedTrip }: MapProps) {
         handleMapLoaded,
         handleTouchEnd,
         mapRef } = useMap();
-
 
     if (!hasLocationPermission) {
         return <View className="bg-background p-2">
@@ -57,7 +56,7 @@ export default function Map({ trips, selectedTrip }: MapProps) {
 
                 <LocationPuck puckBearing={'heading'} pulsing={"default"} />
 
-                {selectedTrip && <MapTrip waypoints={selectedTrip.waypoints} />}
+                {selectedTrip && <DrawTrip trip={selectedTrip} />}
 
                 {areTripMarkersVisible && <TripMarker trips={trips} />}
             </MapView>

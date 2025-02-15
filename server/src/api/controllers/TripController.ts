@@ -4,6 +4,7 @@ import { GetAllTripsQuery } from '../../application/queries/trips/GetAllTripsQue
 import { DeleteTripCommand } from '../../application/commands/trips/DeleteTripCommand';
 import { IMediator } from '../../application/Mediator';
 import { UpdateTripCommand } from '../../application/commands/trips/UpdateTripCommand';
+import { DrawRoadCommand } from '../../application/commands/trips/DrawRoadCommand';
 
 export type Bounds = {
     neLat: string,
@@ -48,13 +49,17 @@ class TripController {
     }
 
     public async update(req: Request, res: Response, next: NextFunction) {
-        // console log quiezes
-        req.body.trip.waypoints.forEach((waypoint: any) => {
-            console.log(waypoint);
-            waypoint.quiezes && console.log(waypoint.quiezes);
-        });
-
         const result = await this.mediator.send(new UpdateTripCommand(req.params.id, req.body.trip));
+
+        if (result.isSuccess) {
+            return res.status(result.statusCode).json(result);
+        }
+
+        next(result);
+    }
+
+    public async drawRoad(req: Request, res: Response, next: NextFunction) {
+        const result = await this.mediator.send(new DrawRoadCommand(req.body.waypoints));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);

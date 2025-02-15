@@ -15,14 +15,26 @@ const tripDetailsSchema = z.object({
     city: z.string().optional()
 });
 
+const roadSchema = z.object({
+    distance: z.number().nonnegative("Distance must be a non-negative number"),
+    duration: z.number().nonnegative("Duration must be a non-negative number"),
+    geometry: z.object({
+        coordinates: z.array(z.array(z.number())).nonempty("Coordinates must be provided"),
+        type: z.literal("LineString")
+    }).refine(data => data.coordinates.length > 1, {
+        message: "Geometry must have at least 2 coordinates",
+    })
+});
+
 const tripSchema = z.object({
     trip: z.object({
         tripDetails: tripDetailsSchema,
-        waypoints: z.array(waypointSchema).min(WAYPOINT_MIN_LENGTH, `Trip must have at least ${WAYPOINT_MIN_LENGTH} waypoints`).max(WAYPOINT_MAX_LENGTH, `Trip must have at most ${WAYPOINT_MAX_LENGTH} waypoints`)
+        waypoints: z.array(waypointSchema).min(WAYPOINT_MIN_LENGTH, `Trip must have at least ${WAYPOINT_MIN_LENGTH} waypoints`).max(WAYPOINT_MAX_LENGTH, `Trip must have at most ${WAYPOINT_MAX_LENGTH} waypoints`),
+        road: roadSchema
     })
 }).refine(data => data !== undefined, {
     message: "Trip object must be provided",
     path: ["trip"]
 });
 
-export { tripSchema, waypointSchema };
+export { tripSchema, waypointSchema, roadSchema };

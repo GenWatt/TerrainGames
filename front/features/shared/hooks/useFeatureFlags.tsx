@@ -46,6 +46,11 @@ const FEATUERS_FLAGS: IFeatureFlags[] = [
     {
         feature: OtherFeatures.FETCH_TRIPS,
         modes: [AppModes.VIEW]
+    },
+    {
+        feature: ToolbarActionFeatures.DRAW_ROAD,
+        group: [FeatureGroups.EDIT_CREATE_TRIP],
+        minWaypoints: 2
     }
 ];
 

@@ -16,3 +16,5 @@ TripRouter.get('/trip', authMiddleware(), asyncHandler(tripController.getAll.bin
 TripRouter.delete('/trip/:id', authMiddleware([UserRole.ADMIN]), asyncHandler(tripController.delete.bind(tripController)));
 
 TripRouter.put('/trip/:id', authMiddleware([UserRole.ADMIN]), asyncHandler(tripController.update.bind(tripController)));
+
+TripRouter.post('/trip/draw-road', authMiddleware([UserRole.ADMIN]), asyncHandler(tripController.drawRoad.bind(tripController)));

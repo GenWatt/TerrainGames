@@ -22,4 +22,5 @@ export enum ResultTypes {
     UPDATED = 'UPDATED',
     CONFLICT = 'CONFLICT',
     BAD_REQUEST = 'BAD_REQUEST',
+    ROAD_ERROR = 'ROAD_ERROR'
 }

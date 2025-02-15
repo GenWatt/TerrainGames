@@ -2,13 +2,12 @@ import { create } from 'zustand';
 import type { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 import { AppModes, useTripStore } from './TripStore';
 import { ToolbarActionFeatures } from '../types';
+import { LineString } from 'geojson';
 
 export enum WaypointTypes {
     QUIZ = 'QUIZ',
     INFO = 'INFO',
     TASK = 'TASK',
-    START = 'START',
-    END = 'END',
 }
 
 export type Quiz = {
@@ -58,7 +57,6 @@ export type TaskWaypoint = {
 
 export type IWaypoint = (QuizWaypoint | InfoWaypoint | TaskWaypoint) & { _id?: string };
 
-
 export type CreateTripStateType = {
     trip: ITrip;
 
@@ -78,10 +76,40 @@ export type ITripDetails = {
     }
 }
 
+export type MapboxRoadType = {
+    distance: number;
+    duration: number;
+    geometry: LineString;
+    legs: {
+        admins: {
+            iso_3166_1_alpha3: string;
+            iso_3166_1: string;
+        }[],
+        distance: number;
+        duration: number;
+        steps: {
+            distance: number;
+            duration: number;
+            geometry: {
+                coordinates: Position[];
+                type: string;
+            };
+            mode: string;
+            name: string;
+        }[];
+        summary: string;
+        via_waypoints: Position[];
+        weight: number;
+    }[];
+    weight: number;
+    weight_name: string;
+}
+
 export type ITrip = {
     _id?: string;
     tripDetails: ITripDetails;
     waypoints: IWaypoint[];
+    road: MapboxRoadType | null;
 }
 
 export type CreateTripActionsType = {
@@ -98,6 +126,7 @@ export type CreateTripActionsType = {
     getTrip: () => ITrip;
     updateTripDetails: (tripDetails: ITripDetails) => void;
     editTrip: (trip: ITrip | null) => void;
+    setRoad: (road: MapboxRoadType) => void;
 }
 
 export type CreateTripStoreType = CreateTripStateType & CreateTripActionsType;
@@ -114,6 +143,7 @@ const initialTrip: ITrip = {
         }
     },
     waypoints: [],
+    road: null,
 }
 
 export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
@@ -185,5 +215,10 @@ export const useCreateTripStore = create<CreateTripStoreType>((set, get) => ({
 
         set({ trip, isEditing: true, });
         useTripStore.getState().changeMode(AppModes.EDIT_TRIP);
-    }
+    },
+    setRoad(road) {
+        const trip = get().trip;
+
+        set({ trip: { ...trip, road } });
+    },
 }));

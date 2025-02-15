@@ -7,6 +7,7 @@ export enum ToolbarActionFeatures {
     DELETE_ALL_WAYPOINTS = 'DELETE_ALL_WAYPOINTS',
     SAVE_TRIP = 'SAVE_TRIP',
     CANCEL_TRIP = 'CANCEL_TRIP',
+    DRAW_ROAD = 'DRAW_ROAD',
     NONE = 'NONE',
 }
 

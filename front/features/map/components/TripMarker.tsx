@@ -1,4 +1,4 @@
-import { Images, ShapeSource, SymbolLayer } from "@rnmapbox/maps";
+import { CircleLayer, Images, ShapeSource, SymbolLayer } from "@rnmapbox/maps";
 import { useMemo } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
@@ -41,10 +41,20 @@ export default function TripMarker({ trips }: TripMarkerProps) {
     };
 
     return (
-        <ShapeSource id="tripMarkerSource" shape={tripsGeoJSON} onPress={handleMarkerPress}>
+        <ShapeSource
+            id="tripMarkerSource"
+            shape={tripsGeoJSON}
+            onPress={handleMarkerPress}
+            cluster
+            clusterRadius={50} // Adjust cluster merging distance
+            clusterMaxZoomLevel={40} // Clustering disappears after this zoom
+            hitbox={{ width: 18, height: 18 }}
+        >
             <Images images={{ 'custom-marker': require('@/assets/images/marker-icon.png') }} />
+
             <SymbolLayer
                 id="tripMarkers"
+                filter={['!', ['has', 'point_count']]}
                 style={{
                     iconImage: 'custom-marker',
                     iconSize: 1,
@@ -59,6 +69,29 @@ export default function TripMarker({ trips }: TripMarkerProps) {
                     iconAnchor: 'center'
                 }}
             />
+
+            <CircleLayer
+                id="clusterCircle"
+                filter={['has', 'point_count']}
+                style={{
+                    circleColor: '#FF5733',
+                    circleRadius: 18,
+                    circleOpacity: 0.8
+                }}
+            />
+
+            <SymbolLayer
+                id="clusterText"
+                filter={['has', 'point_count']}
+                style={{
+                    textField: ['get', 'point_count_abbreviated'],
+                    textSize: 14,
+                    textColor: 'white',
+                    textIgnorePlacement: true,
+                    textAllowOverlap: true
+                }}
+            />
+
         </ShapeSource>
     )
 };

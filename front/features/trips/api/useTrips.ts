@@ -24,7 +24,7 @@ function useTrips() {
     })
 
     const trips = data?.data.data || []
-    console.log(trips.length)
+
     return { trips, ...rest }
 }
 

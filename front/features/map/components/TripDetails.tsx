@@ -40,7 +40,7 @@ function TripDetails({ trip, onClose }: TripDetailsProps) {
             enablePanDownToClose={true}
             handleIndicatorStyle={{ backgroundColor: Colors.dark.primary }}
             handleStyle={{ backgroundColor: Colors.dark.darkForeground }}
-            snapPoints={[300, 400]}>
+            snapPoints={[280, 400]}>
             <BottomSheetView className="bg-background flex-1 p-2">
                 <View>
                     <Text className="text-2xl text-primary font-bold">{tripDetails.title}</Text>

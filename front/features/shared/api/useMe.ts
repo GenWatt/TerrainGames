@@ -12,7 +12,7 @@ export const getMe = async (): Promise<AxiosResponse<IUser, IApiResult>> => {
 
 function useMe() {
     const { login, logout } = useUserStore();
-    const { data, ...rest } = useQuery({
+    const { data, isLoading, ...rest } = useQuery({
         queryKey: ['me'],
         queryFn: getMe,
     });
@@ -28,16 +28,18 @@ function useMe() {
     }
 
     useEffect(() => {
+        if (isLoading) return;
+
         if (data?.data) {
             login(data.data);
         } else {
             logout();
         }
-    }, [data]);
+    }, [data, isLoading]);
 
     const user = data?.data;
 
-    return { user, hasRoles, ...rest };
+    return { user, isLoading, hasRoles, ...rest };
 }
 
 export default useMe
