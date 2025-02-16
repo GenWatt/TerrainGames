@@ -1,38 +1,43 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { useCreateTripStore, IWaypoint } from '@/features/shared/stores/createTripStore';
 import WaypointDisplay from './WaypointDisplay';
 import WaypointEdit from './WaypointEdit';
 import { UserRole } from '@/types';
 import useMe from '@/features/shared/api/useMe';
 import { useRouter } from 'expo-router';
+import { useTripStore } from '@/features/shared/stores/TripStore';
 
 const Waypoint: React.FC = () => {
     const { selectedWaypoint, updateWaypoint, deselectWaypoint, removeWaypoint } = useCreateTripStore();
     const { user } = useMe();
     const router = useRouter();
+    const { isEditOrCreateMode } = useTripStore();
 
     if (!selectedWaypoint) {
-        return <></>;
+        return <View>
+            <Text>Waypoint not selected</Text>
+        </View>;
     }
 
     const handleSave = (waypoint: IWaypoint) => {
-        console.log('waypoint', waypoint);
         updateWaypoint(waypoint);
-        deselectWaypoint();
-        router.back();
+        back();
     }
 
     const handleDelete = (waypoint: IWaypoint) => {
         removeWaypoint(waypoint);
+        back();
+    }
+
+    const back = () => {
         deselectWaypoint();
         router.back();
     }
 
-    console.log('selectedWaypoint', selectedWaypoint);
     return (
         <ScrollView>
-            {user && user.role === UserRole.ADMIN ? (
+            {user && user.role === UserRole.ADMIN && isEditOrCreateMode() ? (
                 <WaypointEdit
                     waypoint={selectedWaypoint}
                     onSave={handleSave}

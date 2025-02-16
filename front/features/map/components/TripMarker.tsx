@@ -46,8 +46,8 @@ export default function TripMarker({ trips }: TripMarkerProps) {
             shape={tripsGeoJSON}
             onPress={handleMarkerPress}
             cluster
-            clusterRadius={50} // Adjust cluster merging distance
-            clusterMaxZoomLevel={40} // Clustering disappears after this zoom
+            clusterRadius={50}
+            clusterMaxZoomLevel={40}
             hitbox={{ width: 18, height: 18 }}
         >
             <Images images={{ 'custom-marker': require('@/assets/images/marker-icon.png') }} />

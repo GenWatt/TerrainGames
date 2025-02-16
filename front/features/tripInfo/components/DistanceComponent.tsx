@@ -1,14 +1,13 @@
-
-import { ITrip } from "@/features/shared/stores/createTripStore";
+import { MapboxRoadType } from "@/features/shared/stores/createTripStore";
 import { View, Text } from "react-native";
 import useDistanceComponent from "../hooks/useDistanceComponent";
 
 export interface DistanceCounterProps {
-    trip: ITrip;
+    road: MapboxRoadType;
 }
 
-function DistanceCounter({ trip }: DistanceCounterProps) {
-    const { totalDistance } = useDistanceComponent({ trip });
+function DistanceCounter({ road }: DistanceCounterProps) {
+    const { totalDistance } = useDistanceComponent({ road });
 
     return (
         <View className='p-2'>

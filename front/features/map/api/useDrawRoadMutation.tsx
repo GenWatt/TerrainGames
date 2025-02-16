@@ -1,35 +1,29 @@
 import { landMarkApi } from "@/features/shared/api"
-import { IWaypoint, MapboxRoadType, useCreateTripStore } from "@/features/shared/stores/createTripStore"
+import { MapboxRoadType } from "@/features/shared/stores/createTripStore"
 import { IApiResult } from "@/types";
+import { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position";
 import { useMutation } from "@tanstack/react-query"
 
-const drawRoadAsync = async (waypoints: IWaypoint[]): Promise<IApiResult<MapboxRoadType>> => {
+const drawRoadAsync = async (waypoints: Position[]): Promise<IApiResult<MapboxRoadType>> => {
     const response = await landMarkApi.post('/trip/draw-road', { waypoints });
     return response.data;
 }
 
 function useDrawRoadMutation() {
-    const { setRoad } = useCreateTripStore();
-
-    const handleSuccess = (response: IApiResult<MapboxRoadType>) => {
-        if (response.data) {
-            setRoad(response.data);
-        }
-    }
-
-    const { mutateAsync, ...rest } = useMutation({
+    const { data, mutateAsync, ...rest } = useMutation({
         mutationKey: ['drawRoad'],
         mutationFn: drawRoadAsync,
-        onSuccess: handleSuccess
     })
 
-    const fetchRoad = async (waypoints: IWaypoint[]) => {
+    const fetchRoad = async (waypoints: Position[]) => {
         if (waypoints.length > 1) {
             await mutateAsync(waypoints);
         }
     }
 
-    return { fetchRoad, ...rest }
+    const road = data?.data;
+
+    return { fetchRoad, road, ...rest }
 }
 
 export default useDrawRoadMutation

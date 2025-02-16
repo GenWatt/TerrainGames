@@ -1,11 +1,10 @@
-import { ITrip } from "@/features/shared/stores/createTripStore";
+import { MapboxRoadType } from "@/features/shared/stores/createTripStore";
 import { ShapeSource, LineLayer } from "@rnmapbox/maps";
-import RoadMarker from "./RoadMarker";
 import { useMemo } from "react";
 import { FeatureCollection, LineString } from 'geojson';
 
 export interface MapTripProps extends Partial<LineLayer['props']> {
-    trip: ITrip;
+    road: MapboxRoadType;
 }
 
 const createFeatureCollection = (geometry: LineString): FeatureCollection<LineString> => {
@@ -28,8 +27,7 @@ const roadStyle = {
     lineCap: "round"
 }
 
-function DrawTrip({ trip, ...rest }: MapTripProps) {
-    const { waypoints, road } = trip;
+function DrawRoad({ road, ...rest }: MapTripProps) {
     const hasRoadGeometry = road && road.geometry && road.geometry.coordinates.length > 1;
 
     const tripRoadGeoJSON: FeatureCollection<LineString> = useMemo(() => {
@@ -45,10 +43,8 @@ function DrawTrip({ trip, ...rest }: MapTripProps) {
                     {...rest}
                 />
             </ShapeSource>}
-
-            <RoadMarker waypoints={waypoints} />
         </>
     )
 }
 
-export default DrawTrip
+export default DrawRoad

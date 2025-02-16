@@ -1,10 +1,11 @@
 import MapToolbar from "./MapToolbar";
 import { View, Text } from 'react-native';
 import useMap from "../hooks/useMap";
-import { ITrip } from "@/features/shared/stores/createTripStore";
+import { ITrip, MapboxRoadType } from "@/features/shared/stores/createTripStore";
 import Mapbox, { MapView, LocationPuck } from "@rnmapbox/maps";
-import DrawTrip from "./DrawTrip";
 import TripMarker from "./TripMarker";
+import DrawWaypoints from "./DrawWaypoints";
+import DrawRoad from "./DrawRoad";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -14,9 +15,10 @@ const PITCH = 45;
 export interface MapProps {
     trips: ITrip[];
     selectedTrip?: ITrip;
+    road?: MapboxRoadType;
 }
 
-export default function Map({ trips, selectedTrip }: MapProps) {
+export default function Map({ trips, selectedTrip, road }: MapProps) {
     const {
         hasLocationPermission,
         userLocationArray,
@@ -56,7 +58,8 @@ export default function Map({ trips, selectedTrip }: MapProps) {
 
                 <LocationPuck puckBearing={'heading'} pulsing={"default"} />
 
-                {selectedTrip && <DrawTrip trip={selectedTrip} />}
+                {selectedTrip && <DrawWaypoints waypoints={selectedTrip.waypoints} />}
+                {road && <DrawRoad road={road} />}
 
                 {areTripMarkersVisible && <TripMarker trips={trips} />}
             </MapView>

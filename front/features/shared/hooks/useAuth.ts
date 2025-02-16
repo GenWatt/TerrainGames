@@ -1,31 +1,29 @@
-import { useRouter, useSegments } from "expo-router";
-import useStorage from "./useStorage";
+import { router } from "expo-router";
 import useLoginMutation from "@/features/login/api/useLoginMutation";
 import useRegisterMutation from "@/features/register/api/useRegisterMutation";
-import { useQueryClient } from "@tanstack/react-query";
 import { AppModes, useTripStore } from "../stores/TripStore";
+import { queryClient } from "@/app/_layout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouterStore } from "../stores/routerStore";
+
+export const logoutAsyncUser = async () => {
+    useTripStore.getState().changeMode(AppModes.VIEW);
+    await AsyncStorage.removeItem('user');
+    queryClient.cancelQueries();
+    queryClient.clear();
+
+    if (useRouterStore.getState().currentPath !== '/auth/login') {
+        console.log('logoutAsyncUser111');
+        router.navigate('/auth/login');
+    }
+}
 
 export default function useAuth() {
-    const router = useRouter();
-    const { setObjectAsync } = useStorage();
-    // const segments = useSegments();
-
     const { loginAsync, loginMutation } = useLoginMutation();
     const { registerAsync, registerMutation } = useRegisterMutation();
 
-    const { changeMode } = useTripStore();
-
-    const queryClient = useQueryClient();
-
     const logoutAsync = async () => {
-        await setObjectAsync('user', null);
-
-        // if (segments[0] === 'auth' && segments[1] === 'login') {
-        router.push({ pathname: '/auth/login', params: {} });
-        // }
-
-        queryClient.clear();
-        changeMode(AppModes.VIEW);
+        await logoutAsyncUser();
     }
 
     return {

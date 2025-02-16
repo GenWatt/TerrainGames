@@ -13,6 +13,7 @@ export type TripActionsType = {
     changeMode: (mode: AppModes) => void;
     isEditOrCreateMode: () => boolean;
     canEnterEditMode: () => boolean;
+    isOneOfModes: (modes: AppModes[]) => boolean;
 }
 
 export enum AppModes {
@@ -43,9 +44,9 @@ export const useTripStore = create<TripStoreType>((set, get) => ({
         const currentMode = get().mode;
         if (mode === AppModes.CREATE_TRIP && currentMode === AppModes.EDIT_TRIP) return;
 
-        if (currentMode === AppModes.SELECTED_TRIP && mode !== AppModes.SELECTED_TRIP) {
-            set({ selectedTrip: null });
-        }
+        // if (currentMode === AppModes.SELECTED_TRIP && mode !== AppModes.ACTIVE_TRIP) {
+        //     set({ selectedTrip: null });
+        // }
 
         set({ mode })
     },
@@ -56,5 +57,8 @@ export const useTripStore = create<TripStoreType>((set, get) => ({
     canEnterEditMode: () => {
         const mode = get().mode;
         return mode !== AppModes.ACTIVE_TRIP && mode !== AppModes.SELECTED_TRIP;
+    },
+    isOneOfModes: (modes: AppModes[]) => {
+        return modes.includes(get().mode);
     }
 }));

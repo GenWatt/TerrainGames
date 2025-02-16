@@ -13,6 +13,7 @@ const TripModalHeader: React.FC<TripModalHeaderProps> = ({ isEditing, onClose })
         <CircleButton onPress={onClose}>
             <Ionicons name="arrow-back" size={24} color="white" />
         </CircleButton>
+
         <Text className="text-lg text-primary">
             {isEditing ? 'Edit' : 'Create'} Trip Modal
         </Text>

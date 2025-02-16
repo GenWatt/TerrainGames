@@ -3,7 +3,7 @@ import path from 'path';
 
 class DIContainer {
     private services = new Map<string, Object>();
-    private excludeServices = ['command'];
+    private excludeServices = ['command', 'query', 'handler'];
 
     register<T extends Object>(key: string, service: T) {
         this.services.set(key, service);
@@ -32,6 +32,7 @@ class DIContainer {
                 const controllerClass: any = Object.values(controllerModule)[0];
                 const controllerName = controllerClass.name;
                 const dependencies = this.resolveDependencies(controllerClass);
+
                 this.register(controllerName, new controllerClass(...dependencies));
             }
         }

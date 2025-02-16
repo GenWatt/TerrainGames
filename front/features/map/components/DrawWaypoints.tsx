@@ -10,7 +10,7 @@ export interface MarkerProps {
     waypoints: IWaypoint[];
 }
 
-export default function RoadMarker({ waypoints }: MarkerProps) {
+export default function DrawWaypoints({ waypoints }: MarkerProps) {
     const selectWaypoint = useCreateTripStore((state) => state.selectWaypoint);
     const router = useRouter();
 

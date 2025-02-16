@@ -51,6 +51,10 @@ const FEATUERS_FLAGS: IFeatureFlags[] = [
         feature: ToolbarActionFeatures.DRAW_ROAD,
         group: [FeatureGroups.EDIT_CREATE_TRIP],
         minWaypoints: 2
+    },
+    {
+        feature: OtherFeatures.VIEW_WAYPOINT_DETAILS,
+        modes: [AppModes.SELECTED_TRIP, AppModes.ACTIVE_TRIP, AppModes.PAUSE_TRIP]
     }
 ];
 

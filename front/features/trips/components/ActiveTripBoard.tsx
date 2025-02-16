@@ -1,4 +1,4 @@
-import { ITrip } from '@/features/shared/stores/createTripStore';
+import { ITrip, MapboxRoadType } from '@/features/shared/stores/createTripStore';
 import { AppModes, useTripStore } from '@/features/shared/stores/TripStore';
 import Slider from '@/features/slider/components/Slider';
 import Stopwatch from '@/features/stoper/components/Stopwatch';
@@ -7,15 +7,16 @@ import WeatherComponent from '@/features/tripInfo/components/WeatherComponent';
 
 export interface ActiveTripBoardProps {
     trip: ITrip;
+    road?: MapboxRoadType;
 }
 
 const SLIDER_INTERVAL = 5000;
 const SLIDER_WIDTH = 150;
 
-function ActiveTripBoard({ trip }: ActiveTripBoardProps) {
+function ActiveTripBoard({ trip, road }: ActiveTripBoardProps) {
     const { changeMode, deselectTrip } = useTripStore()
 
-    const handleStop = (time: number) => {
+    const handleStop = (_: number) => {
         changeMode(AppModes.VIEW);
         deselectTrip();
     }
@@ -38,7 +39,7 @@ function ActiveTripBoard({ trip }: ActiveTripBoardProps) {
                 width={SLIDER_WIDTH}
                 canStop>
 
-                <DistanceComponent trip={trip} />
+                {road && <DistanceComponent road={road} />}
                 <WeatherComponent />
             </Slider>
 

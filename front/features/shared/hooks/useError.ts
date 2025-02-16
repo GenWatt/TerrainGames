@@ -1,55 +1,53 @@
 import axios, { AxiosError } from 'axios';
-import { useSegments } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { ApiError, ResultTypes } from '@/types';
-import { useUserStore } from '../stores/userStore';
+import { logoutAsyncUser } from './useAuth';
 
-export default function useError() {
-    const segments = useSegments();
-    const { logout } = useUserStore();
+export const handleErrorFunction = async (error: any) => {
+    if (!error) {
+        return;
+    }
 
-    const handleError = (error: any) => {
-        if (!error) {
+    if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError<ApiError>;
+        const errorData = axiosError.response?.data;
+
+        if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
+            await logoutAsyncUser();
             return;
         }
 
-        if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError<ApiError>;
-            const errorData = axiosError.response?.data;
+        if (errorData?.type === ResultTypes.INVALID_CREDENTIALS) {
+            Toast.show({
+                type: 'error',
+                text1: 'Invalid credentials',
+                text2: 'Please try again',
+            });
 
-            if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
-                if (segments[0] === 'auth') return;
-                logout();
-
-                return;
-            }
-
-            if (errorData?.type === ResultTypes.INVALID_CREDENTIALS) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Invalid credentials',
-                    text2: 'Please try again',
-                });
-
-                return;
-            }
-
-            if (errorData?.type === ResultTypes.VALIDATION_ERROR) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Validation error',
-                    text2: 'Please check your input',
-                });
-
-                return;
-            }
+            return;
         }
 
-        Toast.show({
-            type: 'error',
-            text1: 'An error occurred',
-            text2: 'Please try again',
-        });
+        if (errorData?.type === ResultTypes.VALIDATION_ERROR) {
+            Toast.show({
+                type: 'error',
+                text1: 'Validation error',
+                text2: 'Please check your input',
+            });
+
+            return;
+        }
+    }
+
+    Toast.show({
+        type: 'error',
+        text1: 'An error occurred',
+        text2: 'Please try again',
+    });
+}
+
+export default function useError() {
+    const handleError = (error: any) => {
+        handleErrorFunction(error);
     }
 
     const getErrorMessage = (error: any) => {

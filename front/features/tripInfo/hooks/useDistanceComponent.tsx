@@ -1,32 +1,25 @@
-import useConverter from '@/features/shared/hooks/useConverter';
-import useMesurement from '@/features/shared/hooks/useMesurement';
-import useUserLocation from '@/features/shared/hooks/useUserLocation';
-import { ITrip } from '@/features/shared/stores/createTripStore';
+import useMe from '@/features/shared/api/useMe';
+import useConverter, { MetricUnit } from '@/features/shared/hooks/useConverter';
+import { MapboxRoadType } from '@/features/shared/stores/createTripStore';
 import { useMemo } from 'react';
 
 export interface DistanceHookProps {
-    trip: ITrip;
+    road: MapboxRoadType;
 }
 
-function useDistanceComponent({ trip }: DistanceHookProps) {
-    const { getTotalTripDistance } = useMesurement();
-    const { userLocation } = useUserLocation();
-    const { formatDistanceString } = useConverter();
+function useDistanceComponent({ road }: DistanceHookProps) {
+    const { formatDistanceString, convertDistance } = useConverter();
+    const { user } = useMe();
 
-    const waypoints = useMemo(() => {
-        if (userLocation) {
-            return [[userLocation.longitude, userLocation.latitude], ...trip.waypoints.map(waypoint => waypoint.position.coordinates)];
-        }
-        return [];
-    }, [userLocation, trip.waypoints]);
+    const convertedDistance = useMemo(() => {
+        return convertDistance({ value: road.distance, unit: MetricUnit.METER });
+    }, [road.distance, user?.prefs]);
 
-    const totalDistance = useMemo(() => {
-        const totalTripDistance = getTotalTripDistance(waypoints);
-        return formatDistanceString(totalTripDistance);
-    }, [waypoints, getTotalTripDistance]);
+    const totalDistance = useMemo(() =>
+        formatDistanceString(convertedDistance)
+        , [convertedDistance]);
 
     return {
-        waypoints,
         totalDistance
     }
 }

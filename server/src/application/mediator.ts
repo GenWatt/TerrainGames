@@ -9,7 +9,6 @@ export interface IMediator {
 
 export default class Mediator implements IMediator {
     private handlers = new Map<ICommand, IHandler>();
-    private excludeServices = ['command'];
 
     constructor() {
         console.log('Mediator constructor');
@@ -33,7 +32,7 @@ export default class Mediator implements IMediator {
                 const handlerClass = Object.values(handlerModule)[0];
 
                 const dependencies = container.resolveDependencies(handlerClass);
-                console.log('Dependencies', dependencies);
+                console.log('Dependencies', handlerClass);
                 const handlerInstance = new (handlerClass as any)(...dependencies);
 
                 let keyModule;
@@ -51,24 +50,6 @@ export default class Mediator implements IMediator {
                 this.handlers.set(keyClass, handlerInstance);
             }
         }
-    }
-
-    private resolveDependencies(handlerClass: any): any[] {
-        // Assuming the constructor parameter names match the registered service names
-        const paramNames = this.getParamNames(handlerClass);
-        console.log('ParamNames', paramNames);
-        return paramNames.map(name => container.resolve(name));
-    }
-
-    private getParamNames(func: Function): string[] {
-        const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-        const ARGUMENT_NAMES = /([^\s,]+)/g;
-        const fnStr = func.toString().replace(STRIP_COMMENTS, '');
-        const result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
-
-        return result === null ? [] : result
-            .filter((service) => !this.excludeServices.includes(service))
-            .map((service) => service.charAt(0).toUpperCase() + service.slice(1));;
     }
 
     async send<T>(command: ICommand): Promise<IResult<T | null>> {

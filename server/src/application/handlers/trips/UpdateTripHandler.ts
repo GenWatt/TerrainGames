@@ -45,10 +45,9 @@ export class UpdateTripCommandHandler implements IHandler<ITrip> {
 
         const updatedTripData: ITrip = {
             tripDetails,
-            // @ts-ignore
+            //@ts-ignore
             waypoints: waypointIds,
-            position: waypoints[0].position,
-            road: trip.road
+            position: waypoints[0].position
         };
 
         const updatedTrip = await this.tripRepository.update(updatedTripData, tripId);

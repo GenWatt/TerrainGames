@@ -11,9 +11,7 @@ export class CreateTripCommandHandler implements IHandler<ITrip> {
     constructor(private tripRepository: ITripRepository) { }
 
     async handle(command: CreateTripCommand): Promise<Result<ITrip | null>> {
-        const { waypoints, tripDetails, road } = command.trip;
-
-        console.log(road)
+        const { waypoints, tripDetails } = command.trip;
         const result = tripSchema.safeParse(command);
 
         if (!result.success) {
@@ -27,7 +25,6 @@ export class CreateTripCommandHandler implements IHandler<ITrip> {
             tripDetails,
             waypoints: waypointIds,
             position: waypoints[0].position,
-            road
         });
 
         const savedTrip = await this.tripRepository.create(trip);

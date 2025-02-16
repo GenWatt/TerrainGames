@@ -1,7 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 
 import { View, Image, ScrollView, Text, StyleSheet } from 'react-native';
-import useLoginViewModel from '@/features/login/hooks/useLoginViewModel';
+// import useLoginViewModel from '@/features/login/hooks/useLoginViewModel';
 //@ts-ignore
 import LoginImage from '@/assets/images/LandmarkLegendsLogin.webp';
 import LoginForm from '@/features/login/components/LoginForm';
@@ -10,7 +10,7 @@ import Link from '@/components/ui/Link';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
-    const { promptAsync } = useLoginViewModel();
+    // const { promptAsync } = useLoginViewModel();
 
     return (
         <ScrollView className='bg-background'>
@@ -34,10 +34,10 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
     image: {
-        borderRadius: 16, // rounded-2xl
-        width: 288, // w-72 (72 * 4 px)
-        height: 288, // h-72
-        alignSelf: 'center', // self-center
-        marginVertical: 12, // my-3 (3 * 4 px)
+        borderRadius: 16,
+        width: 288,
+        height: 288,
+        alignSelf: 'center',
+        marginVertical: 12,
     },
 });

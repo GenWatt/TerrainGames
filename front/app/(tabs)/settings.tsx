@@ -2,16 +2,17 @@ import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Loader from '@/components/ui/Loader';
 import Colors from '@/constants/Colors';
 import useSettings from '@/features/settings/hooks/useSettings';
+import { logoutAsyncUser } from '@/features/shared/hooks/useAuth';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View, Text } from 'react-native';
 
 export default function TabTwoScreen() {
-  const { changeMetric, user, logout, isFetching, changeTemperatureUnit, currentTempUnit } = useSettings();
+  const { changeMetric, user, isFetching, changeTemperatureUnit, currentTempUnit } = useSettings();
 
   return (
     <View className='p-4 bg-background flex-1 flex-row flex-wrap -m-2'>
       <View className='w-6/12 p-2'>
-        <CustomButton className='w-full flex-row items-center gap-2' onPress={logout}>
+        <CustomButton className='w-full flex-row items-center gap-2' onPress={logoutAsyncUser}>
           <Ionicons name="log-out" size={36} color="black" />
           <Text className='text-2xl font-bold'>Logout</Text>
         </CustomButton>

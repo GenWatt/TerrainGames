@@ -15,6 +15,7 @@ export enum OtherFeatures {
     TRIP_ACTIVE_VIEW = 'TRIP_ACTIVE_VIEW',
     TRIP_MARKERS = 'TRIP_MARKERS',
     FETCH_TRIPS = 'FETCH_TRIPS',
+    VIEW_WAYPOINT_DETAILS = 'VIEW_WAYPOINT_DETAILS',
 }
 
 export type Feature = ToolbarActionFeatures | OtherFeatures;
