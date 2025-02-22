@@ -1,6 +1,6 @@
 import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
-import AuthService from "../../../services/AuthService";
+import AuthService, { IAuthService } from "../../../services/AuthService";
 import { UserRole } from "../../../../../shared/types";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
 import { CreateAdminCommand } from "../../commands/auth/CreateAdminCommand";
@@ -8,9 +8,15 @@ import { CreateAdminValidator } from "../../validators/auth/CreateAdminValidator
 import { User } from "../../../domain/models/User";
 import { UserDTO } from "../../DTO/UserDTO";
 import { ResultTypes } from "../../../domain/types/enums";
+import { inject, injectable } from "tsyringe";
+import UserRepository from "../../../core/repositories/UserRepository";
 
+@injectable()
 export class CreateAdminHandler implements IHandler<UserDTO> {
-    constructor(private userRepository: IUserRepository, private authService: AuthService) { }
+    constructor(
+        @inject(UserRepository) private userRepository: IUserRepository,
+        @inject(AuthService) private authService: IAuthService
+    ) { }
 
     async handle(command: CreateAdminCommand): Promise<Result<UserDTO>> {
         const { user } = command;

@@ -1,11 +1,15 @@
 import { NextFunction, Response, Request } from "express";
-import { IMediator } from "../../application/Mediator";
+import Mediator, { IMediator } from "../../application/Mediator";
 import { ChangeMetricCommand } from "../../application/commands/settings/ChangeMetricCommand";
 import { IUser } from "@shared/types";
 import { ChangeTemperatureUnitCommand } from "../../application/commands/settings/ChangeTemperatureUnitCommand";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 class SettingsController {
-    constructor(private mediator: IMediator) { }
+    constructor(
+        @inject(Mediator) private mediator: IMediator
+    ) { }
 
     public async changeMetric(req: Request, res: Response, next: NextFunction) {
         const { metric } = req.body;

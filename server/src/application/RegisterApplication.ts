@@ -1,21 +1,33 @@
 import path from "path";
 import TripRepository from "../core/repositories/TripRepository";
 import ITripRepository from "../domain/repositories/trips/ITripRepository";
-import AuthService from "../services/AuthService";
-import { container } from "../shared/DIContainer";
-import Mediator from "./Mediator";
+import AuthService, { IAuthService } from "../services/AuthService";
+import Mediator, { IMediator } from "./Mediator";
 import IUserRepository from "../domain/repositories/users/IUserRepository";
 import UserRepository from "../core/repositories/UserRepository";
+import { container } from "tsyringe";
+import TripController from "../api/controllers/TripController";
+import AuthController from "../api/controllers/AuthController";
+import SettingsController from "../api/controllers/SettingsController";
+import WeatherController from "../api/controllers/WeatherController";
+import logger from "../core/loggers/logger";
+import { Logger } from "winston";
 
 export default class RegisterApplication {
     constructor(
         private controllerPath: string = path.join(__dirname, '../api/controllers')
     ) {
-        container.register(AuthService.name, new AuthService());
-        container.register<ITripRepository>(TripRepository.name, new TripRepository());
-        container.register<IUserRepository>(UserRepository.name, new UserRepository());
+        container.registerSingleton<ITripRepository>('ITripRepository', TripRepository);
+        container.registerSingleton<IUserRepository>('IUserRepository', UserRepository);
+        container.registerSingleton<IAuthService>('IAuthService', AuthService);
+        container.registerSingleton<IMediator>('IMediator', Mediator);
+        container.registerInstance(Logger, logger);
+    }
 
-        container.register(Mediator.name, new Mediator());
-        container.registerControllers(controllerPath);
+    public registerControllers() {
+        container.register<TripController>('TripController', TripController);
+        container.register<AuthController>('AuthController', AuthController);
+        container.register<SettingsController>('SettingsController', SettingsController);
+        container.register<WeatherController>('WeatherController', WeatherController);
     }
 }

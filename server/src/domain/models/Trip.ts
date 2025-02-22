@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 import { IWaypoint } from './Waypoint';
 
 export interface ITrip {
+    _id: string;
     waypoints: IWaypoint[];
     tripDetails: ITripDetails;
 }

@@ -43,3 +43,10 @@ export type MapBoxDistanceApiResponse = {
     code: string;
     uuid: string;
 }
+
+export type Bounds = {
+    neLat: string,
+    neLng: string,
+    swLat: string,
+    swLng: string
+}

@@ -1,15 +1,19 @@
 import { ITrip } from "../../../domain/models/Trip";
 import { Waypoint } from "../../../domain/models/Waypoint";
-
 import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
 import ITripRepository from "../../../domain/repositories/trips/ITripRepository";
 import { UpdateTripCommand } from "../../commands/trips/UpdateTripCommand";
 import { ResultTypes } from "../../../domain/types/enums";
 import { tripSchema } from "../../validators/trips/CreateTripValidator";
+import { inject, injectable } from "tsyringe";
+import TripRepository from "../../../core/repositories/TripRepository";
 
+@injectable()
 export class UpdateTripCommandHandler implements IHandler<ITrip> {
-    constructor(private tripRepository: ITripRepository) { }
+    constructor(
+        @inject(TripRepository) private tripRepository: ITripRepository
+    ) { }
 
     async handle(command: UpdateTripCommand): Promise<Result<ITrip | null>> {
         const { tripId, trip } = command;

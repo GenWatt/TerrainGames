@@ -2,7 +2,13 @@ import { IUser } from "../../../shared/types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-class AuthService {
+export interface IAuthService {
+    generateToken(user: IUser): string;
+    verifyPassword(password: string, hash: string): Promise<boolean>;
+    hashPassword(password: string): Promise<string>;
+}
+
+class AuthService implements IAuthService {
     public generateToken(user: IUser): string {
         return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET!, { expiresIn: '1h' });
     }

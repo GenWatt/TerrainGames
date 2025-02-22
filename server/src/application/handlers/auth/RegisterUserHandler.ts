@@ -6,9 +6,14 @@ import IUserRepository from "../../../domain/repositories/users/IUserRepository"
 import { RegisterUserValidator } from "../../validators/auth/RegisterUserValidator";
 import { UserDTO } from "../../DTO/UserDTO";
 import { ResultTypes } from "../../../domain/types/enums";
+import { inject, injectable } from "tsyringe";
+import UserRepository from "../../../core/repositories/UserRepository";
 
+@injectable()
 export class RegisterUserHandler implements IHandler<UserDTO> {
-    constructor(private userRepository: IUserRepository) { }
+    constructor(
+        @inject(UserRepository) private userRepository: IUserRepository
+    ) { }
 
     async handle(command: RegisterCommand): Promise<Result<UserDTO>> {
         const { user } = command;

@@ -2,12 +2,12 @@ import { Router } from 'express';
 import TripController from '../../controllers/TripController';
 import { authMiddleware } from '../../middleware/auth';
 import { UserRole } from "../../../../../shared/types";
-import { container } from '../../../shared/DIContainer';
 import { asyncHandler } from '../../middleware/asyncHandler';
+import { container } from 'tsyringe';
 
 export const TripRouter = Router();
 
-const tripController = container.resolve<TripController>('TripController');
+const tripController = container.resolve(TripController);
 
 TripRouter.post('/trip', authMiddleware([UserRole.ADMIN]), asyncHandler(tripController.create.bind(tripController)));
 

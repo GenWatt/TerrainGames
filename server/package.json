@@ -40,6 +40,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.8.0",
+    "winston": "^3.17.0",
     "zod": "^3.24.1"
   }
 }

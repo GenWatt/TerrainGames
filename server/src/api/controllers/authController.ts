@@ -1,11 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { RegisterCommand } from '../../application/commands/auth/RegisterUserCommand';
-import { IMediator } from '../../application/Mediator';
+import Mediator, { IMediator } from '../../application/Mediator';
 import { LoginUserCommand } from '../../application/commands/auth/LoginUserCommand';
 import { CreateAdminCommand } from '../../application/commands/auth/CreateAdminCommand';
+import { inject, injectable } from 'tsyringe';
 
+@injectable()
 class AuthController {
-    public constructor(private mediator: IMediator) { }
+    public constructor(
+        @inject(Mediator) private mediator: IMediator
+    ) { }
 
     googleCallback(req: Request, res: Response) {
         res.redirect('myapp://auth?token=${token}');

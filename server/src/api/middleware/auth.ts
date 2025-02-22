@@ -8,15 +8,14 @@ import { ResultTypes } from '../../domain/types/enums';
 export const authMiddleware = (roles: UserRole[] = []) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const token = req.headers.authorization?.split(' ')[1];
-        console.log(req.headers.authorization + ' token');
+
         if (!token || token === 'undefined') {
-            console.log('User not authorized (Token not found) - ' + req.url);
             return next(Result.failure('User not authorized (Token not found)', ResultTypes.NOT_AUTHORIZED, 401));
         }
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-            console.log(decoded + ' decoded');
+
             if (typeof decoded === 'string' || !decoded) {
                 return next(Result.failure('User not authorized', ResultTypes.NOT_AUTHORIZED, 401));
             }
