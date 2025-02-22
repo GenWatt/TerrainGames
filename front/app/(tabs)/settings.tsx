@@ -2,7 +2,7 @@ import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Loader from '@/components/ui/Loader';
 import Colors from '@/constants/Colors';
 import useSettings from '@/features/settings/hooks/useSettings';
-import { logoutAsyncUser } from '@/features/shared/hooks/useAuth';
+import { logoutAsyncUser } from '@/features/shared/utils/logoutUserAsync';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { View, Text } from 'react-native';
 

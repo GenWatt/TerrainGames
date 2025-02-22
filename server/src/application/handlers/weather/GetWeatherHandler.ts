@@ -5,11 +5,12 @@ import { GetWeatherQuery } from "../../queries/weather/GetWeatherQuery";
 import { axiosOpenWeatherInstance } from '../../../core/apiConfigs/openWeatherConfig';
 import { injectable } from "tsyringe";
 import { WeatherValidator } from "../../validators/weather/WeatherValidator";
+import { WeatherResponse } from "../../../domain/types";
 
 @injectable()
-export class GetWeatherHandler implements IHandler<any> {
+export class GetWeatherHandler implements IHandler<WeatherResponse> {
 
-    public async handle(command: GetWeatherQuery): Promise<Result<any>> {
+    public async handle(command: GetWeatherQuery): Promise<Result<WeatherResponse>> {
         const { latitude, longitude } = command;
 
         const result = WeatherValidator.safeParse({ latitude, longitude });
@@ -18,7 +19,7 @@ export class GetWeatherHandler implements IHandler<any> {
             return Result.failure(result.error.errors.map(e => e.message).join(", "), ResultTypes.VALIDATION_ERROR, 400);
         }
 
-        const response = await axiosOpenWeatherInstance.get('/', {
+        const response = await axiosOpenWeatherInstance.get<WeatherResponse>('/', {
             params: {
                 lat: latitude,
                 lon: longitude

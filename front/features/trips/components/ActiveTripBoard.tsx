@@ -3,7 +3,7 @@ import { AppModes, useTripStore } from '@/features/shared/stores/TripStore';
 import Slider from '@/features/slider/components/Slider';
 import Stopwatch from '@/features/stoper/components/Stopwatch';
 import DistanceComponent from '@/features/tripInfo/components/DistanceComponent';
-import WeatherComponent from '@/features/tripInfo/components/WeatherComponent';
+import WeatherComponent from '@/features/weather/components/WeatherComponent';
 
 export interface ActiveTripBoardProps {
     trip: ITrip;

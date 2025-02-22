@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import Toast from 'react-native-toast-message';
 import { ApiError, ResultTypes } from '@/types';
-import { logoutAsyncUser } from './useAuth';
+import { logoutAsyncUser } from '../utils/logoutUserAsync';
 
 export const handleErrorFunction = async (error: any) => {
     if (!error) {
@@ -13,6 +13,7 @@ export const handleErrorFunction = async (error: any) => {
         const errorData = axiosError.response?.data;
 
         if (errorData?.type === ResultTypes.NOT_AUTHORIZED) {
+            console.log('User not authorized');
             await logoutAsyncUser();
             return;
         }

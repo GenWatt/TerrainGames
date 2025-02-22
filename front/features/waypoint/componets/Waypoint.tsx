@@ -3,14 +3,12 @@ import { ScrollView, View, Text } from 'react-native';
 import { useCreateTripStore, IWaypoint } from '@/features/shared/stores/createTripStore';
 import WaypointDisplay from './WaypointDisplay';
 import WaypointEdit from './WaypointEdit';
-import { UserRole } from '@/types';
-import useMe from '@/features/shared/api/useMe';
 import { useRouter } from 'expo-router';
 import { useTripStore } from '@/features/shared/stores/TripStore';
+import Header from '@/components/ui/Header';
 
 const Waypoint: React.FC = () => {
     const { selectedWaypoint, updateWaypoint, deselectWaypoint, removeWaypoint } = useCreateTripStore();
-    const { user } = useMe();
     const router = useRouter();
     const { isEditOrCreateMode } = useTripStore();
 
@@ -37,14 +35,20 @@ const Waypoint: React.FC = () => {
 
     return (
         <ScrollView>
-            {user && user.role === UserRole.ADMIN && isEditOrCreateMode() ? (
-                <WaypointEdit
-                    waypoint={selectedWaypoint}
-                    onSave={handleSave}
-                    onDelete={handleDelete}
-                />
+            {isEditOrCreateMode() ? (
+                <>
+                    <Header title={`Edit ${selectedWaypoint.title} waypoint`} />
+                    <WaypointEdit
+                        waypoint={selectedWaypoint}
+                        onSave={handleSave}
+                        onDelete={handleDelete}
+                    />
+                </>
             ) : (
-                <WaypointDisplay waypoint={selectedWaypoint} />
+                <>
+                    <Header title={`See '${selectedWaypoint.title}' waypoint`} />
+                    <WaypointDisplay waypoint={selectedWaypoint} />
+                </>
             )}
         </ScrollView>
     );

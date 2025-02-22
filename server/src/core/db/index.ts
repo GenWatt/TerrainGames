@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 // Connect to MongoDB
 export function connectTerrainDb() {
-    console.log('process.env.MONGO_CONNECTION_STRING', process.env.MONGO_CONNECTION_STRING);
     mongoose.connect(process.env.MONGO_CONNECTION_STRING!, {
         dbName: process.env.MONGO_TERRAIN_GAME_DB,
     });

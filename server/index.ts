@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectTerrainDb } from './src/core/db';
-
 import RegisterApplication from './src/application/RegisterApplication';
 
 new RegisterApplication();
@@ -11,24 +10,36 @@ new RegisterApplication();
 import routes from './src/api/routes';
 import { errorHandler } from './src/api/middleware/errorHandler';
 import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import helmet from "helmet";
+import compression from 'compression';
 
 dotenv.config();
 
 const app = express();
 
-connectTerrainDb();
-
-const allowedOrigins = ['http://localhost:8081', '']; // Add your allowed origins here
-
+const allowedOrigins = ['http://localhost:8081'];
 const corsOptions = {
     origin: allowedOrigins,
     credentials: true,
 };
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: 'Too many requests from this IP, please try again later.',
+});
 
+connectTerrainDb();
+
+app.use(helmet());
+app.use(limiter);
 app.use(cors(corsOptions));
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(compression());
+}
+app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 routes.forEach((route) => app.use(route));
 

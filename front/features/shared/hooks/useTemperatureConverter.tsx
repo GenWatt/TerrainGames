@@ -13,13 +13,29 @@ class TemperatureConverter {
         return this.preferedUnit === Temperature.CELSIUS;
     }
 
+    private isFahrenheitPreferred(): boolean {
+        return this.preferedUnit === Temperature.FAHRENHEIT;
+    }
+
+    private isKelvinPreferred(): boolean {
+        return this.preferedUnit === Temperature.KELVIN;
+    }
+
     public convert(temp: TemperatureValue): TemperatureValue {
-        return this.isCelsiusPreferred() ? this.toCelsius(temp) : this.toFahrenheit(temp);
+        if (this.isCelsiusPreferred()) {
+            return this.toCelsius(temp);
+        } else if (this.isFahrenheitPreferred()) {
+            return this.toFahrenheit(temp);
+        } else {
+            return this.toKelvin(temp);
+        }
     }
 
     private toCelsius(temp: TemperatureValue): TemperatureValue {
         if (temp.unit === TemperatureUnit.FAHRENHEIT) {
             return { value: (temp.value - 32) * (5 / 9), unit: TemperatureUnit.CELSIUS };
+        } else if (temp.unit === TemperatureUnit.KELVIN) {
+            return { value: temp.value - 273.15, unit: TemperatureUnit.CELSIUS };
         }
         return temp;
     }
@@ -27,6 +43,17 @@ class TemperatureConverter {
     private toFahrenheit(temp: TemperatureValue): TemperatureValue {
         if (temp.unit === TemperatureUnit.CELSIUS) {
             return { value: temp.value * (9 / 5) + 32, unit: TemperatureUnit.FAHRENHEIT };
+        } else if (temp.unit === TemperatureUnit.KELVIN) {
+            return { value: (temp.value - 273.15) * (9 / 5) + 32, unit: TemperatureUnit.FAHRENHEIT };
+        }
+        return temp;
+    }
+
+    private toKelvin(temp: TemperatureValue): TemperatureValue {
+        if (temp.unit === TemperatureUnit.CELSIUS) {
+            return { value: temp.value + 273.15, unit: TemperatureUnit.KELVIN };
+        } else if (temp.unit === TemperatureUnit.FAHRENHEIT) {
+            return { value: (temp.value - 32) * (5 / 9) + 273.15, unit: TemperatureUnit.KELVIN };
         }
         return temp;
     }

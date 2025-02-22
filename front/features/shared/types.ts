@@ -33,3 +33,26 @@ export interface IFeatureFlags {
     group?: FeatureGroups[];
     minWaypoints?: number;
 }
+
+export interface ILocation {
+    latitude: number;
+    longitude: number;
+}
+
+export interface LocationUpdate {
+    location: ILocation;
+    speed?: number;
+}
+
+export interface ILocationService {
+    getCurrentLocation(): Promise<ILocation>;
+    watchLocation(
+        callback: (update: LocationUpdate) => void,
+        options?: { simulationSpeed?: number }
+    ): Promise<() => void>;
+    simulatePath(
+        path: ILocation[],
+        options?: { speed?: number; loop?: boolean }
+    ): void;
+    stopSimulation(): void;
+}
