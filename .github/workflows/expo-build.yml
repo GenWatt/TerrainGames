@@ -37,4 +37,5 @@ jobs:
         run: npm install
 
       - name: 🚀 Build app
+        working-directory: front
         run: eas build --platform android
