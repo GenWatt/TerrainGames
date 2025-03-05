@@ -36,11 +36,5 @@ jobs:
         working-directory: front
         run: npm install
 
-      - name: 🚀 Create preview
-        uses: expo/expo-github-action/preview@v8
-        id: preview
-        with:
-          # In this example, we use the `push` trigger which will always use the branch name that was pushed to.
-          # By using `--auto` we both use the git commit message and branch name for the update.
-          command: eas update --auto
-          comment: false
+      - name: 🚀 Build app
+        run: eas build --non-interactive
