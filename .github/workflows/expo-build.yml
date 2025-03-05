@@ -38,4 +38,4 @@ jobs:
 
       - name: 🚀 Build app
         working-directory: front
-        run: eas build --platform android
+        run: eas build --platform android --profile preview --non-interactive
