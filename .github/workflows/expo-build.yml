@@ -1,0 +1,85 @@
+name: Expo build APK
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Expo Login
+        run: expo login --username ${{ secrets.EXPO_USERNAME }} --password ${{ secrets.EXPO_PASSWORD }}
+        # Make sure to set EXPO_USERNAME and EXPO_PASSWORD in your repository secrets
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Trigger Android Build
+        id: trigger_build
+        run: |
+          # Trigger the build without waiting for completion; output JSON so we can capture the build id.
+          expo build:android --non-interactive --no-wait --json > build.json
+          BUILD_ID=$(jq -r '.id' build.json)
+          echo "Build triggered with id: $BUILD_ID"
+          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+
+      - name: Wait for Build to Complete
+        id: wait_build
+        run: |
+          echo "Waiting for build to complete..."
+          APK_URL=""
+          while [ -z "$APK_URL" ]; do
+            # Check build status for the build id we just triggered.
+            OUTPUT=$(expo build:status --non-interactive --platform android --id $BUILD_ID --json)
+            STATUS=$(echo "$OUTPUT" | jq -r '.status')
+            echo "Current build status: $STATUS"
+            if [ "$STATUS" == "finished" ]; then
+              APK_URL=$(echo "$OUTPUT" | jq -r '.artifacts.buildUrl')
+              if [ -n "$APK_URL" ]; then
+                echo "Build finished. APK URL: $APK_URL"
+                break
+              fi
+            elif [ "$STATUS" == "errored" ]; then
+              echo "Build errored. Exiting."
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "APK_URL=$APK_URL" >> $GITHUB_ENV
+
+      - name: Download APK
+        run: |
+          echo "Downloading APK from $APK_URL"
+          wget "$APK_URL" -O build.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: expo-apk
+          path: build.apk
