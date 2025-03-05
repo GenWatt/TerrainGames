@@ -42,5 +42,5 @@ jobs:
         with:
           # In this example, we use the `push` trigger which will always use the branch name that was pushed to.
           # By using `--auto` we both use the git commit message and branch name for the update.
-          command: eas update --auto
+          command: npx eas update --auto
           comment: false
