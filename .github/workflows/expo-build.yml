@@ -19,6 +19,11 @@ jobs:
         with:
           node-version: '20.12.2'
 
+      - uses: expo/expo-github-action@v8
+        with:
+          expo-version: 12.x
+          token: ${{ secrets.EXPO_TOKEN }}
+
       - name: Cache node modules
         uses: actions/cache@v4
         with:
@@ -31,39 +36,5 @@ jobs:
         working-directory: front
         run: npm install
 
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      - name: Set up EAS credentials
-        env:
-          EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: echo "EAS_TOKEN set"
-
-      - name: Trigger EAS Android Build
-        id: eas_build
-        working-directory: front
-        env:
-          EAS_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: |
-          echo "Triggering EAS Build..."
-          # The --wait flag makes EAS CLI wait until the build completes.
-          eas build --platform android --non-interactive --profile release --wait --json > eas_build.json
-          cat eas_build.json
-          # Extract the build artifact URL from the JSON output.
-          BUILD_URL=$(jq -r '.artifacts.buildUrl' eas_build.json)
-          if [ -z "$BUILD_URL" ]; then
-            echo "No build URL found. Check your eas.json configuration and build logs."
-            exit 1
-          fi
-          echo "BUILD_URL=$BUILD_URL" >> $GITHUB_ENV
-
-      - name: Download APK
-        run: |
-          echo "Downloading APK from $BUILD_URL"
-          wget "$BUILD_URL" -O build.apk
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: expo-eas-apk
-          path: build.apk
+      - name: Build app
+        run: eas build --non-interactive
