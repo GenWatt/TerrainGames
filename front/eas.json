@@ -6,12 +6,20 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
     },
     "preview": {
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY": "pk.eyJ1IjoiZ2Vud2F0dCIsImEiOiJjbTF1dTYwejkwNTh6MnFzOWp6ZmRxZGRnIn0.9Ef2PE3FErDwxZvT-opdpw",
+        "EXPO_PUBLIC_RNMAPBOX_MAPS_DOWNLOAD_TOKEN": "sk.eyJ1IjoiZ2Vud2F0dCIsImEiOiJjbTF1dDB5bzUwM29wMmlwaXYyanpxcmI3In0.AfM4qaHsFGVSJGNIHy1QgA",
+        "EXPO_PUBLIC_LANDMARK_LEGENDS_API_URL": "http://192.168.1.109:5001"
       }
     },
     "production": {
