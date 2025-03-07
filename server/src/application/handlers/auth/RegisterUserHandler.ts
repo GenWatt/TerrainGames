@@ -1,4 +1,4 @@
-import { RegisterCommand } from "../../commands/auth/RegisterUserCommand";
+import { RegisterUserCommand } from "../../commands/auth/RegisterUserCommand";
 import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
 import { User } from "../../../domain/models/User";
@@ -15,7 +15,7 @@ export class RegisterUserHandler implements IHandler<UserDTO> {
         @inject(UserRepository) private userRepository: IUserRepository
     ) { }
 
-    async handle(command: RegisterCommand): Promise<Result<UserDTO>> {
+    async handle(command: RegisterUserCommand): Promise<Result<UserDTO>> {
         const { user } = command;
 
         const result = RegisterUserValidator.safeParse(user);

@@ -12,6 +12,7 @@ export default class Mediator implements IMediator {
 
     constructor() {
         const handlerPath = path.join(__dirname, 'handlers');
+        console.log(`Loading handlers from ${handlerPath}`);
         this.loadHandlers(handlerPath);
     }
 
@@ -52,12 +53,14 @@ export default class Mediator implements IMediator {
     private findCommandQueryClass(relativeHandlerPath: string): (new (...args: any[]) => ICommand) | null {
         const baseName = path.basename(relativeHandlerPath).replace(/Handler\.[tj]s$/, '');
         const directory = path.dirname(relativeHandlerPath);
+        const fileExtension = path.extname(relativeHandlerPath);
 
-        const commandPath = path.join(__dirname, 'commands', directory, `${baseName}Command.ts`);
+        const commandPath = path.join(__dirname, 'commands', directory, `${baseName}Command${fileExtension}`);
+        console.log(`Looking for command at ${commandPath}`);
         try {
             return require(commandPath)[`${baseName}Command`];
         } catch {
-            const queryPath = path.join(__dirname, 'queries', directory, `${baseName}Query.ts`);
+            const queryPath = path.join(__dirname, 'queries', directory, `${baseName}Query${fileExtension}`);
             try {
                 return require(queryPath)[`${baseName}Query`];
             } catch {

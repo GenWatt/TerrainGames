@@ -35,6 +35,8 @@ export class LoginUserHandler implements IHandler<UserDTO> {
             return Result.failure("Invalid email or password", ResultTypes.INVALID_CREDENTIALS, 401);
         }
 
+        console.log(savedUser.password, await this.authService.hashPassword(user.password));
+
         const isPasswordValid = await this.authService.verifyPassword(user.password, savedUser.password);
         if (!isPasswordValid) {
             this.logger.error(`Invalid password: ${user.username}`);

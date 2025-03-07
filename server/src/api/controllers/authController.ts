@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { RegisterCommand } from '../../application/commands/auth/RegisterUserCommand';
+import { RegisterUserCommand } from '../../application/commands/auth/RegisterUserCommand';
 import Mediator, { IMediator } from '../../application/Mediator';
 import { LoginUserCommand } from '../../application/commands/auth/LoginUserCommand';
 import { CreateAdminCommand } from '../../application/commands/auth/CreateAdminCommand';
@@ -40,7 +40,7 @@ class AuthController {
     }
 
     async registerUser(req: Request, res: Response, next: NextFunction) {
-        const result = await this.mediator.send(new RegisterCommand(req.body));
+        const result = await this.mediator.send(new RegisterUserCommand(req.body));
 
         if (result.isSuccess) {
             return res.status(result.statusCode).json(result);
