@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "tsc --traceResolution && tsc-alias",
+    "build": "tsc --module commonjs && tsc-alias",
     "start": "node ./dist/index.js",
     "dev": "nodemon -L ./src/index.ts"
   },
