@@ -1,5 +1,6 @@
-export type Position = [number, number];
+import { UserRole, Theme, MetricTypes, TemperatureUnits } from "./enums";
 
+export type Position = [number, number];
 
 export type MapboxRoadType = {
     distance: number;
@@ -95,4 +96,35 @@ export type WeatherResponse = {
     name: string;
     cod: number;
 };
+
+
+export type IUser = {
+    _id: string;
+    username: string;
+    email: string;
+    password: string;
+    role: UserRole;
+    googleId: string;
+    avatar: string;
+    accessToken: string;
+    createdAt: Date;
+    prefs: UserPrefs;
+}
+
+export type UserPrefs = {
+    theme: Theme;
+    metricSystem: MetricTypes;
+    temperatureUnit: TemperatureUnits;
+}
+
+export type RegisterUserDTO = {
+    username: string;
+    email: string;
+    password: string;
+}
+
+export type LoginUserDTO = {
+    username: string;
+    password: string;
+}
 

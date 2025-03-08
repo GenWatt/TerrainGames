@@ -1,4 +1,5 @@
-import { IUser, Theme, UserRole } from "@shared/types";
+import { IUser } from "../../domain/types";
+import { UserRole, Theme } from "../../domain/types/enums";
 
 export class UserDTO {
     _id: string;

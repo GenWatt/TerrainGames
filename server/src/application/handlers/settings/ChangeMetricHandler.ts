@@ -3,11 +3,11 @@ import { Result } from "../../../domain/Result";
 import { ChangeMetricCommand } from "../../commands/settings/ChangeMetricCommand";
 import { ResultTypes } from "../../../domain/types/enums";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
-import { UserPrefs } from "@shared/types";
 import { UserType } from "../../../domain/models/User";
 import { ChangeMetricValidator } from "../../validators/settings/ChangeMetricValidator";
 import { inject, injectable } from "tsyringe";
 import UserRepository from "../../../core/repositories/UserRepository";
+import { UserPrefs } from "../../../domain/types";
 
 @injectable()
 export class ChangeMetricHandler implements IHandler<UserPrefs> {

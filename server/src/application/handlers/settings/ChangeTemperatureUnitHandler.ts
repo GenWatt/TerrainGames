@@ -3,11 +3,11 @@ import { Result } from "../../../domain/Result";
 import { ChangeTemperatureUnitCommand } from "../../commands/settings/ChangeTemperatureUnitCommand";
 import { ResultTypes } from "../../../domain/types/enums";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
-import { UserPrefs } from "@shared/types";
 import { UserType } from "../../../domain/models/User";
 import { ChangeTemperatureUnitValidator } from "../../validators/settings/ChangeTemperatureUnitValidator";
 import { inject, injectable } from "tsyringe";
 import UserRepository from "../../../core/repositories/UserRepository";
+import { UserPrefs } from "../../../domain/types";
 
 @injectable()
 export class ChangeTemperatureUnitHandler implements IHandler<UserPrefs> {

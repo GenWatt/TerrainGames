@@ -1,4 +1,4 @@
-import { TemperatureUnits } from "@shared/types";
+import { TemperatureUnits } from "../../../domain/types/enums";
 import { ICommand } from "../../types";
 
 export class ChangeTemperatureUnitCommand implements ICommand {

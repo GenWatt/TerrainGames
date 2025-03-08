@@ -1,9 +1,9 @@
 import { NextFunction, Response, Request } from "express";
 import Mediator, { IMediator } from "../../application/Mediator";
 import { ChangeMetricCommand } from "../../application/commands/settings/ChangeMetricCommand";
-import { IUser } from "@shared/types";
 import { ChangeTemperatureUnitCommand } from "../../application/commands/settings/ChangeTemperatureUnitCommand";
 import { inject, injectable } from "tsyringe";
+import { IUser } from "../../domain/types";
 
 @injectable()
 class SettingsController {

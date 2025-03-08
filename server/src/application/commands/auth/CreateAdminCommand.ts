@@ -1,4 +1,4 @@
-import { RegisterUserDTO } from "@shared/types";
+import { RegisterUserDTO } from "../../../domain/types";
 import { ICommand } from "../../types";
 
 export class CreateAdminCommand implements ICommand {

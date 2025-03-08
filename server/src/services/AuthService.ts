@@ -1,6 +1,6 @@
-import { IUser } from "../../../shared/types";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { IUser } from "../domain/types";
 
 export interface IAuthService {
     generateToken(user: IUser): string;

@@ -1,4 +1,4 @@
-import { MetricTypes } from "@shared/types";
+import { MetricTypes } from "../../../domain/types/enums";
 import { ICommand } from "../../types";
 
 export class ChangeMetricCommand implements ICommand {

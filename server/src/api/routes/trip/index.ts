@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import TripController from '../../controllers/TripController';
 import { authMiddleware } from '../../middleware/auth';
-import { UserRole } from "../../../../../shared/types";
 import { asyncHandler } from '../../middleware/asyncHandler';
 import { container } from 'tsyringe';
+import { UserRole } from '../../../domain/types/enums';
 
 export const TripRouter = Router();
 

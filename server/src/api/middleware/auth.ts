@@ -1,9 +1,8 @@
 import { User } from '../../domain/models/User';
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserRole } from "@shared/types";
 import { Result } from '../../domain/Result';
-import { ResultTypes } from '../../domain/types/enums';
+import { ResultTypes, UserRole } from '../../domain/types/enums';
 
 export const authMiddleware = (roles: UserRole[] = []) => {
     return async (req: Request, res: Response, next: NextFunction) => {

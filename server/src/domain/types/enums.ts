@@ -25,3 +25,29 @@ export enum ResultTypes {
     ROAD_ERROR = 'ROAD_ERROR',
     WEATHER_ERROR = 'WEATHER_ERROR',
 }
+
+export enum MetricTypes {
+    METRIC = 'metric',
+    IMPERIAL = 'imperial',
+}
+
+export enum UserRole {
+    ADMIN = 'ADMIN',
+    CREATOR = 'CREATOR',
+    USER = 'USER',
+}
+
+export enum Theme {
+    LIGHT = 'light',
+    DARK = 'dark',
+}
+
+export enum TemperatureUnits {
+    CELSIUS = '°C',
+    FAHRENHEIT = '°F',
+}
+
+export enum Temperature {
+    CELSIUS = 'CELSIUS',
+    FAHRENHEIT = 'FAHRENHEIT',
+}

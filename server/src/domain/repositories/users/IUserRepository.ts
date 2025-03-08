@@ -1,5 +1,5 @@
-import { IUser } from "../../../../../shared/types";
 import { UserType } from '../../models/User';
+import { IUser } from '../../types';
 
 export default interface IUserRepository {
     create(user: IUser): Promise<UserType>;

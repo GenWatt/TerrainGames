@@ -1,6 +1,6 @@
 import { User, UserType } from "../../domain/models/User";
-import { IUser } from "../../../../shared/types";
 import IUserRepository from "../../domain/repositories/users/IUserRepository";
+import { IUser } from "../../domain/types";
 
 export default class UserRepository implements IUserRepository {
     async create(user: IUser): Promise<UserType> {

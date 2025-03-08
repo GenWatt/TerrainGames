@@ -1,12 +1,11 @@
 import { IHandler } from "../../types";
 import { Result } from "../../../domain/Result";
-import { UserRole } from "../../../../../shared/types";
 import IUserRepository from "../../../domain/repositories/users/IUserRepository";
 import { CreateAdminCommand } from "../../commands/auth/CreateAdminCommand";
 import { CreateAdminValidator } from "../../validators/auth/CreateAdminValidator";
 import { User } from "../../../domain/models/User";
 import { UserDTO } from "../../DTO/UserDTO";
-import { ResultTypes } from "../../../domain/types/enums";
+import { ResultTypes, UserRole } from "../../../domain/types/enums";
 import { inject, injectable } from "tsyringe";
 import UserRepository from "../../../core/repositories/UserRepository";
 

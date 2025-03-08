@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { IUser, MetricTypes, Temperature, Theme, UserRole } from "../../../../shared/types";
+import { IUser } from "../types";
+import { UserRole, Theme, MetricTypes, Temperature } from "../types/enums";
 
 const userSchema = new mongoose.Schema<IUser & Document>({
     username: {
