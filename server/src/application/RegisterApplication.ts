@@ -2,7 +2,7 @@ import path from "path";
 import TripRepository from "@core/repositories/TripRepository";
 import ITripRepository from "@domain/repositories/trips/ITripRepository";
 import AuthService, { IAuthService } from "../services/AuthService";
-import Mediator, { IMediator } from "./Mediator";
+import Mediator, { IMediator } from "@application/Mediator";
 import IUserRepository from "@domain/repositories/users/IUserRepository";
 import UserRepository from "@core/repositories/UserRepository";
 import { container } from "tsyringe";
