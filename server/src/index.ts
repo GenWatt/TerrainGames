@@ -2,13 +2,13 @@ import "reflect-metadata";
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectTerrainDb } from './core/db';
-import RegisterApplication from './application/RegisterApplication';
+import { connectTerrainDb } from '@core/db';
+import RegisterApplication from '@application/RegisterApplication';
 
 new RegisterApplication();
 
-import routes from './api/routes';
-import { errorHandler } from './api/middleware/errorHandler';
+import routes from '@api/routes';
+import { errorHandler } from '@api/middleware/errorHandler';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import helmet from "helmet";

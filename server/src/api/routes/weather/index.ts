@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { authMiddleware } from '../../middleware/auth';
-import { asyncHandler } from '../../middleware/asyncHandler';
-import WeatherController from '../../controllers/WeatherController';
+import { authMiddleware } from '@api/middleware/auth';
+import { asyncHandler } from '@api/middleware/asyncHandler';
+import WeatherController from '@api/controllers/WeatherController';
 import { container } from 'tsyringe';
 
 export const WeatherRouter = Router();

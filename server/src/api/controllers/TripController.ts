@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { CreateTripCommand } from '../../application/commands/trips/CreateTripCommand';
-import { GetAllTripsQuery } from '../../application/queries/trips/GetAllTripsQuery';
-import { DeleteTripCommand } from '../../application/commands/trips/DeleteTripCommand';
-import { IMediator } from '../../application/Mediator';
-import { UpdateTripCommand } from '../../application/commands/trips/UpdateTripCommand';
-import { DrawRoadCommand } from '../../application/commands/trips/DrawRoadCommand';
-import { GetTripByIdQuery } from '../../application/queries/trips/GetTripByIdQuery';
+import { CreateTripCommand } from '@application/commands/trips/CreateTripCommand';
+import { GetAllTripsQuery } from '@application/queries/trips/GetAllTripsQuery';
+import { DeleteTripCommand } from '@application/commands/trips/DeleteTripCommand';
+import { IMediator } from '@application/Mediator';
+import { UpdateTripCommand } from '@application/commands/trips/UpdateTripCommand';
+import { DrawRoadCommand } from '@application/commands/trips/DrawRoadCommand';
+import { GetTripByIdQuery } from '@application/queries/trips/GetTripByIdQuery';
 import { inject, injectable } from 'tsyringe';
-import { Bounds } from '../../domain/types';
+import { Bounds } from '@domain/types';
 
 @injectable()
 class TripController {

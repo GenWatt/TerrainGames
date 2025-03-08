@@ -1,4 +1,4 @@
-import { ResultTypes } from "../../domain/types/enums";
+import { ResultTypes } from "@domain/types/enums";
 
 export interface IHandler<TResult = null> {
     handle(command: ICommand): Promise<IResult<TResult>>;

@@ -1,6 +1,22 @@
 {
     "compilerOptions": {
-        "paths": {},
+        "paths": {
+            "@/*": [
+                "*"
+            ],
+            "@api/*": [
+                "api/*"
+            ],
+            "@application/*": [
+                "application/*"
+            ],
+            "@core/*": [
+                "core/*"
+            ],
+            "@domain/*": [
+                "domain/*"
+            ],
+        },
         "baseUrl": "./src",
         /* Visit https://aka.ms/tsconfig to read more about this file */
         /* Projects */
@@ -111,5 +127,11 @@
     "tsc-alias": {
         "resolveFullPaths": true,
         "verbose": false
+    },
+    "ts-node": {
+        // Do not forget to `npm i -D tsconfig-paths`
+        "require": [
+            "tsconfig-paths/register"
+        ]
     }
 }

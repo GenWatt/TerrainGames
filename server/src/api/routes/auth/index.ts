@@ -1,7 +1,7 @@
 import express from 'express';
-import AuthController from '../../controllers/AuthController';
-import { authMiddleware } from '../../middleware/auth';
-import { asyncHandler } from '../../middleware/asyncHandler';
+import AuthController from '@api/controllers/AuthController';
+import { authMiddleware } from '@api/middleware/auth';
+import { asyncHandler } from '@api/middleware/asyncHandler';
 import { container } from 'tsyringe';
 // import { UserRole } from '../../types/enums';
 

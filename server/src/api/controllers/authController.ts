@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { RegisterUserCommand } from '../../application/commands/auth/RegisterUserCommand';
-import Mediator, { IMediator } from '../../application/Mediator';
-import { LoginUserCommand } from '../../application/commands/auth/LoginUserCommand';
-import { CreateAdminCommand } from '../../application/commands/auth/CreateAdminCommand';
+import { RegisterUserCommand } from '@application/commands/auth/RegisterUserCommand';
+import Mediator, { IMediator } from '@application/Mediator';
+import { LoginUserCommand } from '@application/commands/auth/LoginUserCommand';
+import { CreateAdminCommand } from '@application/commands/auth/CreateAdminCommand';
 import { inject, injectable } from 'tsyringe';
 
 @injectable()

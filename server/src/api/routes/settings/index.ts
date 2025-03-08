@@ -1,7 +1,7 @@
 import { Router } from "express";
-import SettingsController from "../../controllers/SettingsController";
-import { asyncHandler } from "../../middleware/asyncHandler";
-import { authMiddleware } from "../../middleware/auth";
+import SettingsController from "@api/controllers/SettingsController";
+import { asyncHandler } from "@api/middleware/asyncHandler";
+import { authMiddleware } from "@api/middleware/auth";
 import { container } from "tsyringe";
 
 export const SettingsRouter = Router();

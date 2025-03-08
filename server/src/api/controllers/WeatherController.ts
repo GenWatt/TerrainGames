@@ -1,6 +1,6 @@
-import { IMediator } from '../../application/Mediator';
+import { IMediator } from '@application/Mediator';
 import { Request, Response, NextFunction } from 'express';
-import { GetWeatherQuery } from '../../application/queries/weather/GetWeatherQuery';
+import { GetWeatherQuery } from '@application/queries/weather/GetWeatherQuery';
 import { inject, injectable } from 'tsyringe';
 
 @injectable()

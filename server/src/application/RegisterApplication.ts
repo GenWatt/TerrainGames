@@ -1,16 +1,16 @@
 import path from "path";
-import TripRepository from "../core/repositories/TripRepository";
-import ITripRepository from "../domain/repositories/trips/ITripRepository";
+import TripRepository from "@core/repositories/TripRepository";
+import ITripRepository from "@domain/repositories/trips/ITripRepository";
 import AuthService, { IAuthService } from "../services/AuthService";
 import Mediator, { IMediator } from "./Mediator";
-import IUserRepository from "../domain/repositories/users/IUserRepository";
-import UserRepository from "../core/repositories/UserRepository";
+import IUserRepository from "@domain/repositories/users/IUserRepository";
+import UserRepository from "@core/repositories/UserRepository";
 import { container } from "tsyringe";
-import TripController from "../api/controllers/TripController";
-import AuthController from "../api/controllers/AuthController";
-import SettingsController from "../api/controllers/SettingsController";
-import WeatherController from "../api/controllers/WeatherController";
-import logger from "../core/loggers/logger";
+import TripController from "@api/controllers/TripController";
+import AuthController from "@api/controllers/AuthController";
+import SettingsController from "@api/controllers/SettingsController";
+import WeatherController from "@api/controllers/WeatherController";
+import logger from "@core/loggers/logger";
 import { Logger } from "winston";
 
 export default class RegisterApplication {

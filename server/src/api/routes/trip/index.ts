@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import TripController from '../../controllers/TripController';
-import { authMiddleware } from '../../middleware/auth';
-import { asyncHandler } from '../../middleware/asyncHandler';
+import TripController from '@api/controllers/TripController';
+import { authMiddleware } from '@api/middleware/auth';
+import { asyncHandler } from '@api/middleware/asyncHandler';
 import { container } from 'tsyringe';
-import { UserRole } from '../../../domain/types/enums';
+import { UserRole } from '@domain/types/enums';
 
 export const TripRouter = Router();
 

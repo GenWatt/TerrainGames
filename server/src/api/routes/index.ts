@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { AuthRouter } from './auth';
-import { TripRouter } from './trip';
-import { SettingsRouter } from './settings';
-import { WeatherRouter } from './weather';
+import { AuthRouter } from '@api/routes/auth';
+import { TripRouter } from '@api/routes//trip';
+import { SettingsRouter } from '@api/routes//settings';
+import { WeatherRouter } from '@api/routes//weather';
 
 const routes: Router[] = [
     AuthRouter,

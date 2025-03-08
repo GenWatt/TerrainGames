@@ -1,4 +1,4 @@
-import { LoginUserDTO } from "../../../domain/types";
+import { LoginUserDTO } from "@domain/types";
 import { ICommand } from "../../types";
 
 export class LoginUserCommand implements ICommand {
