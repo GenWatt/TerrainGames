@@ -113,5 +113,9 @@
     "exclude": [
         "node_modules",
         "dist"
-    ]
+    ],
+    "tsc-alias": {
+        "resolveFullPaths": true,
+        "verbose": false
+    }
 }
