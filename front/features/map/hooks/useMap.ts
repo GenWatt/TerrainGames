@@ -9,7 +9,7 @@ import { useRef } from "react";
 import { GestureResponderEvent } from "react-native";
 
 function useMap() {
-    const { hasLocationPermission, userLocation } = useUserLocation();
+    const { hasLocationPermission, userLocation, handleLocationPermission } = useUserLocation();
     const { action: selectedAction, selectWaypoint, addPosition, isEditing } = useCreateTripStore((state) => state);
     const { changeMode } = useTripStore();
     const { isFeatureAvailable } = useFeatureFlags();
@@ -49,7 +49,7 @@ function useMap() {
         if (camera && !mapCamera) setMapCamera(camera);
     }
 
-    const userLocationArray = userLocation ? [userLocation.longitude, userLocation.latitude] : [18.9480, 49.7921];
+    const userLocationArray = [userLocation.longitude, userLocation.latitude];
 
     const areTripMarkersVisible = isFeatureAvailable(OtherFeatures.TRIP_MARKERS);
 
@@ -66,7 +66,8 @@ function useMap() {
         areTripMarkersVisible,
         mapRef,
         handleTouchEnd,
-        handleMapLoaded
+        handleMapLoaded,
+        handleLocationPermission
     }
 }
 

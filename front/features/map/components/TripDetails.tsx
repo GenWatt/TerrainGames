@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { useCallback, useRef } from 'react'
-import { ITrip } from '@/features/shared/stores/createTripStore';
+import { useCallback, useRef, useState } from 'react'
+import { ITrip, useCreateTripStore } from '@/features/shared/stores/createTripStore';
 import { View, Text } from 'react-native';
 import WaypointList from '@/features/shared/componets/waypoint/WaypointList';
 import Badge from '@/components/ui/Badge';
@@ -8,27 +8,55 @@ import Colors from '@/constants/Colors';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AppModes, useTripStore } from '@/features/shared/stores/TripStore';
+import WithRoles from '@/features/shared/componets/auth/WithRoles';
+import AdminActions from '@/features/trips/components/AdminActions';
+import { UserRole } from '@/types';
+import useDeleteTripMutation from '@/features/trips/api/useDeleteTripMutation';
+
+export enum CloseSheetReason {
+    EDIT = 'EDIT',
+    DELETE = 'DELETE',
+    START = 'START',
+    CLOSE = 'CLOSE',
+}
 
 export interface TripDetailsProps {
     trip: ITrip;
-    onClose?: () => void;
+    onClose?: (reason: CloseSheetReason) => void;
 }
 
 function TripDetails({ trip, onClose }: TripDetailsProps) {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const tripDetails = trip.tripDetails;
+    const { deleteAction } = useDeleteTripMutation()
+    const { editTrip } = useCreateTripStore()
 
     const { changeMode } = useTripStore();
+    const [reason, setReason] = useState<CloseSheetReason | null>(null);
 
     const handleSheetChanges = useCallback((index: number) => {
         if (index === -1) {
-            bottomSheetRef.current?.close();
-            onClose?.();
+            onClose?.(reason || CloseSheetReason.CLOSE);
+            setReason(null);
         }
-    }, []);
+    }, [reason, onClose]);
 
     const handleStartTrip = () => {
         changeMode(AppModes.ACTIVE_TRIP);
+        setReason(CloseSheetReason.START);
+        bottomSheetRef.current?.close();
+    }
+
+    const handleDelete = () => {
+        deleteAction(trip._id || '');
+
+        setReason(CloseSheetReason.DELETE);
+        bottomSheetRef.current?.close();
+    }
+
+    const handleEdit = () => {
+        setReason(CloseSheetReason.EDIT);
+        editTrip(trip);
         bottomSheetRef.current?.close();
     }
 
@@ -59,10 +87,16 @@ function TripDetails({ trip, onClose }: TripDetailsProps) {
 
                     <Text className="mt-1 text-foreground bg-darkForeground rounded-md p-1">{tripDetails.description}</Text>
 
-                    <CustomButton className='mt-2 flex-row gap-2 items-center' onPress={handleStartTrip}>
-                        <Ionicons name='play' size={24} color={Colors.dark.darkForeground} />
-                        <Text className='font-bold text-2xl text-darkForeground'>Start Trip</Text>
-                    </CustomButton>
+                    <View className='flex flex-row justify-between items-center mt-4'>
+                        <CustomButton className='mt-2 flex-row gap-2 items-center' onPress={handleStartTrip}>
+                            <Ionicons name='play' size={24} color={Colors.dark.darkForeground} />
+                            <Text className='font-bold text-2xl text-darkForeground'>Start Trip</Text>
+                        </CustomButton>
+
+                        <WithRoles roles={[UserRole.ADMIN]}>
+                            <AdminActions tripId={trip._id || ''} onDelete={handleDelete} onEdit={handleEdit} />
+                        </WithRoles>
+                    </View>
                 </View>
             </BottomSheetView>
         </BottomSheet>

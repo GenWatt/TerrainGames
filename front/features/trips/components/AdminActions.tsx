@@ -16,12 +16,12 @@ function AdminActions({ onDelete, tripId, onEdit }: AdminActionsProps) {
 
     return (
         <View className="flex-row gap-3">
-            {onDelete && <CustomButton className="mt-2 bg-danger" onPress={handleDelete}>
-                <Ionicons name="trash" size={20} color={Colors.dark.background} />
-            </CustomButton>}
-
             {onEdit && <CustomButton className="mt-2 bg-primary" onPress={() => onEdit(tripId)}>
                 <Ionicons name="create" size={20} color={Colors.dark.background} />
+            </CustomButton>}
+
+            {onDelete && <CustomButton className="mt-2 bg-danger" onPress={handleDelete}>
+                <Ionicons name="trash" size={20} color={Colors.dark.background} />
             </CustomButton>}
         </View>
     )

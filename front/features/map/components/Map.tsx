@@ -1,11 +1,11 @@
 import MapToolbar from "./MapToolbar";
-import { View, Text } from 'react-native';
 import useMap from "../hooks/useMap";
 import { ITrip, MapboxRoadType } from "@/features/shared/stores/createTripStore";
 import Mapbox, { MapView, LocationPuck } from "@rnmapbox/maps";
 import TripMarker from "./TripMarker";
 import DrawWaypoints from "./DrawWaypoints";
 import DrawRoad from "./DrawRoad";
+import NoLocationPermission from "./NoLocationPermission";
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_PUBLIC_API_KEY!);
 
@@ -20,7 +20,6 @@ export interface MapProps {
 
 export default function Map({ trips, selectedTrip, road }: MapProps) {
     const {
-        hasLocationPermission,
         userLocationArray,
         styleUrl,
         handlePress,
@@ -30,14 +29,9 @@ export default function Map({ trips, selectedTrip, road }: MapProps) {
         handleTouchEnd,
         mapRef } = useMap();
 
-    if (!hasLocationPermission) {
-        return <View className="bg-background p-2">
-            <Text className="text-foreground">No location permission</Text>
-        </View>;
-    }
-
     return (
         <>
+            <NoLocationPermission />
             <MapToolbar location={userLocationArray} />
             <MapView
                 ref={mapRef}

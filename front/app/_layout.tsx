@@ -11,7 +11,6 @@ import { StatusBar } from 'react-native';
 import Colors from '@/constants/Colors';
 import Toast from 'react-native-toast-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Header from '@/components/ui/Header';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useRouterStore } from '@/features/shared/stores/routerStore';

@@ -37,6 +37,8 @@ export const handleErrorFunction = async (error: any) => {
 
             return;
         }
+
+        console.log('API error:', errorData?.message);
     }
 
     Toast.show({
