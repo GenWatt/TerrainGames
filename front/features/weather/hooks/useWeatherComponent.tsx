@@ -18,7 +18,7 @@ function useWeatherComponent() {
         return calculateTemperature(weatherData)
     }, [weatherData, calculateTemperature])
 
-    return { formateedTemperature }
+    return { formateedTemperature, weatherData }
 }
 
 export default useWeatherComponent

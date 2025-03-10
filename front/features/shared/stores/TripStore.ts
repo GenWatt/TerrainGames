@@ -42,9 +42,6 @@ export const useTripStore = create<TripStoreType>((set, get) => ({
         const currentMode = get().mode;
         if (mode === AppModes.CREATE_TRIP && currentMode === AppModes.EDIT_TRIP) return;
 
-        // if (currentMode === AppModes.SELECTED_TRIP && mode !== AppModes.ACTIVE_TRIP) {
-        //     set({ selectedTrip: null });
-        // }
 
         set({ mode })
     },

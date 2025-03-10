@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import useWeatherComponent from "../hooks/useWeatherComponent";
 
 function WeatherComponent() {
-    const { formateedTemperature } = useWeatherComponent();
+    const { formateedTemperature, weatherData } = useWeatherComponent();
 
     return (
         <View>
@@ -11,6 +11,9 @@ function WeatherComponent() {
             </Text>
             <Text className='text-primary font-extrabold text-2xl text-wrap text-center'>
                 {formateedTemperature}
+            </Text>
+            <Text className='text-primary font-medium text-sm text-wrap text-center'>
+                {weatherData?.weather[0].description}
             </Text>
         </View >
     );

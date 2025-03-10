@@ -7,7 +7,7 @@ export interface CircleButtonProps extends PressableProps {
 
 export default function CircleButton({ children, className, ...props }: CircleButtonProps) {
     return (
-        <Pressable {...props} className={clsx("w-10 h-10 bg-dim justify-center items-center rounded-md", className)}>
+        <Pressable {...props} className={clsx("w-10 h-10 bg-dim justify-center items-center rounded-md disabled:bg-background/20", className)}>
             {children}
         </Pressable>
     )

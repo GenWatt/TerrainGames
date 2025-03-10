@@ -38,7 +38,7 @@ export default function Map({ trips, selectedTrip, road }: MapProps) {
                 onTouchEnd={handleTouchEnd}
                 onDidFinishLoadingMap={handleMapLoaded}
                 compassEnabled={true}
-                compassPosition={{ top: 10, left: 10 }}
+                compassPosition={{ bottom: 110, left: 10 }}
                 scaleBarEnabled={false}
                 styleURL={styleUrl}
                 style={{ flex: 1 }}

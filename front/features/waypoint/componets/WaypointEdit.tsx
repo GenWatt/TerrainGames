@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { IWaypoint, WaypointTypes } from '@/features/shared/stores/createTripStore';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
@@ -19,8 +19,16 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
     const methods = useForm<IWaypoint>({
         defaultValues: waypoint,
     });
+    const [newImageUrl, setNewImageUrl] = useState('');
 
-    const { control, handleSubmit, watch, reset } = methods;
+    const handleAddImageUrl = (field: any) => {
+        if (newImageUrl.trim() !== '') {
+            field.onChange([...(field.value || []), newImageUrl]);
+            setNewImageUrl('');
+        }
+    };
+
+    const { control, watch, reset } = methods;
     const selectedType = watch('type');
 
     useEffect(() => {
@@ -29,7 +37,7 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
 
     const handleSave = () => {
         const newValues = methods.getValues();
-        console.log('newValues', newValues);
+
         onSave(newValues);
     };
 
@@ -59,9 +67,7 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
                                     iconContainer: styles.iconContainer
                                 }}
                                 useNativeAndroidPickerStyle={false}
-                                Icon={() => {
-                                    return <Ionicons name="chevron-down" size={24} color={Colors.dark.foreground} />;
-                                }}
+                                Icon={() => (<Ionicons name="chevron-down" size={24} color={Colors.dark.foreground} />)}
                             />
                         )}
                     />
@@ -116,6 +122,5 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
 });
-
 
 export default WaypointEdit;

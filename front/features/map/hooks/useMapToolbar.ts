@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useCreateTripStore } from '@/features/shared/stores/createTripStore';
 import { useMapStore } from '@/features/map/store/MapStore';
 import { UserRole } from '@/types';
@@ -24,22 +24,18 @@ export default function useMapToolbar({ location }: useMapToolbarProps) {
     const { clearPositions, isEditing, selectAction, trip, action, editTrip } = useCreateTripStore((state) => state);
     const camera = useMapStore((state) => state.camera);
     const { isFeatureAvailable } = useFeatureFlags();
+    const [isToolbarOpen, setIsToolbarOpen] = useState(false);
 
     const navigate = useRouter();
 
     const handleToolbarAction = async ({ name, isToggle }: ToolbarAction) => {
-        console.log('handleToolbarAction', name);
-
         if (name === ToolbarActionFeatures.DELETE_ALL_WAYPOINTS) {
             handleClearPress();
         } else if (name === ToolbarActionFeatures.FLY_TO && camera) {
-            console.log('fly');
             camera.flyTo(location, 12);
         } else if (name === ToolbarActionFeatures.SAVE_TRIP) {
-            console.log('save');
             navigate.push({ pathname: '/(modals)/createTripModal', params: { _id: trip._id } });
         } else if (name === ToolbarActionFeatures.CANCEL_TRIP) {
-            console.log('cancel');
             editTrip(null);
         }
 
@@ -65,9 +61,15 @@ export default function useMapToolbar({ location }: useMapToolbarProps) {
         handleToolbarAction(action);
     }, [handleToolbarAction]);
 
+    const handleToggleToolbar = () => {
+        setIsToolbarOpen(!isToolbarOpen);
+    };
+
     return {
         actions,
         action,
+        isToolbarOpen,
         handleToolbarActionCallback,
+        handleToggleToolbar
     };
 }
