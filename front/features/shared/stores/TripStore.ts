@@ -8,7 +8,7 @@ export type TripStateType = {
 
 export type TripActionsType = {
     selectTrip: (trip: ITrip | null) => void;
-    deselectTrip: (preserveMode?: boolean) => void;
+    deselectTrip: () => void;
 
     changeMode: (mode: AppModes) => void;
     isEditOrCreateMode: () => boolean;
@@ -32,16 +32,23 @@ export const useTripStore = create<TripStoreType>((set, get) => ({
     mode: AppModes.VIEW,
 
     selectTrip: (trip: ITrip | null) => {
-        set({ selectedTrip: trip, mode: AppModes.SELECTED_TRIP })
+        set({ selectedTrip: trip })
     },
-    deselectTrip: (preserveMode = false) => {
-        set((state) => ({ selectedTrip: null, mode: preserveMode ? state.mode : AppModes.VIEW }));
+    deselectTrip: () => {
+        set({ selectedTrip: null });
     },
 
     changeMode: (mode: AppModes) => {
         const currentMode = get().mode;
         if (mode === AppModes.CREATE_TRIP && currentMode === AppModes.EDIT_TRIP) return;
 
+        if (mode === AppModes.EDIT_TRIP) {
+            get().deselectTrip();
+        }
+
+        if (mode === AppModes.VIEW) {
+            get().deselectTrip();
+        }
 
         set({ mode })
     },

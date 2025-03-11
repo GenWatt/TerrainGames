@@ -1,7 +1,7 @@
 import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { useCreateTripStore, IWaypoint } from '@/features/shared/stores/createTripStore';
-import WaypointDisplay from './WaypointDisplay';
+import WaypointDisplay from './display/WaypointDisplay';
 import WaypointEdit from './WaypointEdit';
 import { useRouter } from 'expo-router';
 import { useTripStore } from '@/features/shared/stores/TripStore';
@@ -34,7 +34,7 @@ const Waypoint: React.FC = () => {
     }
 
     return (
-        <ScrollView>
+        <View>
             {isEditOrCreateMode() ? (
                 <>
                     <Header title={`Edit ${selectedWaypoint.title} waypoint`} />
@@ -50,7 +50,7 @@ const Waypoint: React.FC = () => {
                     <WaypointDisplay waypoint={selectedWaypoint} />
                 </>
             )}
-        </ScrollView>
+        </View>
     );
 };
 

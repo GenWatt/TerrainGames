@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Map from '@/features/map/components/Map';
 import useTrips from "@/features/trips/api/useTrips";
-import TripDetails, { CloseSheetReason } from '@/features/map/components/TripDetails';
+import TripDetailsSheet, { CloseSheetReason } from '@/features/map/components/TripDetailsSheet';
 import { useTripStore } from '@/features/shared/stores/TripStore';
 import { IWaypoint, useCreateTripStore } from '@/features/shared/stores/createTripStore';
 import ActiveTripBoard from '@/features/trips/components/ActiveTripBoard';
@@ -14,7 +14,7 @@ import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 
 export default function HomeScreen() {
   const { trips } = useTrips();
-  const { selectedTrip, deselectTrip } = useTripStore();
+  const { selectedTrip } = useTripStore();
   const { trip: editedTrip } = useCreateTripStore();
   const { isFeatureAvailable } = useFeatureFlags();
   const { road, fetchRoad, reset } = useDrawRoadMutation();
@@ -42,13 +42,6 @@ export default function HomeScreen() {
     }
   }, [selectedTrip, userLocation]);
 
-  const handleClose = (reason: CloseSheetReason) => {
-    if (reason !== CloseSheetReason.START) {
-      deselectTrip(reason !== CloseSheetReason.CLOSE);
-      reset();
-    }
-  }
-
   return (
     <View className='flex-1 w-full h-full'>
 
@@ -56,7 +49,7 @@ export default function HomeScreen() {
       {isFeatureAvailable(OtherFeatures.TRIP_ACTIVE_VIEW) && selectedTrip && <ActiveTripBoard road={road} trip={selectedTrip} />}
 
       <Map trips={trips} selectedTrip={tripToDraw} road={road} />
-      {selectedTrip && <TripDetails trip={selectedTrip} onClose={handleClose} />}
+      {selectedTrip && <TripDetailsSheet trip={selectedTrip} />}
     </View>
   );
 }

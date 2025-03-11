@@ -1,11 +1,11 @@
-import { View, Text } from 'react-native';
-import { IWaypoint } from '@/features/shared/stores/createTripStore';
+import { IWaypoint } from "@/features/shared/stores/createTripStore"
+import { View, Text } from "react-native"
 
-export interface WaypointDisplayProps {
-    waypoint: IWaypoint;
+export interface WaypointInfoDisplayProps {
+    waypoint: IWaypoint
 }
 
-const WaypointDisplay: React.FC<WaypointDisplayProps> = ({ waypoint }) => {
+function WaypointInfoDisplay({ waypoint }: WaypointInfoDisplayProps) {
     return (
         <View>
             <Text className='text-foreground p-2 text-md'>
@@ -17,6 +17,6 @@ const WaypointDisplay: React.FC<WaypointDisplayProps> = ({ waypoint }) => {
             </Text>
         </View>
     )
-};
+}
 
-export default WaypointDisplay;
+export default WaypointInfoDisplay

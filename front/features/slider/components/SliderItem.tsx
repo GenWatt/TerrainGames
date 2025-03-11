@@ -1,4 +1,4 @@
-import clsx from "clsx"
+import { cn } from "@/utils/cn";
 import { View, ViewProps } from "react-native"
 
 export interface SliderItemProps extends ViewProps {
@@ -8,7 +8,7 @@ export interface SliderItemProps extends ViewProps {
 
 function SliderItem({ children, width, index, className, ...props }: SliderItemProps) {
     return (
-        <View className={clsx(className, 'h-full')} key={index} style={{ width }} {...props}>
+        <View className={cn(className, 'h-full')} key={index} style={{ width }} {...props}>
             {children}
         </View>
     )

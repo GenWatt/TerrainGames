@@ -10,7 +10,12 @@ export interface MapToolbarProps {
 }
 
 export default function MapToolbar({ location }: MapToolbarProps) {
-    const { actions, action: selectedAction, isToolbarOpen, handleToolbarActionCallback, handleToggleToolbar } = useMapToolbar({ location });
+    const {
+        actions,
+        action: selectedAction,
+        isToolbarOpen,
+        handleToolbarActionCallback,
+        handleToggleToolbar } = useMapToolbar({ location });
 
     return (
         <View className='absolute gap-2 right-2 top-2 z-10 flex-row'>

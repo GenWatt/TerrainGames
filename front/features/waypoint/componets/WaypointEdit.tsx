@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
 import { IWaypoint, WaypointTypes } from '@/features/shared/stores/createTripStore';
 import CustomButton from '@/components/ui/Buttons/CustomButton';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Colors from '@/constants/Colors';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import RNPickerSelect from 'react-native-picker-select';
-import InfoWaypointForm from './InfoWaypointForm';
-import QuizWaypointForm from './QuizWaypointForm';
+
+import InfoWaypointForm from './forms/InfoWaypointForm';
+import QuizWaypointForm from './forms/QuizWaypointForm';
+import Select from '@/components/ui/Select';
 
 interface WaypointEditProps {
     waypoint: IWaypoint;
@@ -19,14 +20,6 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
     const methods = useForm<IWaypoint>({
         defaultValues: waypoint,
     });
-    const [newImageUrl, setNewImageUrl] = useState('');
-
-    const handleAddImageUrl = (field: any) => {
-        if (newImageUrl.trim() !== '') {
-            field.onChange([...(field.value || []), newImageUrl]);
-            setNewImageUrl('');
-        }
-    };
 
     const { control, watch, reset } = methods;
     const selectedType = watch('type');
@@ -45,6 +38,12 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
         onDelete(waypoint);
     }
 
+    const items = Object.values(WaypointTypes).map((type) => ({
+        label: type,
+        value: type,
+    }))
+    const icon = () => (<Ionicons name="chevron-down" size={24} color={Colors.dark.foreground} />)
+
     return (
         <FormProvider {...methods}>
             <View className="justify-stretch w-full p-4">
@@ -54,20 +53,11 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
                         control={control}
                         name="type"
                         render={({ field: { onChange, value } }) => (
-                            <RNPickerSelect
+                            <Select
                                 onValueChange={onChange}
-                                items={Object.values(WaypointTypes).map((type) => ({
-                                    label: type,
-                                    value: type,
-                                }))}
+                                items={items}
                                 value={value}
-                                style={{
-                                    inputIOS: styles.inputIOS,
-                                    inputAndroid: styles.inputAndroid,
-                                    iconContainer: styles.iconContainer
-                                }}
-                                useNativeAndroidPickerStyle={false}
-                                Icon={() => (<Ionicons name="chevron-down" size={24} color={Colors.dark.foreground} />)}
+                                Icon={icon}
                             />
                         )}
                     />
@@ -75,7 +65,6 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
 
                 {selectedType === WaypointTypes.INFO && <InfoWaypointForm />}
                 {selectedType === WaypointTypes.QUIZ && <QuizWaypointForm />}
-                {/* {selectedType === WaypointTypes.TASK && <TaskWaypointForm />} */}
 
                 <View className='flex-row gap-2'>
                     <CustomButton className='flex-row gap-2 items-center' onPress={handleSave}>
@@ -93,34 +82,5 @@ const WaypointEdit: React.FC<WaypointEditProps> = ({ waypoint, onSave, onDelete 
     );
 };
 
-const styles = StyleSheet.create({
-    inputIOS: {
-        height: 50,
-        width: '100%',
-        color: Colors.dark.foreground,
-        backgroundColor: Colors.dark.background,
-        borderColor: Colors.dark.primary,
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingHorizontal: 8,
-        paddingVertical: 10,
-    },
-    inputAndroid: {
-        height: 50,
-        width: '100%',
-        color: Colors.dark.foreground,
-        backgroundColor: Colors.dark.background,
-        borderColor: Colors.dark.primary,
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 8,
-        paddingVertical: 10,
-    },
-    iconContainer: {
-        top: Platform.OS === 'ios' ? 10 : 15,
-        right: 12,
-        backgroundColor: 'transparent',
-    },
-});
 
 export default WaypointEdit;
