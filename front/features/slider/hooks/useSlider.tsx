@@ -6,17 +6,19 @@ export interface UseSliderProps {
     children: React.ReactNode[];
     interval?: number;
     width?: number;
+    isAutoChanging?: boolean;
+    swipeEnabled?: boolean;
 }
 
 const defaultWidth = Dimensions.get('window').width;
 
 const GESTURE_THRESHOLD = 15;
 
-function useSlider({ children, interval = 3000, width = defaultWidth }: UseSliderProps) {
+function useSlider({ children, interval = 3000, width = defaultWidth, isAutoChanging, swipeEnabled }: UseSliderProps) {
     const scrollX = useSharedValue(0);
     const progress = useSharedValue(0);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(isAutoChanging);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     const handleGesture = (evt: GestureResponderEvent, gestureState: PanResponderGestureState) => {
@@ -29,7 +31,10 @@ function useSlider({ children, interval = 3000, width = defaultWidth }: UseSlide
         }
     }
 
-    const panResponder = useRef(PanResponder.create({ onMoveShouldSetPanResponder: () => true, onPanResponderRelease: handleGesture })).current;
+    const panResponder = swipeEnabled ? PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderRelease: handleGesture
+    }) : undefined;
 
     useEffect(() => {
         if (isPlaying) {
@@ -74,6 +79,17 @@ function useSlider({ children, interval = 3000, width = defaultWidth }: UseSlide
         setCurrentIndex((prevIndex) => (prevIndex - 1 + children.length) % children.length);
     };
 
+    const goTo = (index: number) => {
+        if (index < 0 || index >= children.length) {
+            return;
+        }
+
+        setCurrentIndex(index);
+        scrollX.value = withSpring(index * width);
+        progress.value = 0;
+        runProgressBar();
+    }
+
     const runProgressBar = () => {
         progress.value = 0;
         progress.value = withTiming(1, { duration: interval, easing: Easing.linear });
@@ -99,7 +115,7 @@ function useSlider({ children, interval = 3000, width = defaultWidth }: UseSlide
         }
     };
 
-    return { animatedStyle, progress, panResponder, width, currentIndex, togglePlay, isPlaying };
+    return { animatedStyle, progress, panResponder, width, currentIndex, isPlaying, togglePlay, nextSlide, prevSlide, goTo };
 }
 
 export default useSlider;

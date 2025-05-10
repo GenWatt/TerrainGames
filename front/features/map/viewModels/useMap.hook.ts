@@ -7,11 +7,12 @@ import { OtherFeatures, ToolbarActionFeatures } from "@/features/shared/types";
 import useFeatureFlags from "@/features/shared/hooks/useFeatureFlags";
 import { useRef } from "react";
 import { GestureResponderEvent } from "react-native";
+import { OrnamentPositonProp } from "@rnmapbox/maps/lib/typescript/src/utils";
 
 function useMap() {
     const { hasLocationPermission, userLocation, handleLocationPermission } = useUserLocation();
     const { action: selectedAction, selectWaypoint, addPosition, isEditing } = useCreateTripStore((state) => state);
-    const { changeMode } = useTripStore();
+    const { changeMode, mode } = useTripStore();
     const { isFeatureAvailable } = useFeatureFlags();
 
     const mapRef = useRef<Mapbox.MapView | null>(null);
@@ -53,18 +54,21 @@ function useMap() {
 
     const areTripMarkersVisible = isFeatureAvailable(OtherFeatures.TRIP_MARKERS);
 
+    const compassPostion: OrnamentPositonProp = mode === AppModes.SELECTED_TRIP ? { bottom: 300, left: 10 } : { bottom: 50, left: 10 };
+
     return {
         hasLocationPermission,
         userLocation,
         isEditing,
-        addPosition,
-        setMapCamera,
-        styleUrl,
-        handlePress,
-        handleMapRef,
         userLocationArray,
         areTripMarkersVisible,
         mapRef,
+        styleUrl,
+        compassPostion,
+        addPosition,
+        setMapCamera,
+        handlePress,
+        handleMapRef,
         handleTouchEnd,
         handleMapLoaded,
         handleLocationPermission

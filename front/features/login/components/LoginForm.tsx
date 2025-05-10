@@ -3,6 +3,7 @@ import { View, Text, TextInput } from "react-native";
 import { useEffect, useRef } from "react";
 import CustomButton from "@/components/ui/Buttons/CustomButton";
 import CustomInput from "@/components/ui/CustomInput";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 export interface ILoginFormProps {
     isFocus?: boolean;
@@ -19,32 +20,34 @@ export default function LoginForm({ isFocus = true }: ILoginFormProps) {
     }, [isFocus]);
 
     return (
-        <View>
-            <Text className="text-danger">{error}</Text>
+        <>
+            <KeyboardAwareScrollView bottomOffset={100}>
+                <Text className="text-danger">{error}</Text>
 
-            <View className="mb-4">
-                <Text className="text-foreground mb-2">Username</Text>
-                <CustomInput
-                    ref={usernameRef}
-                    placeholder="Username"
-                    value={form.username}
-                    onChangeText={(value) => handleChange('username', value)}
-                />
-            </View>
+                <View className="mb-4">
+                    <Text className="text-foreground mb-2">Username</Text>
+                    <CustomInput
+                        ref={usernameRef}
+                        placeholder="Username"
+                        value={form.username}
+                        onChangeText={(value) => handleChange('username', value)}
+                    />
+                </View>
 
-            <View className="mb-4">
-                <Text className="text-foreground mb-2">Password</Text>
-                <CustomInput
-                    placeholder="Password"
-                    value={form.password}
-                    onChangeText={(value) => handleChange('password', value)}
-                    secureTextEntry
-                />
-            </View>
+                <View className="mb-4">
+                    <Text className="text-foreground mb-2">Password</Text>
+                    <CustomInput
+                        placeholder="Password"
+                        value={form.password}
+                        onChangeText={(value) => handleChange('password', value)}
+                        secureTextEntry
+                    />
+                </View>
 
-            <CustomButton className="w-full" onPress={handleSubmit}>
-                <Text className="text-center text-2xl font-bold">Log In</Text>
-            </CustomButton>
-        </View>
+                <CustomButton className="w-full" onPress={handleSubmit}>
+                    <Text className="text-center text-2xl font-bold">Log In</Text>
+                </CustomButton>
+            </KeyboardAwareScrollView>
+        </>
     )
 }

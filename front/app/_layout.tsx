@@ -15,6 +15,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useRouterStore } from '@/features/shared/stores/routerStore';
 import { queryClient } from '@/features/shared/utils/queryClient';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,14 +42,16 @@ export default function RootLayout() {
         <StatusBar barStyle="light-content" backgroundColor={Colors.dark.background} />
         <SafeAreaView style={{ flex: 1 }} edges={['top']}>
           <QueryClientProvider client={queryClient}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-              <Stack.Screen name="auth/login" options={{ headerShown: false }} />
-              <Stack.Screen name="auth/register" options={{ headerShown: false }} />
-              <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
-              <Stack.Screen name="(modals)/waypointModal" options={{ presentation: 'card', headerShown: false }} />
-            </Stack>
+            <KeyboardProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+                <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+                <Stack.Screen name="auth/register" options={{ headerShown: false }} />
+                <Stack.Screen name="(modals)/createTripModal" options={{ presentation: 'card', headerShown: false }} />
+                <Stack.Screen name="(modals)/waypointModal" options={{ presentation: 'card', headerShown: false }} />
+              </Stack>
+            </KeyboardProvider>
           </QueryClientProvider>
           <Toast />
         </SafeAreaView>

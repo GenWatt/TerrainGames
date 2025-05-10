@@ -1,11 +1,11 @@
 import { Pressable, PressableProps } from "react-native"
-import clsx from 'clsx'
+import { cn } from "@/utils/cn"
 
 export interface CustomButtonProps extends PressableProps { }
 
 function CustomButton({ children, className, ...props }: CustomButtonProps) {
     return (
-        <Pressable className={clsx("bg-primary rounded-xl p-3 self-start", className)} {...props}>
+        <Pressable className={cn("bg-primary rounded-xl p-3 self-start", className)} {...props}>
             {children}
         </Pressable>
     )

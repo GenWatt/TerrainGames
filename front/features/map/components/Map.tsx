@@ -1,5 +1,5 @@
 import MapToolbar from "./MapToolbar";
-import useMap from "../hooks/useMap";
+import useMap from "../viewModels/useMap.hook";
 import { ITrip, MapboxRoadType } from "@/features/shared/stores/createTripStore";
 import Mapbox, { MapView, LocationPuck } from "@rnmapbox/maps";
 import TripMarker from "./TripMarker";
@@ -22,12 +22,14 @@ export default function Map({ trips, selectedTrip, road }: MapProps) {
     const {
         userLocationArray,
         styleUrl,
+        areTripMarkersVisible,
+        mapRef,
+        compassPostion,
         handlePress,
         handleMapRef,
-        areTripMarkersVisible,
         handleMapLoaded,
-        handleTouchEnd,
-        mapRef } = useMap();
+        handleTouchEnd
+    } = useMap();
 
     return (
         <>
@@ -35,13 +37,13 @@ export default function Map({ trips, selectedTrip, road }: MapProps) {
             <MapToolbar location={userLocationArray} />
             <MapView
                 ref={mapRef}
-                onTouchEnd={handleTouchEnd}
-                onDidFinishLoadingMap={handleMapLoaded}
+                compassPosition={compassPostion}
                 compassEnabled={true}
-                compassPosition={{ bottom: 110, left: 10 }}
                 scaleBarEnabled={false}
                 styleURL={styleUrl}
                 style={{ flex: 1 }}
+                onTouchEnd={handleTouchEnd}
+                onDidFinishLoadingMap={handleMapLoaded}
                 onPress={handlePress}>
                 <Mapbox.Camera
                     ref={handleMapRef}

@@ -3,14 +3,14 @@ import { useMemo } from 'react';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { FeatureCollection, Point } from 'geojson';
 import { ITrip } from "@/features/shared/stores/createTripStore";
-import { useTripStore } from "../../shared/stores/TripStore";
+import { AppModes, useTripStore } from "../../shared/stores/TripStore";
 
 export interface TripMarkerProps {
     trips: ITrip[];
 }
 
 export default function TripMarker({ trips }: TripMarkerProps) {
-    const { selectTrip } = useTripStore();
+    const { selectTrip, changeMode } = useTripStore();
 
     const tripsGeoJSON: FeatureCollection<Point> = useMemo(() => {
         return {
@@ -37,6 +37,7 @@ export default function TripMarker({ trips }: TripMarkerProps) {
 
         if (selectedTrip) {
             selectTrip(selectedTrip);
+            changeMode(AppModes.SELECTED_TRIP);
         }
     };
 
