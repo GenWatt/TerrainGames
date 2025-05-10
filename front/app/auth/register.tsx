@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         borderRadius: 16, // rounded-2xl
         width: 288, // w-72 (72 * 4 px)
         height: 288, // h-72
-        alignSelf: 'center', // self-center
+        alignSelf: 'center',
         marginVertical: 12, // my-3 (3 * 4 px)
     },
 });
