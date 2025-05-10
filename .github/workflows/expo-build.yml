@@ -33,6 +33,6 @@ jobs:
         working-directory: front
         run: npm install
 
-      - name: 🚀 Build app
+      - name: Build app
         working-directory: front
         run: eas build --platform android --profile preview --non-interactive
